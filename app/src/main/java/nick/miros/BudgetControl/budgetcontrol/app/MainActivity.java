@@ -12,31 +12,38 @@ import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
     Button ExpenseDirectionButton;
+    Button DataDirectionButton;
+    Button BudgetDirectionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ExpenseDirectionButton = (Button) findViewById(R.id.expenseDirectionButton);
+
+        ExpenseDirectionButton = (Button) findViewById(R.id.ExpenseDirectionButton);
+        DataDirectionButton = (Button) findViewById(R.id.DataDirectionButton);
+        BudgetDirectionButton = (Button) findViewById(R.id.BudgetDirectionButton);
+
         ExpenseDirectionButton.setOnClickListener(new mainActivityListener());
+        DataDirectionButton.setOnClickListener(new mainActivityListener());
+        BudgetDirectionButton.setOnClickListener(new mainActivityListener());
+
     }
 
     private class mainActivityListener implements View.OnClickListener {
 
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.expenseDirectionButton:
+                case R.id.ExpenseDirectionButton:
                     //startActivity(new Intent(v.getContext(), AddExpenseActivity.class));
-                    Toast.makeText(getApplicationContext(), "msg msg", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "expenseButton", Toast.LENGTH_SHORT).show();
                     break;
-                /*
-                case R.id.email:
-                    model.setEmail(text);
+                case R.id.DataDirectionButton:
+                    Toast.makeText(getApplicationContext(), "dataButton", Toast.LENGTH_SHORT).show();
                     break;
-                case R.id.phone:
-                    model.setPhone(text);
+                case R.id.BudgetDirectionButton:
+                    Toast.makeText(getApplicationContext(), "BudgetButton", Toast.LENGTH_SHORT).show();
                     break;
-                    */
             }
 
         }
