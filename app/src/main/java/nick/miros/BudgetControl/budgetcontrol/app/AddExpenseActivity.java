@@ -130,7 +130,8 @@ public class AddExpenseActivity extends Activity {
 		public void onDateSet(DatePicker view, int year, int month, int day) {
 		// Do something with the date chosen by the user
 			TextView dateText = (TextView)getActivity().findViewById(R.id.dateView);
-			dateText.setText(day + "/" + month + 1 + "/" + year);
+            month += 1;
+			dateText.setText(month + " / " + day + " / " + year);
 		}
 		}
 }
