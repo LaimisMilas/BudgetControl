@@ -36,13 +36,12 @@ public class MainActivity extends ActionBarActivity {
             switch (v.getId()) {
                 case R.id.ExpenseDirectionButton:
                     startActivity(new Intent(v.getContext(), AddExpenseActivity.class));
-                    //Toast.makeText(getApplicationContext(), "expenseButton", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.DataDirectionButton:
                     Toast.makeText(getApplicationContext(), "dataButton", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.BudgetDirectionButton:
-                    Toast.makeText(getApplicationContext(), "BudgetButton", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(v.getContext(), BudgetSettings.class));
                     break;
             }
 
