@@ -91,9 +91,9 @@ public class AddExpenseActivity extends Activity {
 
             date = dateView.getText().toString();
             amount = Double.parseDouble(amountView.getText().toString());
-            category = categoryView.toString();
+            category = categoryView.getSelectedItem().toString();
             description = descriptionView.getText().toString();
-            paymentMethod = paymentSpinnerView.toString();
+            paymentMethod = paymentSpinnerView.getSelectedItem().toString();
 
             datasource = new ExpensesDataSource(this);
             datasource.open();

@@ -60,6 +60,6 @@ public class Expense {
 	// Will be used by the ArrayAdapter in the ListView
 	@Override
 	public String toString() {
-		return date + " " + amount + " " + description + " " + paymentMethod;
+		return date + " " + amount + " " + category + " " + description + " " + paymentMethod;
 	}
 }
