@@ -86,20 +86,49 @@ public class AddExpenseActivity extends Activity {
 		TextView descriptionView = (TextView) findViewById(R.id.expense_description);
 		TextView amountView = (TextView) findViewById(R.id.expense_amount);
 		Spinner paymentSpinnerView = (Spinner) findViewById(R.id.payment_spinner);
-		
-		date = dateView.getText().toString();
-		amount = Double.parseDouble(amountView.getText().toString());
-		category = categoryView.toString();
-		description = descriptionView.getText().toString();
-		paymentMethod = paymentSpinnerView.toString();
 
-		
-		datasource = new ExpensesDataSource(this);
-	    datasource.open();
-		datasource.createExpense(date, amount, category, description, paymentMethod);
-		
-		startActivity(new Intent(this, ExpenseList.class));
+        if (checkForEmpty(amountView, descriptionView)){
+
+            date = dateView.getText().toString();
+            amount = Double.parseDouble(amountView.getText().toString());
+            category = categoryView.toString();
+            description = descriptionView.getText().toString();
+            paymentMethod = paymentSpinnerView.toString();
+
+            datasource = new ExpensesDataSource(this);
+            datasource.open();
+            datasource.createExpense(date, amount, category, description, paymentMethod);
+
+            startActivity(new Intent(this, ExpenseList.class));
+        }
 	}
+
+    public boolean checkForEmpty(TextView amountView, TextView descriptionView)
+    {
+        boolean amountViewIsOk;
+        boolean descriptionViewIsOk;
+
+        if (amountView.getText().toString().matches("")) {
+            amountView.setError("enter amount");
+            amountViewIsOk = false;
+        }
+        else
+        {
+            amountViewIsOk = true;
+        }
+
+        if (descriptionView.getText().toString().matches("")) {
+            descriptionView.setError("enter description");
+            descriptionViewIsOk = false;
+        }
+        else
+        {
+            descriptionViewIsOk = true;
+        }
+
+        return (amountViewIsOk && descriptionViewIsOk);
+
+    }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
