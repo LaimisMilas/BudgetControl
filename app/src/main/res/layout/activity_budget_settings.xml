@@ -27,6 +27,7 @@
 
         <ImageButton
             style="?android:attr/borderlessButtonStyle"
+            android:id="@+id/EditButton"
             android:layout_width="40dip"
             android:layout_height="28dip"
             android:scaleType="fitXY"
