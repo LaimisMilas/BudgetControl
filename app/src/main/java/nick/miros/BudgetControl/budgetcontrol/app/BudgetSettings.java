@@ -6,10 +6,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import java.util.Calendar;
+
 
 public class BudgetSettings extends ActionBarActivity {
 
     TextView currentMonth;
+
+    String[] monthNames = { "January", "February", "March", "April", "May",
+            "June", "July", "August", "September", "October", "November",
+            "December" };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +24,12 @@ public class BudgetSettings extends ActionBarActivity {
         setContentView(R.layout.activity_budget_settings);
 
         currentMonth = (TextView) findViewById(R.id.currentMonth);
+
+        Calendar cal = Calendar.getInstance();
+        int month = cal.get(Calendar.MONTH);
+
+        currentMonth.setText("Budget for " + monthNames[month]);
+
 
     }
 
