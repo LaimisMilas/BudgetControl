@@ -1,4 +1,4 @@
-package nick.miros.BudgetControl.budgetcontrol.app;
+package nick.miros.BudgetControl.budgetcontrol.activities;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -18,8 +17,11 @@ import android.widget.TextView;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 
+import nick.miros.BudgetControl.budgetcontrol.helper.DecimalDigits;
+import nick.miros.BudgetControl.budgetcontrol.app.R;
 
-public class BudgetSettings extends ActionBarActivity {
+
+public class BudgetSettingsActivity extends ActionBarActivity {
 
     TextView currentMonth;
     final Context context = this;

@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    tools:context="nick.miros.BudgetControl.budgetcontrol.app.BudgetSettings">
+    tools:context="nick.miros.BudgetControl.budgetcontrol.activities.BudgetSettingsActivity">
 
     <TextView
         android:id="@+id/currentMonth"

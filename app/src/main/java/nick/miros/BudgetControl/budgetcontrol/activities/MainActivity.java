@@ -1,4 +1,4 @@
-package nick.miros.BudgetControl.budgetcontrol.app;
+package nick.miros.BudgetControl.budgetcontrol.activities;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -8,6 +8,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import nick.miros.BudgetControl.budgetcontrol.activities.AddExpenseActivity;
+import nick.miros.BudgetControl.budgetcontrol.activities.BudgetSettingsActivity;
+import nick.miros.BudgetControl.budgetcontrol.app.R;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -41,7 +45,7 @@ public class MainActivity extends ActionBarActivity {
                     Toast.makeText(getApplicationContext(), "dataButton", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.BudgetDirectionButton:
-                    startActivity(new Intent(v.getContext(), BudgetSettings.class));
+                    startActivity(new Intent(v.getContext(), BudgetSettingsActivity.class));
                     break;
             }
 

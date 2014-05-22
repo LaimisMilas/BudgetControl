@@ -1,4 +1,4 @@
-package nick.miros.BudgetControl.budgetcontrol.app;
+package nick.miros.BudgetControl.budgetcontrol.helper;
 
 import android.text.InputFilter;
 import android.text.Spanned;

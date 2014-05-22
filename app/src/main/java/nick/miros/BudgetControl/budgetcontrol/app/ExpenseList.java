@@ -6,6 +6,8 @@ import android.widget.ArrayAdapter;
 
 import java.util.List;
 
+import nick.miros.BudgetControl.budgetcontrol.data.ExpensesDataSource;
+
 public class ExpenseList extends ListActivity {
 	private ExpensesDataSource datasource;
 

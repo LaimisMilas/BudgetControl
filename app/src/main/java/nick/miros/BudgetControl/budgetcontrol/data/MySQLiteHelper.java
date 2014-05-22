@@ -1,4 +1,4 @@
-package nick.miros.BudgetControl.budgetcontrol.app;
+package nick.miros.BudgetControl.budgetcontrol.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
