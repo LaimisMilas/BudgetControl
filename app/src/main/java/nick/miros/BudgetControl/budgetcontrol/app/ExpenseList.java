@@ -13,7 +13,7 @@ public class ExpenseList extends ListActivity {
 
 	 public void onCreate(Bundle savedInstanceState) {
 		    super.onCreate(savedInstanceState);
-		    setContentView(R.layout.expense_list);
+		    setContentView(R.layout.activity_expense_list);
 		    
 		    datasource = new ExpensesDataSource(this);
 		    datasource.open();

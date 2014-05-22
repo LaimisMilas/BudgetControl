@@ -35,7 +35,7 @@ public class AddExpenseActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.add_expense);
+		setContentView(R.layout.activity_add_expense);
 		
 		Calendar c = Calendar.getInstance();
 		
@@ -57,16 +57,16 @@ public class AddExpenseActivity extends Activity {
 		currentDateText.setText(currentDay + " / " + currentMonth + " / " + currentYear);
 		
 		
-		Spinner spinner = (Spinner) findViewById(R.id.category_spinner);
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.expense_category_array, R.layout.my_spinner_textview);
-		adapter.setDropDownViewResource(R.layout.my_spinner_textview);
-		spinner.setAdapter(adapter);
+		Spinner categorySpinner = (Spinner) findViewById(R.id.category_spinner);
+		ArrayAdapter<CharSequence> simpleTextViewAdapter = ArrayAdapter.createFromResource(this,
+                R.array.expense_category_array, R.layout.adapter_simple_textview);
+		simpleTextViewAdapter.setDropDownViewResource(R.layout.adapter_simple_textview);
+		categorySpinner.setAdapter(simpleTextViewAdapter);
 		
 		Spinner paymentSpinner = (Spinner) findViewById(R.id.payment_spinner);
 		ArrayAdapter<CharSequence> paymentAdapter = ArrayAdapter.createFromResource(this,
-                R.array.payment_method, R.layout.my_spinner_textview);
-		adapter.setDropDownViewResource(R.layout.my_spinner_textview);
+                R.array.payment_method, R.layout.adapter_simple_textview);
+		simpleTextViewAdapter.setDropDownViewResource(R.layout.adapter_simple_textview);
 		paymentSpinner.setAdapter(paymentAdapter);
 		
 		TextView AmountEntered = (TextView) findViewById(R.id.expense_amount);

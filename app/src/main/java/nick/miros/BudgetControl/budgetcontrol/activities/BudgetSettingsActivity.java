@@ -61,7 +61,7 @@ public class BudgetSettingsActivity extends ActionBarActivity {
 
                 // get prompts.xml view
                 LayoutInflater li = LayoutInflater.from(context);
-                View promptsView = li.inflate(R.layout.budget_prompt, null);
+                View promptsView = li.inflate(R.layout.alert_budget_prompt, null);
 
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                         context);
