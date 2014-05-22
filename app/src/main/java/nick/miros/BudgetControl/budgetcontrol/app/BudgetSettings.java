@@ -23,6 +23,7 @@ public class BudgetSettings extends ActionBarActivity {
     final Context context = this;
     private ImageButton BudgetEditButton;
     private TextView MonthlyBudget;
+    private TextView dailyBudget;
 
     String[] monthNames = {"January", "February", "March", "April", "May",
             "June", "July", "August", "September", "October", "November",
@@ -35,15 +36,18 @@ public class BudgetSettings extends ActionBarActivity {
         setContentView(R.layout.activity_budget_settings);
 
         currentMonth = (TextView) findViewById(R.id.currentMonth);
+        dailyBudget = (TextView) findViewById(R.id.dailyBudgetAmount);
 
         Calendar cal = Calendar.getInstance();
         int month = cal.get(Calendar.MONTH);
+        final int amountOfDays = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 
         currentMonth.setText("Budget for " + monthNames[month]);
 
 
         BudgetEditButton = (ImageButton) findViewById(R.id.EditButton);
         MonthlyBudget = (TextView) findViewById(R.id.currentMonthBudget);
+
 
         // add button listener
         BudgetEditButton.setOnClickListener(new View.OnClickListener() {
@@ -73,6 +77,7 @@ public class BudgetSettings extends ActionBarActivity {
                                         // get user input and set it to result
                                         // edit text
                                         MonthlyBudget.setText(userInput.getText());
+                                        dailyBudget.setText(" " + (Double.parseDouble(userInput.getText().toString()) / amountOfDays));
                                     }
                                 }
                         )
