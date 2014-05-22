@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.Calendar;
 
 
@@ -68,6 +70,8 @@ public class BudgetSettings extends ActionBarActivity {
                 final EditText userInput = (EditText) promptsView
                         .findViewById(R.id.editTextDialogUserInput);
 
+                userInput.setFilters(new InputFilter[]{new DecimalDigits(7, 2)});
+
                 // set dialog message
                 alertDialogBuilder
                         .setCancelable(false)
@@ -77,7 +81,9 @@ public class BudgetSettings extends ActionBarActivity {
                                         // get user input and set it to result
                                         // edit text
                                         MonthlyBudget.setText(userInput.getText());
-                                        dailyBudget.setText(" " + (Double.parseDouble(userInput.getText().toString()) / amountOfDays));
+
+                                        DecimalFormat numberFormat = new DecimalFormat("#.00");
+                                        dailyBudget.setText(" " + (numberFormat.format(Double.parseDouble(userInput.getText().toString()) / amountOfDays)));
                                     }
                                 }
                         )
