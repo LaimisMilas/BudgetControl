@@ -72,7 +72,7 @@ public class BudgetSettingsActivity extends ActionBarActivity {
                 final EditText userInput = (EditText) promptsView
                         .findViewById(R.id.editTextDialogUserInput);
 
-                userInput.setFilters(new InputFilter[]{new DecimalDigits(7, 2)});
+                userInput.setFilters(new InputFilter[]{new DecimalDigits()});
 
                 // set dialog message
                 alertDialogBuilder

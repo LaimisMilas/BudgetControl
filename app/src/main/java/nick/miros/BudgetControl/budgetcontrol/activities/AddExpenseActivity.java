@@ -71,7 +71,7 @@ public class AddExpenseActivity extends Activity {
 		
 		TextView AmountEntered = (TextView) findViewById(R.id.expense_amount);
 		
-		AmountEntered.setFilters(new InputFilter[] {new DecimalDigits(7,2)});
+		AmountEntered.setFilters(new InputFilter[] {new DecimalDigits()});
 		
 		Button addExpenseButton = (Button) findViewById(R.id.addExpense);
 		
