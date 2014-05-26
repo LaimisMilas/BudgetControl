@@ -88,7 +88,15 @@ public class BudgetSettingsActivity extends ActionBarActivity {
                             public void onClick(View view) {
 
                                 if (new DecimalDigits().isValidInput(userInput)) {
-                                    MonthlyBudget.setText(userInput.getText());
+
+                                    String input = userInput.getText().toString();
+
+                                    if (input.substring(input.length()-1, input.length()).equals(".")) {
+                                        MonthlyBudget.setText(input.substring(0, input.length() - 1));
+                                    }
+                                    else {
+                                        MonthlyBudget.setText(userInput.getText());
+                                    }
 
                                     DecimalFormat numberFormat = new DecimalFormat("#.00");
                                     dailyBudget.setText(" " + (numberFormat.format(Double.parseDouble(userInput.getText().toString()) / amountOfDays)));

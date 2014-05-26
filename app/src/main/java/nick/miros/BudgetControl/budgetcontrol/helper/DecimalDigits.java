@@ -45,7 +45,7 @@ public class DecimalDigits implements InputFilter {
     public boolean isValidInput(EditText userInput) {
 
         String input = userInput.getText().toString();
-        if (input.substring(input.length() - 1, input.length()).equals(".")) {
+        if ((input.substring(input.length() - 1, input.length()).equals(".")) && input.length() == 1) {
             userInput.setError("You cannot enter a . by itself");
             return false;
         }
