@@ -11,7 +11,7 @@ public class DecimalDigits implements InputFilter {
 Pattern mPattern;
 
 public DecimalDigits() {
-    mPattern=Pattern.compile("^(([1-9](\\d*)?)\\.?(\\d{0,2})?)|(0(\\.\\d{0,2})?)$");
+    mPattern=Pattern.compile("^(([1-9](\\d*)?)\\.?(\\d{0,2})?)|(0(\\.\\d{0,2})?)|\\.(\\d{0,2})?$");
 
 }
 
