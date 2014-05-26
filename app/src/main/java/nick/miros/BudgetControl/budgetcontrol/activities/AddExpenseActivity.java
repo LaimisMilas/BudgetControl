@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -89,22 +90,25 @@ public class AddExpenseActivity extends Activity {
 		TextView dateView = (TextView) findViewById(R.id.dateView);
 		Spinner categoryView = (Spinner) findViewById(R.id.category_spinner);
 		TextView descriptionView = (TextView) findViewById(R.id.expense_description);
-		TextView amountView = (TextView) findViewById(R.id.expense_amount);
+		EditText amountView = (EditText) findViewById(R.id.expense_amount);
 		Spinner paymentSpinnerView = (Spinner) findViewById(R.id.payment_spinner);
 
         if (checkForEmpty(amountView, descriptionView)){
 
-            date = dateView.getText().toString();
-            amount = Double.parseDouble(amountView.getText().toString());
-            category = categoryView.getSelectedItem().toString();
-            description = descriptionView.getText().toString();
-            paymentMethod = paymentSpinnerView.getSelectedItem().toString();
+            if (new DecimalDigits().isValidInput(amountView)) {
 
-            datasource = new ExpensesDataSource(this);
-            datasource.open();
-            datasource.createExpense(date, amount, category, description, paymentMethod);
+                date = dateView.getText().toString();
+                amount = Double.parseDouble(amountView.getText().toString());
+                category = categoryView.getSelectedItem().toString();
+                description = descriptionView.getText().toString();
+                paymentMethod = paymentSpinnerView.getSelectedItem().toString();
 
-            startActivity(new Intent(this, ExpenseList.class));
+                datasource = new ExpensesDataSource(this);
+                datasource.open();
+                datasource.createExpense(date, amount, category, description, paymentMethod);
+
+                startActivity(new Intent(this, ExpenseList.class));
+            }
         }
 	}
 

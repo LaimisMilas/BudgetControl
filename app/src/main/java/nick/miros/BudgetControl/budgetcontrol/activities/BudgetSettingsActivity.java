@@ -3,22 +3,24 @@ package nick.miros.BudgetControl.budgetcontrol.activities;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
 
-import nick.miros.BudgetControl.budgetcontrol.helper.DecimalDigits;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
+import nick.miros.BudgetControl.budgetcontrol.helper.DecimalDigits;
 
 
 public class BudgetSettingsActivity extends ActionBarActivity {
@@ -63,44 +65,40 @@ public class BudgetSettingsActivity extends ActionBarActivity {
                 LayoutInflater li = LayoutInflater.from(context);
                 View promptsView = li.inflate(R.layout.alert_budget_prompt, null);
 
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                        context);
-
-                // set prompts.xml to alertdialog builder
-                alertDialogBuilder.setView(promptsView);
+                final AlertDialog alertDialog = new AlertDialog.Builder(context)
+                        .setView(promptsView)
+                        .setPositiveButton("OK", null)
+                        .setNegativeButton("Cancel", null)
+                        .create();
 
                 final EditText userInput = (EditText) promptsView
                         .findViewById(R.id.editTextDialogUserInput);
 
                 userInput.setFilters(new InputFilter[]{new DecimalDigits()});
 
-                // set dialog message
-                alertDialogBuilder
-                        .setCancelable(false)
-                        .setPositiveButton("OK",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        // get user input and set it to result
-                                        // edit text
-                                        MonthlyBudget.setText(userInput.getText());
+                alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
 
-                                        DecimalFormat numberFormat = new DecimalFormat("#.00");
-                                        dailyBudget.setText(" " + (numberFormat.format(Double.parseDouble(userInput.getText().toString()) / amountOfDays)));
-                                    }
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+
+                        Button b = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                        b.setOnClickListener(new View.OnClickListener() {
+
+                            @Override
+                            public void onClick(View view) {
+
+                                if (new DecimalDigits().isValidInput(userInput)) {
+                                    MonthlyBudget.setText(userInput.getText());
+
+                                    DecimalFormat numberFormat = new DecimalFormat("#.00");
+                                    dailyBudget.setText(" " + (numberFormat.format(Double.parseDouble(userInput.getText().toString()) / amountOfDays)));
+                                    alertDialog.dismiss();
                                 }
-                        )
-                        .setNegativeButton("Cancel",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
-                                    }
-                                }
-                        );
+                            }
+                        });
+                    }
+                });
 
-                // create alert dialog
-                AlertDialog alertDialog = alertDialogBuilder.create();
-
-                // show it
                 alertDialog.show();
 
             }
