@@ -1,3 +1,9 @@
+/*
+* This is an Activity where the user will be able to set
+* their monthly budget and the daily budget will be recalculated
+* appropriately.
+ */
+
 package nick.miros.BudgetControl.budgetcontrol.activities;
 
 import android.app.AlertDialog;
@@ -14,7 +20,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
@@ -50,18 +55,14 @@ public class BudgetSettingsActivity extends ActionBarActivity {
 
         currentMonth.setText("Budget for " + monthNames[month]);
 
-
         BudgetEditButton = (ImageButton) findViewById(R.id.EditButton);
         MonthlyBudget = (TextView) findViewById(R.id.currentMonthBudget);
 
-
-        // add button listener
         BudgetEditButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View arg0) {
 
-                // get prompts.xml view
                 LayoutInflater li = LayoutInflater.from(context);
                 View promptsView = li.inflate(R.layout.alert_budget_prompt, null);
 
@@ -81,24 +82,21 @@ public class BudgetSettingsActivity extends ActionBarActivity {
                     @Override
                     public void onShow(DialogInterface dialog) {
 
-                        Button b = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                        b.setOnClickListener(new View.OnClickListener() {
+                        Button positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+
+                        positiveButton.setOnClickListener(new View.OnClickListener() {
 
                             @Override
                             public void onClick(View view) {
 
+                                //checks whether the input is just a dot
                                 if (new DecimalDigits().isValidInput(userInput)) {
 
-                                    String input = userInput.getText().toString();
-
-                                    if (input.substring(input.length()-1, input.length()).equals(".")) {
-                                        MonthlyBudget.setText(input.substring(0, input.length() - 1));
-                                    }
-                                    else {
-                                        MonthlyBudget.setText(userInput.getText());
-                                    }
+                                    MonthlyBudget.setText(userInput.getText());
 
                                     DecimalFormat numberFormat = new DecimalFormat("#.00");
+
+                                    //formats and sets the text for the dailyBudget textview
                                     dailyBudget.setText(" " + (numberFormat.format(Double.parseDouble(userInput.getText().toString()) / amountOfDays)));
                                     alertDialog.dismiss();
                                 }

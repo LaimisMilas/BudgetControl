@@ -1,3 +1,9 @@
+/*
+* Helper class for validating the user input.
+*
+*
+ */
+
 package nick.miros.BudgetControl.budgetcontrol.helper;
 
 import android.text.InputFilter;
@@ -12,6 +18,7 @@ public class DecimalDigits implements InputFilter {
     Pattern mPattern;
 
     public DecimalDigits() {
+        //pattern for checking the user input
         mPattern = Pattern.compile("^(([1-9](\\d*)?)\\.?(\\d{0,2})?)|(0(\\.\\d{0,2})?)|\\.(\\d{0,2})?$");
 
     }
@@ -42,11 +49,22 @@ public class DecimalDigits implements InputFilter {
         return null;
     }
 
+    /**
+     * Checks whether the user has entered a trailing dot at the
+     * end of the input, or a dot by itself and sets the error
+     * on the edittext being passed
+     * @param userInput EditText input that should be validated
+     * @return whether the text is valid or not
+     */
     public boolean isValidInput(EditText userInput) {
 
         String input = userInput.getText().toString();
-        if ((input.substring(input.length() - 1, input.length()).equals(".")) && input.length() == 1) {
+        if (input.equals(".") && input.length() == 1) {
             userInput.setError("You cannot enter a . by itself");
+            return false;
+        }
+        else if (input.substring(input.length() - 1, input.length()).equals(".")) {
+            userInput.setError("delete the dot, or enter more decimals");
             return false;
         }
         return true;
