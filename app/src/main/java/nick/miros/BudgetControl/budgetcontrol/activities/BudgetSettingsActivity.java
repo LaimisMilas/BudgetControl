@@ -9,6 +9,7 @@ package nick.miros.BudgetControl.budgetcontrol.activities;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.InputFilter;
@@ -20,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
@@ -36,7 +38,7 @@ public class BudgetSettingsActivity extends ActionBarActivity {
     private TextView MonthlyBudget;
     private TextView dailyBudget;
 
-    String[] monthNames = {"January", "February", "March", "April", "May",
+    public static final String[] monthNames = {"January", "February", "March", "April", "May",
             "June", "July", "August", "September", "October", "November",
             "December"};
 
@@ -50,13 +52,25 @@ public class BudgetSettingsActivity extends ActionBarActivity {
         dailyBudget = (TextView) findViewById(R.id.dailyBudgetAmount);
 
         Calendar cal = Calendar.getInstance();
-        int month = cal.get(Calendar.MONTH);
-        final int amountOfDays = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+        final int month = cal.get(Calendar.MONTH); //current calendar month
+
+        final int amountOfDays = cal.getActualMaximum(Calendar.DAY_OF_MONTH); //amount of days in the current month
 
         currentMonth.setText("Budget for " + monthNames[month]);
 
         BudgetEditButton = (ImageButton) findViewById(R.id.EditButton);
         MonthlyBudget = (TextView) findViewById(R.id.currentMonthBudget);
+
+        final SharedPreferences sharedPreferences = getSharedPreferences("Test", Context.MODE_PRIVATE);
+
+        if (sharedPreferences.contains(monthNames[month])){
+            MonthlyBudget.setText(sharedPreferences.getString(monthNames[month], ""));
+
+            DecimalFormat numberFormat = new DecimalFormat("#.00");
+
+            //formats and sets the text for the dailyBudget textview
+            dailyBudget.setText(" " + (numberFormat.format(Double.parseDouble(sharedPreferences.getString(monthNames[month], "")) / amountOfDays)));
+        }
 
         BudgetEditButton.setOnClickListener(new View.OnClickListener() {
 
@@ -92,7 +106,13 @@ public class BudgetSettingsActivity extends ActionBarActivity {
                                 //checks whether the input is just a dot
                                 if (new DecimalDigits().isValidInput(userInput)) {
 
+
+
                                     MonthlyBudget.setText(userInput.getText());
+
+                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    editor.putString(monthNames[month], userInput.getText().toString());
+                                    editor.commit();
 
                                     DecimalFormat numberFormat = new DecimalFormat("#.00");
 

@@ -1,9 +1,3 @@
-/*
-* Helper class for validating the user input.
-*
-*
- */
-
 package nick.miros.BudgetControl.budgetcontrol.helper;
 
 import android.text.InputFilter;
@@ -12,7 +6,10 @@ import android.widget.EditText;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+/*
+* Helper class for validating the user input.
+*
+ */
 public class DecimalDigits implements InputFilter {
 
     Pattern mPattern;
