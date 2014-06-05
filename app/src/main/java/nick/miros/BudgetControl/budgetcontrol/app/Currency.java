@@ -1,7 +1,7 @@
 package nick.miros.BudgetControl.budgetcontrol.app;
 
 /**
- * Created by mymi on 05-Jun-14.
+ * Class for setting and getting currencies
  */
 public class Currency {
     private String country;
@@ -36,4 +36,5 @@ public class Currency {
     public String toString() {
         return country + " " + currencyName + " " + symbol;
     }
+
 }

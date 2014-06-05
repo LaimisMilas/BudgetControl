@@ -34,8 +34,8 @@
     <string name="payment_method">Payment Method</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_starting">StartingActivity</string>
-
     <string name="initial_budget_value"><b><u>0</u></b></string>
     <string name="initial_daily_budget_value"><b><u>0</u></b></string>
+    <string name="title_activity_currency_list">CurrencyListActivity</string>
 
 </resources>

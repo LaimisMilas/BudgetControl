@@ -26,6 +26,10 @@
             android:name="nick.miros.BudgetControl.budgetcontrol.activities.BudgetSettingsActivity"
             android:label="@string/title_activity_budget_settings" >
         </activity>
+        <activity
+            android:name="nick.miros.BudgetControl.budgetcontrol.app.CurrencyListActivity"
+            android:label="@string/title_activity_currency_list" >
+        </activity>
     </application>
 
 </manifest>
