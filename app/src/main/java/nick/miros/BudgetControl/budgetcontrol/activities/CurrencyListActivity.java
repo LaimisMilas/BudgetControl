@@ -1,9 +1,11 @@
-package nick.miros.BudgetControl.budgetcontrol.app;
+package nick.miros.BudgetControl.budgetcontrol.activities;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import nick.miros.BudgetControl.budgetcontrol.app.R;
 
 
 public class CurrencyListActivity extends ActionBarActivity {

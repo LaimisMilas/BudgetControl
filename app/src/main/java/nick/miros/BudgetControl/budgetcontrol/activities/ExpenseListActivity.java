@@ -1,4 +1,4 @@
-package nick.miros.BudgetControl.budgetcontrol.app;
+package nick.miros.BudgetControl.budgetcontrol.activities;
 
 import android.app.ListActivity;
 import android.os.Bundle;
@@ -6,9 +6,11 @@ import android.widget.ArrayAdapter;
 
 import java.util.List;
 
+import nick.miros.BudgetControl.budgetcontrol.app.Expense;
+import nick.miros.BudgetControl.budgetcontrol.app.R;
 import nick.miros.BudgetControl.budgetcontrol.data.ExpensesDataSource;
 
-public class ExpenseList extends ListActivity {
+public class ExpenseListActivity extends ListActivity {
 	private ExpensesDataSource datasource;
 
 	 public void onCreate(Bundle savedInstanceState) {

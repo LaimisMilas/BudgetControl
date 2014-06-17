@@ -20,7 +20,6 @@ import android.widget.TextView;
 import java.util.Calendar;
 
 import nick.miros.BudgetControl.budgetcontrol.helper.DecimalDigits;
-import nick.miros.BudgetControl.budgetcontrol.app.ExpenseList;
 import nick.miros.BudgetControl.budgetcontrol.data.ExpensesDataSource;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
 
@@ -106,7 +105,7 @@ public class AddExpenseActivity extends Activity {
                 datasource.open();
                 datasource.createExpense(date, amount, category, description, paymentMethod);
 
-                startActivity(new Intent(this, ExpenseList.class));
+                startActivity(new Intent(this, ExpenseListActivity.class));
             }
         }
     }
