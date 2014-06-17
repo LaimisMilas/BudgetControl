@@ -35,6 +35,7 @@ public class BudgetSettingsActivity extends ActionBarActivity {
     TextView currentMonth;
     final Context context = this;
     private ImageButton BudgetEditButton;
+    private ImageButton CurrencyEditButton;
     private TextView MonthlyBudget;
     private TextView dailyBudget;
 
@@ -127,6 +128,15 @@ public class BudgetSettingsActivity extends ActionBarActivity {
 
                 alertDialog.show();
 
+            }
+        });
+
+        CurrencyEditButton = (ImageButton) findViewById(R.id.EditCurrencyButton);
+        CurrencyEditButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "stuff", Toast.LENGTH_SHORT).show();
             }
         });
 
