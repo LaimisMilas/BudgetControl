@@ -1,7 +1,7 @@
 package nick.miros.BudgetControl.budgetcontrol.app;
 
 /**
- * Class for setting and getting currencies
+ * Class for setting and getting countries
  */
 public class Currency {
     private String country;
