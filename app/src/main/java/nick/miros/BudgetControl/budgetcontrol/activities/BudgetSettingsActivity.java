@@ -23,6 +23,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 
@@ -64,7 +71,7 @@ public class BudgetSettingsActivity extends ActionBarActivity {
 
         final SharedPreferences sharedPreferences = getSharedPreferences("Test", Context.MODE_PRIVATE);
 
-        if (sharedPreferences.contains(monthNames[month])){
+        if (sharedPreferences.contains(monthNames[month])) {
             MonthlyBudget.setText(sharedPreferences.getString(monthNames[month], ""));
 
             DecimalFormat numberFormat = new DecimalFormat("#.00");
@@ -108,7 +115,6 @@ public class BudgetSettingsActivity extends ActionBarActivity {
                                 if (new DecimalDigits().isValidInput(userInput)) {
 
 
-
                                     MonthlyBudget.setText(userInput.getText());
 
                                     SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -137,6 +143,22 @@ public class BudgetSettingsActivity extends ActionBarActivity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getApplicationContext(), "stuff", Toast.LENGTH_SHORT).show();
+                String eol = System.getProperty("line.separator");
+                InputStream is = getResources().openRawResource(R.raw.currencies);
+                try {
+                    InputStreamReader inputStreamReader = new InputStreamReader(is);
+                    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                    String line;
+                    StringBuffer buffer = new StringBuffer();
+                    while ((line = bufferedReader.readLine()) != null) {
+                        buffer.append(line + eol);
+                        System.out.println(line);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
             }
         });
 
