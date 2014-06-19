@@ -1,9 +1,11 @@
 package nick.miros.BudgetControl.budgetcontrol.activities;
 
+import android.app.ListActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -14,7 +16,7 @@ import nick.miros.BudgetControl.budgetcontrol.app.Currency;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
 
 
-public class CurrencyListActivity extends ActionBarActivity {
+public class CurrencyListActivity extends ListActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,10 +75,9 @@ public class CurrencyListActivity extends ActionBarActivity {
         }
         System.out.println(currencySymbols);
 
-        ArrayList<Currency> currencies= new ArrayList<Currency>();
+        ArrayList<Currency> currencies = new ArrayList<Currency>();
 
-        for (int i = 0; i < countries.size(); i++)
-        {
+        for (int i = 0; i < countries.size(); i++) {
             Currency currency = new Currency();
             String currentCountry = countries.get(i);
             String currentName = currencyNames.get(i);
@@ -88,6 +89,9 @@ public class CurrencyListActivity extends ActionBarActivity {
         }
         System.out.println(currencies);
 
+        ArrayAdapter<Currency> adapter = new ArrayAdapter<Currency>(this,
+                android.R.layout.simple_list_item_1, currencies);
+        setListAdapter(adapter);
 
 
     }
