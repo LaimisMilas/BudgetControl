@@ -30,6 +30,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import nick.miros.BudgetControl.budgetcontrol.app.Currency;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
 import nick.miros.BudgetControl.budgetcontrol.helper.DecimalDigits;
 
@@ -195,6 +196,21 @@ public class BudgetSettingsActivity extends ActionBarActivity {
                     e.printStackTrace();
                 }
                 System.out.println(currencySymbols);
+
+                ArrayList<Currency> currencies= new ArrayList<Currency>();
+
+                for (int i = 0; i < countries.size(); i++)
+                {
+                    Currency currency = new Currency();
+                    String currentCountry = countries.get(i);
+                    String currentName = currencyNames.get(i);
+                    String currentSymbol = currencySymbols.get(i);
+                    currency.setCountry(currentCountry);
+                    currency.setCurrencyName(currentName);
+                    currency.setSymbol(currentSymbol);
+                    currencies.add(currency);
+                }
+                System.out.println(currencies);
 
 
 
