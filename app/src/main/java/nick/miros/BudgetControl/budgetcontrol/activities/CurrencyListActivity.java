@@ -5,6 +5,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+
+import nick.miros.BudgetControl.budgetcontrol.app.Currency;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
 
 
@@ -14,6 +20,76 @@ public class CurrencyListActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_currency_list);
+
+        ArrayList<String> countries = new ArrayList<String>();
+
+        String eol = System.getProperty("line.separator");
+        InputStream isCountry = getResources().openRawResource(R.raw.countries);
+        try {
+            InputStreamReader inputStreamReader = new InputStreamReader(isCountry);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            String line;
+            StringBuffer buffer = new StringBuffer();
+            while ((line = bufferedReader.readLine()) != null) {
+                buffer.append(line + eol);
+                countries.add(line);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(countries);
+
+        ArrayList<String> currencyNames = new ArrayList<String>();
+
+        InputStream isCurrency = getResources().openRawResource(R.raw.currency_names);
+        try {
+            InputStreamReader inputStreamReader = new InputStreamReader(isCurrency);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            String line;
+            StringBuffer buffer = new StringBuffer();
+            while ((line = bufferedReader.readLine()) != null) {
+                buffer.append(line + eol);
+                currencyNames.add(line);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(currencyNames);
+
+        ArrayList<String> currencySymbols = new ArrayList<String>();
+
+        InputStream isSymbol = getResources().openRawResource(R.raw.currency_symbols);
+        try {
+            InputStreamReader inputStreamReader = new InputStreamReader(isSymbol);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            String line;
+            StringBuffer buffer = new StringBuffer();
+            while ((line = bufferedReader.readLine()) != null) {
+                buffer.append(line + eol);
+                currencySymbols.add(line);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(currencySymbols);
+
+        ArrayList<Currency> currencies= new ArrayList<Currency>();
+
+        for (int i = 0; i < countries.size(); i++)
+        {
+            Currency currency = new Currency();
+            String currentCountry = countries.get(i);
+            String currentName = currencyNames.get(i);
+            String currentSymbol = currencySymbols.get(i);
+            currency.setCountry(currentCountry);
+            currency.setCurrencyName(currentName);
+            currency.setSymbol(currentSymbol);
+            currencies.add(currency);
+        }
+        System.out.println(currencies);
+
+
+
     }
 
 

@@ -9,6 +9,7 @@ package nick.miros.BudgetControl.budgetcontrol.activities;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -140,79 +141,7 @@ public class BudgetSettingsActivity extends ActionBarActivity {
 
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "stuff", Toast.LENGTH_SHORT).show();
-
-                ArrayList<String> countries = new ArrayList<String>();
-
-                String eol = System.getProperty("line.separator");
-                InputStream isCountry = getResources().openRawResource(R.raw.countries);
-                try {
-                    InputStreamReader inputStreamReader = new InputStreamReader(isCountry);
-                    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                    String line;
-                    StringBuffer buffer = new StringBuffer();
-                    while ((line = bufferedReader.readLine()) != null) {
-                        buffer.append(line + eol);
-                        countries.add(line);
-                        //System.out.println(line);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                System.out.println(countries);
-
-                ArrayList<String> currencyNames = new ArrayList<String>();
-
-                InputStream isCurrency = getResources().openRawResource(R.raw.currency_names);
-                try {
-                    InputStreamReader inputStreamReader = new InputStreamReader(isCurrency);
-                    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                    String line;
-                    StringBuffer buffer = new StringBuffer();
-                    while ((line = bufferedReader.readLine()) != null) {
-                        buffer.append(line + eol);
-                        currencyNames.add(line);
-                        //System.out.println(line);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                System.out.println(currencyNames);
-
-                ArrayList<String> currencySymbols = new ArrayList<String>();
-
-                InputStream isSymbol = getResources().openRawResource(R.raw.currency_symbols);
-                try {
-                    InputStreamReader inputStreamReader = new InputStreamReader(isSymbol);
-                    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                    String line;
-                    StringBuffer buffer = new StringBuffer();
-                    while ((line = bufferedReader.readLine()) != null) {
-                        buffer.append(line + eol);
-                        currencySymbols.add(line);
-                        //System.out.println(line);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                System.out.println(currencySymbols);
-
-                ArrayList<Currency> currencies= new ArrayList<Currency>();
-
-                for (int i = 0; i < countries.size(); i++)
-                {
-                    Currency currency = new Currency();
-                    String currentCountry = countries.get(i);
-                    String currentName = currencyNames.get(i);
-                    String currentSymbol = currencySymbols.get(i);
-                    currency.setCountry(currentCountry);
-                    currency.setCurrencyName(currentName);
-                    currency.setSymbol(currentSymbol);
-                    currencies.add(currency);
-                }
-                System.out.println(currencies);
-
-
+                startActivity(new Intent(view.getContext(), CurrencyListActivity.class));
 
             }
         });
