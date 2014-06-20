@@ -6,13 +6,14 @@ import android.widget.EditText;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 /*
 * Helper class for validating the user input.
 *
  */
 public class DecimalDigits implements InputFilter {
 
-    Pattern mPattern;
+    public static Pattern mPattern;
 
     public DecimalDigits() {
         //pattern for checking the user input
@@ -20,6 +21,27 @@ public class DecimalDigits implements InputFilter {
 
     }
 
+    /**
+     * Checks whether the user has entered a trailing dot at the
+     * end of the input, or a dot by itself and sets the error
+     * on the edittext being passed
+     *
+     * @param userInput EditText input that should be validated
+     * @return whether the text is valid or not
+     */
+    public static boolean isValidInput(EditText userInput) {
+
+        String input = userInput.getText().toString();
+        if (input.equals(".") && input.length() == 1) {
+            userInput.setError("You cannot enter a . by itself");
+            return false;
+        } else if (input.substring(input.length() - 1, input.length()).equals(".")) {
+            userInput.setError("delete the dot, or enter more decimals");
+            return false;
+        }
+        return true;
+
+    }
 
     @Override
     public CharSequence filter(CharSequence source,
@@ -44,28 +66,6 @@ public class DecimalDigits implements InputFilter {
         }
 
         return null;
-    }
-
-    /**
-     * Checks whether the user has entered a trailing dot at the
-     * end of the input, or a dot by itself and sets the error
-     * on the edittext being passed
-     * @param userInput EditText input that should be validated
-     * @return whether the text is valid or not
-     */
-    public boolean isValidInput(EditText userInput) {
-
-        String input = userInput.getText().toString();
-        if (input.equals(".") && input.length() == 1) {
-            userInput.setError("You cannot enter a . by itself");
-            return false;
-        }
-        else if (input.substring(input.length() - 1, input.length()).equals(".")) {
-            userInput.setError("delete the dot, or enter more decimals");
-            return false;
-        }
-        return true;
-
     }
 
 }

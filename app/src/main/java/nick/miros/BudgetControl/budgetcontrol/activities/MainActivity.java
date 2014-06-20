@@ -1,41 +1,18 @@
 package nick.miros.BudgetControl.budgetcontrol.activities;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
-import nick.miros.BudgetControl.budgetcontrol.activities.AddExpenseActivity;
-import nick.miros.BudgetControl.budgetcontrol.activities.BudgetSettingsActivity;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
 
 
 public class MainActivity extends ActionBarActivity {
-    Button ExpenseDirectionButton;
-    Button DataDirectionButton;
-    Button BudgetDirectionButton;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        ExpenseDirectionButton = (Button) findViewById(R.id.ExpenseDirectionButton);
-        DataDirectionButton = (Button) findViewById(R.id.DataDirectionButton);
-        BudgetDirectionButton = (Button) findViewById(R.id.BudgetDirectionButton);
-
-        ExpenseDirectionButton.setOnClickListener(new mainActivityListener());
-        DataDirectionButton.setOnClickListener(new mainActivityListener());
-        BudgetDirectionButton.setOnClickListener(new mainActivityListener());
-
-    }
-
-    private class mainActivityListener implements View.OnClickListener {
-
+    View.OnClickListener mainActivityListener = new View.OnClickListener() {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.ExpenseDirectionButton:
@@ -48,8 +25,25 @@ public class MainActivity extends ActionBarActivity {
                     startActivity(new Intent(v.getContext(), BudgetSettingsActivity.class));
                     break;
             }
-
         }
+    };
+    private Button ExpenseDirectionButton;
+    private Button DataDirectionButton;
+    private Button BudgetDirectionButton;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        ExpenseDirectionButton = (Button) findViewById(R.id.ExpenseDirectionButton);
+        DataDirectionButton = (Button) findViewById(R.id.DataDirectionButton);
+        BudgetDirectionButton = (Button) findViewById(R.id.BudgetDirectionButton);
+
+        ExpenseDirectionButton.setOnClickListener(mainActivityListener);
+        DataDirectionButton.setOnClickListener(mainActivityListener);
+        BudgetDirectionButton.setOnClickListener(mainActivityListener);
+
     }
 
 

@@ -1,30 +1,32 @@
 package nick.miros.BudgetControl.budgetcontrol.activities;
 
-import android.app.ListActivity;
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import nick.miros.BudgetControl.budgetcontrol.app.Currency;
+import nick.miros.BudgetControl.budgetcontrol.app.R;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-import nick.miros.BudgetControl.budgetcontrol.app.Currency;
-import nick.miros.BudgetControl.budgetcontrol.app.R;
 
-
-public class CurrencyListActivity extends ListActivity {
+public class CurrencyListActivity extends Activity {
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_currency_list);
 
+        listView = (ListView) findViewById(R.id.list);
         ArrayList<String> countries = new ArrayList<String>();
 
+        // <Comment>: Code duplication.
         String eol = System.getProperty("line.separator");
         InputStream isCountry = getResources().openRawResource(R.raw.countries);
         try {
@@ -43,6 +45,7 @@ public class CurrencyListActivity extends ListActivity {
 
         ArrayList<String> currencyNames = new ArrayList<String>();
 
+        // <Comment>: Code duplication.
         InputStream isCurrency = getResources().openRawResource(R.raw.currency_names);
         try {
             InputStreamReader inputStreamReader = new InputStreamReader(isCurrency);
@@ -60,6 +63,7 @@ public class CurrencyListActivity extends ListActivity {
 
         ArrayList<String> currencySymbols = new ArrayList<String>();
 
+        // <Comment>: Code duplication.
         InputStream isSymbol = getResources().openRawResource(R.raw.currency_symbols);
         try {
             InputStreamReader inputStreamReader = new InputStreamReader(isSymbol);
@@ -91,7 +95,7 @@ public class CurrencyListActivity extends ListActivity {
 
         ArrayAdapter<Currency> adapter = new ArrayAdapter<Currency>(this,
                 android.R.layout.simple_list_item_1, currencies);
-        setListAdapter(adapter);
+        listView.setAdapter(adapter);
 
 
     }

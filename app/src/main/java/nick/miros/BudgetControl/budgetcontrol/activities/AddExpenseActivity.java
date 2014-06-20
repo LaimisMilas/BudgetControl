@@ -9,19 +9,12 @@ import android.os.Bundle;
 import android.text.InputFilter;
 import android.view.Menu;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.*;
+import nick.miros.BudgetControl.budgetcontrol.app.R;
+import nick.miros.BudgetControl.budgetcontrol.data.ExpensesDataSource;
+import nick.miros.BudgetControl.budgetcontrol.helper.DecimalDigits;
 
 import java.util.Calendar;
-
-import nick.miros.BudgetControl.budgetcontrol.helper.DecimalDigits;
-import nick.miros.BudgetControl.budgetcontrol.data.ExpensesDataSource;
-import nick.miros.BudgetControl.budgetcontrol.app.R;
 
 public class AddExpenseActivity extends Activity {
 
@@ -83,6 +76,13 @@ public class AddExpenseActivity extends Activity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
     public void addNewExpense(View v) {
 
         TextView dateView = (TextView) findViewById(R.id.dateView);
@@ -93,7 +93,7 @@ public class AddExpenseActivity extends Activity {
 
         if (checkForEmpty(amountView, descriptionView)) {
 
-            if (new DecimalDigits().isValidInput(amountView)) {
+            if (DecimalDigits.isValidInput(amountView)) {
 
                 date = dateView.getText().toString();
                 amount = Double.parseDouble(amountView.getText().toString());
@@ -130,13 +130,6 @@ public class AddExpenseActivity extends Activity {
 
         return (amountViewIsOk && descriptionViewIsOk);
 
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
     }
 
     public void showDatePickerDialog(View v) {
