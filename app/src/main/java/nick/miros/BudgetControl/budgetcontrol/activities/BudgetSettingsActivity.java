@@ -6,9 +6,11 @@
 
 package nick.miros.BudgetControl.budgetcontrol.activities;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -28,13 +30,13 @@ import java.text.DecimalFormat;
 import java.util.Calendar;
 
 
-public class BudgetSettingsActivity extends ActionBarActivity {
+public class BudgetSettingsActivity extends Activity {
 
     public static final String[] monthNames = {"January", "February", "March", "April", "May",
             "June", "July", "August", "September", "October", "November",
             "December"};
-    final Context context = this;
-    TextView currentMonth;
+    private final Context context = this;
+    private TextView currentMonth;
     private ImageButton BudgetEditButton;
     private ImageButton CurrencyEditButton;
     private TextView MonthlyBudget;
@@ -125,6 +127,12 @@ public class BudgetSettingsActivity extends ActionBarActivity {
 
                 alertDialog.show();
 
+            }
+        });
+        CurrencyEditButton = (ImageButton) findViewById(R.id.EditCurrencyButton);
+        CurrencyEditButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                startActivity(new Intent(v.getContext(), CurrencyListActivity.class));
             }
         });
     }

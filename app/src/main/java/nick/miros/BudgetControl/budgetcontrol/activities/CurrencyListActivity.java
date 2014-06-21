@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
 import nick.miros.BudgetControl.budgetcontrol.app.Currency;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
 
@@ -18,68 +19,25 @@ import java.util.ArrayList;
 public class CurrencyListActivity extends Activity {
     private ListView listView;
 
+    private ArrayList<String> countries = new ArrayList<String>();
+    private ArrayList<String> currencyNames = new ArrayList<String>();
+    private ArrayList<String> currencySymbols = new ArrayList<String>();
+    private ArrayList<Currency> currencies = new ArrayList<Currency>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_currency_list);
 
         listView = (ListView) findViewById(R.id.list);
-        ArrayList<String> countries = new ArrayList<String>();
 
-        // <Comment>: Code duplication.
-        String eol = System.getProperty("line.separator");
-        InputStream isCountry = getResources().openRawResource(R.raw.countries);
-        try {
-            InputStreamReader inputStreamReader = new InputStreamReader(isCountry);
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-            String line;
-            StringBuffer buffer = new StringBuffer();
-            while ((line = bufferedReader.readLine()) != null) {
-                buffer.append(line + eol);
-                countries.add(line);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        System.out.println(countries);
+        //extract the needed Strings from currency files
+        countries = extractFileInfo(R.raw.countries);
+        currencyNames = extractFileInfo(R.raw.currency_names);
+        currencySymbols = extractFileInfo(R.raw.currency_symbols);
 
-        ArrayList<String> currencyNames = new ArrayList<String>();
-
-        // <Comment>: Code duplication.
-        InputStream isCurrency = getResources().openRawResource(R.raw.currency_names);
-        try {
-            InputStreamReader inputStreamReader = new InputStreamReader(isCurrency);
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-            String line;
-            StringBuffer buffer = new StringBuffer();
-            while ((line = bufferedReader.readLine()) != null) {
-                buffer.append(line + eol);
-                currencyNames.add(line);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        System.out.println(currencyNames);
-
-        ArrayList<String> currencySymbols = new ArrayList<String>();
-
-        // <Comment>: Code duplication.
-        InputStream isSymbol = getResources().openRawResource(R.raw.currency_symbols);
-        try {
-            InputStreamReader inputStreamReader = new InputStreamReader(isSymbol);
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-            String line;
-            StringBuffer buffer = new StringBuffer();
-            while ((line = bufferedReader.readLine()) != null) {
-                buffer.append(line + eol);
-                currencySymbols.add(line);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        System.out.println(currencySymbols);
-
-        ArrayList<Currency> currencies = new ArrayList<Currency>();
+        //create an array to be passed to an adapter
+        currencies = new ArrayList<Currency>();
 
         for (int i = 0; i < countries.size(); i++) {
             Currency currency = new Currency();
@@ -91,13 +49,41 @@ public class CurrencyListActivity extends Activity {
             currency.setSymbol(currentSymbol);
             currencies.add(currency);
         }
-        System.out.println(currencies);
 
+        //make the listview
         ArrayAdapter<Currency> adapter = new ArrayAdapter<Currency>(this,
                 android.R.layout.simple_list_item_1, currencies);
         listView.setAdapter(adapter);
 
+    }
 
+    /**
+     * Extracts text line by line from a file specified
+     * and puts it into an array of Strings
+     *
+     * @param fileId id of a txt file that is to be parsed
+     * @return an array of Strings that were extracted from the file
+     */
+
+    public ArrayList<String> extractFileInfo(int fileId) {
+        String eol = System.getProperty("line.separator");
+        ArrayList<String> extractedArray = new ArrayList<String>();
+
+        InputStream isSymbol = getResources().openRawResource(fileId);
+        try {
+            InputStreamReader inputStreamReader = new InputStreamReader(isSymbol);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            String line;
+            StringBuffer buffer = new StringBuffer();
+            while ((line = bufferedReader.readLine()) != null) {
+                buffer.append(line + eol);
+                extractedArray.add(line);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return extractedArray;
     }
 
 

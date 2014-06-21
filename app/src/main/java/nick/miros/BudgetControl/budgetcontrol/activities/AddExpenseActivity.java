@@ -25,6 +25,7 @@ public class AddExpenseActivity extends Activity {
     private double amount;
     private String paymentMethod;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
