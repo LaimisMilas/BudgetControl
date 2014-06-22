@@ -18,12 +18,27 @@ import java.util.Calendar;
 
 public class AddExpenseActivity extends Activity {
 
-    private ExpensesDataSource datasource;
     private String date;
     private String category;
     private String description;
-    private double amount;
     private String paymentMethod;
+    private double amount;
+    private int currentDay;
+    private int currentMonth;
+    private int currentYear;
+    private TextView currentDateText;
+    private TextView amountEntered;
+    private TextView dateView;
+    private TextView descriptionView;
+    private ImageButton dateButton;
+    private Button addExpenseButton;
+    private Spinner categorySpinner;
+    private Spinner paymentSpinner;
+    private Spinner categoryView;
+    private Spinner paymentSpinnerView;
+    private ExpensesDataSource datasource;
+    private EditText amountView;
+
 
 
     @Override
@@ -33,14 +48,12 @@ public class AddExpenseActivity extends Activity {
 
         Calendar c = Calendar.getInstance();
 
-        int currentDay = c.get(Calendar.DATE);
-        int currentMonth = c.get(Calendar.MONTH) + 1;
-        int currentYear = c.get(Calendar.YEAR);
+        currentDay = c.get(Calendar.DATE);
+        currentMonth = c.get(Calendar.MONTH) + 1;
+        currentYear = c.get(Calendar.YEAR);
+        currentDateText = (TextView) findViewById(R.id.dateView);
 
-        TextView currentDateText = (TextView) findViewById(R.id.dateView);
-
-        ImageButton dateButton = (ImageButton) findViewById(R.id.chooseDateButton);
-
+        dateButton = (ImageButton) findViewById(R.id.chooseDateButton);
         dateButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 showDatePickerDialog(v);
@@ -51,24 +64,22 @@ public class AddExpenseActivity extends Activity {
         currentDateText.setText(currentDay + " / " + currentMonth + " / " + currentYear);
 
 
-        Spinner categorySpinner = (Spinner) findViewById(R.id.category_spinner);
+        categorySpinner = (Spinner) findViewById(R.id.category_spinner);
         ArrayAdapter<CharSequence> simpleTextViewAdapter = ArrayAdapter.createFromResource(this,
                 R.array.expense_category_array, R.layout.adapter_simple_textview);
         simpleTextViewAdapter.setDropDownViewResource(R.layout.adapter_simple_textview);
         categorySpinner.setAdapter(simpleTextViewAdapter);
 
-        Spinner paymentSpinner = (Spinner) findViewById(R.id.payment_spinner);
+        paymentSpinner = (Spinner) findViewById(R.id.payment_spinner);
         ArrayAdapter<CharSequence> paymentAdapter = ArrayAdapter.createFromResource(this,
                 R.array.payment_method, R.layout.adapter_simple_textview);
         simpleTextViewAdapter.setDropDownViewResource(R.layout.adapter_simple_textview);
         paymentSpinner.setAdapter(paymentAdapter);
 
-        TextView AmountEntered = (TextView) findViewById(R.id.expense_amount);
+        amountEntered = (TextView) findViewById(R.id.expense_amount);
+        amountEntered.setFilters(new InputFilter[]{new DecimalDigits()});
 
-        AmountEntered.setFilters(new InputFilter[]{new DecimalDigits()});
-
-        Button addExpenseButton = (Button) findViewById(R.id.addExpense);
-
+        addExpenseButton = (Button) findViewById(R.id.addExpense);
         addExpenseButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 addNewExpense(v);
@@ -86,11 +97,11 @@ public class AddExpenseActivity extends Activity {
 
     public void addNewExpense(View v) {
 
-        TextView dateView = (TextView) findViewById(R.id.dateView);
-        Spinner categoryView = (Spinner) findViewById(R.id.category_spinner);
-        TextView descriptionView = (TextView) findViewById(R.id.expense_description);
-        EditText amountView = (EditText) findViewById(R.id.expense_amount);
-        Spinner paymentSpinnerView = (Spinner) findViewById(R.id.payment_spinner);
+        dateView = (TextView) findViewById(R.id.dateView);
+        categoryView = (Spinner) findViewById(R.id.category_spinner);
+        descriptionView = (TextView) findViewById(R.id.expense_description);
+        amountView = (EditText) findViewById(R.id.expense_amount);
+        paymentSpinnerView = (Spinner) findViewById(R.id.payment_spinner);
 
         if (checkForEmpty(amountView, descriptionView)) {
 
@@ -110,6 +121,16 @@ public class AddExpenseActivity extends Activity {
             }
         }
     }
+
+    /**
+     * Checks whether the user entered or not
+     * the information to the given textview.
+     * If not - set an error to an appropriate View.
+     *
+     * @param amountView amount field to be checked
+     * @param descriptionView description field to be checked
+     * @return whether both fields are not empty
+     */
 
     public boolean checkForEmpty(TextView amountView, TextView descriptionView) {
         boolean amountViewIsOk;
