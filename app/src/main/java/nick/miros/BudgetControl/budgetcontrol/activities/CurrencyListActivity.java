@@ -34,7 +34,7 @@ public class CurrencyListActivity extends Activity {
         //extract the needed Strings from currency files
         countries = extractFileInfo(R.raw.countries);
         currencyNames = extractFileInfo(R.raw.currency_names);
-        currencySymbols = extractFileInfo(R.raw.currency_symbols);
+        currencySymbols = extractFileInfo(R.raw.currency_codes);
 
         //create an array to be passed to an adapter
         currencies = new ArrayList<Currency>();

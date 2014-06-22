@@ -6,6 +6,7 @@ package nick.miros.BudgetControl.budgetcontrol.app;
 public class Currency {
     private String country;
     private String currencyName;
+    private String currencyCode;
     private String symbol;
 
     public String getCountry() {
@@ -24,6 +25,14 @@ public class Currency {
         this.currencyName = currencyName;
     }
 
+    public String getCurrencyCode() {
+        return currencyCode;
+    }
+
+    public void setCurrencyCode(String currencyCode) {
+        this.currencyCode = currencyCode;
+    }
+
     public String getSymbol() {
         return symbol;
     }
@@ -34,7 +43,7 @@ public class Currency {
 
     @Override
     public String toString() {
-        return country + " " + currencyName + " " + symbol;
+        return country + " " + currencyName + " - " + symbol;
     }
 
 }

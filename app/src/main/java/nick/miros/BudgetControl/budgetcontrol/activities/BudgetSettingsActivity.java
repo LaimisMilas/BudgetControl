@@ -13,7 +13,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,11 +22,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import nick.miros.BudgetControl.budgetcontrol.app.R;
-import nick.miros.BudgetControl.budgetcontrol.helper.DecimalDigits;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
+
+import nick.miros.BudgetControl.budgetcontrol.app.R;
+import nick.miros.BudgetControl.budgetcontrol.helper.DecimalDigits;
 
 
 public class BudgetSettingsActivity extends Activity {
@@ -129,6 +129,7 @@ public class BudgetSettingsActivity extends Activity {
 
             }
         });
+
         CurrencyEditButton = (ImageButton) findViewById(R.id.EditCurrencyButton);
         CurrencyEditButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
