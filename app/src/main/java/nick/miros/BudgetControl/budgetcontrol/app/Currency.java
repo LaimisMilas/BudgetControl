@@ -25,14 +25,6 @@ public class Currency {
         this.currencyName = currencyName;
     }
 
-    public String getCurrencyCode() {
-        return currencyCode;
-    }
-
-    public void setCurrencyCode(String currencyCode) {
-        this.currencyCode = currencyCode;
-    }
-
     public String getSymbol() {
         return symbol;
     }
