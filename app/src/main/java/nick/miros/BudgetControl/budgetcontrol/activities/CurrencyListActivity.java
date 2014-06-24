@@ -9,6 +9,7 @@ import android.widget.ListView;
 
 import nick.miros.BudgetControl.budgetcontrol.app.Currency;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
+import nick.miros.BudgetControl.budgetcontrol.helper.CurrencyAdapter;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -51,8 +52,12 @@ public class CurrencyListActivity extends Activity {
         }
 
         //make the listview
+        /*
         ArrayAdapter<Currency> adapter = new ArrayAdapter<Currency>(this,
                 android.R.layout.simple_list_item_1, currencies);
+        listView.setAdapter(adapter);
+        */
+        CurrencyAdapter adapter = new CurrencyAdapter(this, currencyNames, currencySymbols);
         listView.setAdapter(adapter);
 
     }
