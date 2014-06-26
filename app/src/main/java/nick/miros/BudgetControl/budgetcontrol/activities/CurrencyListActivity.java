@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import nick.miros.BudgetControl.budgetcontrol.app.Currency;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
@@ -18,6 +21,7 @@ import java.util.ArrayList;
 
 
 public class CurrencyListActivity extends Activity {
+    public static String currencyUsed;
     private ListView listView;
 
     private ArrayList<String> countries = new ArrayList<String>();
@@ -33,7 +37,6 @@ public class CurrencyListActivity extends Activity {
         listView = (ListView) findViewById(R.id.list);
 
         //extract the needed Strings from currency files
-        countries = extractFileInfo(R.raw.countries);
         currencyNames = extractFileInfo(R.raw.currency_names);
         currencySymbols = extractFileInfo(R.raw.currency_symbols);
 
@@ -51,14 +54,20 @@ public class CurrencyListActivity extends Activity {
             currencies.add(currency);
         }
 
-        //make the listview
-        /*
-        ArrayAdapter<Currency> adapter = new ArrayAdapter<Currency>(this,
-                android.R.layout.simple_list_item_1, currencies);
-        listView.setAdapter(adapter);
-        */
         CurrencyAdapter adapter = new CurrencyAdapter(this, currencyNames, currencySymbols);
         listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, final View view,
+                                    int position, long id) {
+                currencyUsed = currencySymbols.get(position);
+                Toast.makeText(getApplicationContext(), currencyUsed, Toast.LENGTH_SHORT).show();
+
+            }
+
+        });
 
     }
 
