@@ -41,13 +41,16 @@ public class BudgetSettingsActivity extends Activity {
     private ImageButton CurrencyEditButton;
     private TextView MonthlyBudget;
     private TextView dailyBudget;
-
     //
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_budget_settings);
+
+        //final SharedPreferences settings = getSharedPreferences("Test", Context.MODE_PRIVATE);
+        final SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
+
 
         currentMonth = (TextView) findViewById(R.id.currentMonth);
         dailyBudget = (TextView) findViewById(R.id.dailyBudgetAmount);
@@ -62,15 +65,14 @@ public class BudgetSettingsActivity extends Activity {
         BudgetEditButton = (ImageButton) findViewById(R.id.EditButton);
         MonthlyBudget = (TextView) findViewById(R.id.currentMonthBudget);
 
-        final SharedPreferences sharedPreferences = getSharedPreferences("Test", Context.MODE_PRIVATE);
 
-        if (sharedPreferences.contains(monthNames[month])) {
-            MonthlyBudget.setText(sharedPreferences.getString(monthNames[month], ""));
+        if (settings.contains(monthNames[month])) {
+            MonthlyBudget.setText(settings.getString(monthNames[month], ""));
 
             DecimalFormat numberFormat = new DecimalFormat("#.00");
 
             //formats and sets the text for the dailyBudget textview
-            dailyBudget.setText(" " + (numberFormat.format(Double.parseDouble(sharedPreferences.getString(monthNames[month], "")) / amountOfDays)));
+            dailyBudget.setText(" " + (numberFormat.format(Double.parseDouble(settings.getString(monthNames[month], "")) / amountOfDays)));
         }
 
         BudgetEditButton.setOnClickListener(new View.OnClickListener() {
@@ -110,7 +112,7 @@ public class BudgetSettingsActivity extends Activity {
 
                                     MonthlyBudget.setText(userInput.getText());
 
-                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    SharedPreferences.Editor editor = settings.edit();
                                     editor.putString(monthNames[month], userInput.getText().toString());
                                     editor.commit();
 

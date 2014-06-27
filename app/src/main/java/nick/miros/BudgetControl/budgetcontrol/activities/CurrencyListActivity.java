@@ -1,6 +1,8 @@
 package nick.miros.BudgetControl.budgetcontrol.activities;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,8 +23,8 @@ import java.util.ArrayList;
 
 
 public class CurrencyListActivity extends Activity {
-    public static String currencyUsed;
     private ListView listView;
+    public static final String currencyUsed = "CurrencyUsedKey";
 
     private ArrayList<String> countries = new ArrayList<String>();
     private ArrayList<String> currencyNames = new ArrayList<String>();
@@ -33,6 +35,7 @@ public class CurrencyListActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_currency_list);
+        final SharedPreferences settings = getPreferences(MODE_PRIVATE);
 
         listView = (ListView) findViewById(R.id.list);
 
@@ -57,13 +60,23 @@ public class CurrencyListActivity extends Activity {
         CurrencyAdapter adapter = new CurrencyAdapter(this, currencyNames, currencySymbols);
         listView.setAdapter(adapter);
 
+        if (settings.contains(currencyUsed)) {
+
+            Toast.makeText(getApplicationContext(), settings.getString(currencyUsed, ""), Toast.LENGTH_SHORT).show();
+        }
+
+        //saves the currency chosen from the list to sharePreferences
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
-                currencyUsed = currencySymbols.get(position);
-                Toast.makeText(getApplicationContext(), currencyUsed, Toast.LENGTH_SHORT).show();
+
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString(currencyUsed, currencySymbols.get(position));
+                editor.commit();
+
+
 
             }
 
