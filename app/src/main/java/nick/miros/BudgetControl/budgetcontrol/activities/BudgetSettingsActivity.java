@@ -26,6 +26,7 @@ import android.widget.TextView;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 
+import nick.miros.BudgetControl.budgetcontrol.app.Currency;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
 import nick.miros.BudgetControl.budgetcontrol.helper.DecimalDigits;
 
@@ -41,6 +42,7 @@ public class BudgetSettingsActivity extends Activity {
     private ImageButton CurrencyEditButton;
     private TextView MonthlyBudget;
     private TextView dailyBudget;
+    private TextView CurrentCurrencyView;
     //
 
     @Override
@@ -48,7 +50,6 @@ public class BudgetSettingsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_budget_settings);
 
-        //final SharedPreferences settings = getSharedPreferences("Test", Context.MODE_PRIVATE);
         final SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
 
 
@@ -135,9 +136,34 @@ public class BudgetSettingsActivity extends Activity {
         CurrencyEditButton = (ImageButton) findViewById(R.id.EditCurrencyButton);
         CurrencyEditButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), CurrencyListActivity.class));
+                //startActivity(new Intent(v.getContext(), CurrencyListActivity.class));
+                Intent intent=new Intent(v.getContext(), CurrencyListActivity.class);
+                startActivityForResult(intent, 2);// Activity is started with requestCode 2
             }
         });
+
+
+        CurrentCurrencyView = (TextView) findViewById(R.id.currentCurrency);
+        if (settings.contains("CurrencyUsedKey")) {
+
+            CurrentCurrencyView.setText(settings.getString("CurrencyUsedKey", ""));
+        }
+    }
+
+    // Call Back method  to get the Message form other Activity
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode==2)
+        {
+            String currencyName = data.getStringExtra("CurrencyName");
+            String currencySymbol = data.getStringExtra("CurrencySymbol");
+            CurrentCurrencyView.setText(currencyName + " " + currencySymbol);
+
+        }
+
     }
 
 

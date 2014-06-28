@@ -2,6 +2,7 @@ package nick.miros.BudgetControl.budgetcontrol.activities;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
@@ -60,11 +61,6 @@ public class CurrencyListActivity extends Activity {
         CurrencyAdapter adapter = new CurrencyAdapter(this, currencyNames, currencySymbols);
         listView.setAdapter(adapter);
 
-        if (settings.contains(currencyUsed)) {
-
-            Toast.makeText(getApplicationContext(), settings.getString(currencyUsed, ""), Toast.LENGTH_SHORT).show();
-        }
-
         //saves the currency chosen from the list to sharePreferences
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -75,6 +71,14 @@ public class CurrencyListActivity extends Activity {
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putString(currencyUsed, currencySymbols.get(position));
                 editor.commit();
+
+                Intent intent=new Intent();
+                intent.putExtra("CurrencyName",currencyNames.get(position));
+                intent.putExtra("CurrencySymbol",currencySymbols.get(position));
+
+                setResult(2,intent);
+
+                finish();//finishing activity
 
 
 
