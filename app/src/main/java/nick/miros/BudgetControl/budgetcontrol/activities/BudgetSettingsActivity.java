@@ -43,6 +43,7 @@ public class BudgetSettingsActivity extends Activity {
     private TextView MonthlyBudget;
     private TextView dailyBudget;
     private TextView CurrentCurrencyView;
+    private SharedPreferences settings;
     //
 
     @Override
@@ -50,8 +51,7 @@ public class BudgetSettingsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_budget_settings);
 
-        final SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
-
+        settings = getPreferences(Context.MODE_PRIVATE);
 
         currentMonth = (TextView) findViewById(R.id.currentMonth);
         dailyBudget = (TextView) findViewById(R.id.dailyBudgetAmount);
@@ -134,32 +134,37 @@ public class BudgetSettingsActivity extends Activity {
         });
 
         CurrencyEditButton = (ImageButton) findViewById(R.id.EditCurrencyButton);
-        CurrencyEditButton.setOnClickListener(new View.OnClickListener(){
+        CurrencyEditButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //startActivity(new Intent(v.getContext(), CurrencyListActivity.class));
-                Intent intent=new Intent(v.getContext(), CurrencyListActivity.class);
+                Intent intent = new Intent(v.getContext(), CurrencyListActivity.class);
                 startActivityForResult(intent, 2);// Activity is started with requestCode 2
             }
         });
 
 
         CurrentCurrencyView = (TextView) findViewById(R.id.currentCurrency);
-        if (settings.contains("CurrencyUsedKey")) {
+        if (settings.contains("CurrencySymbolKey") && settings.contains("CurrencyNameKey")) {
 
-            CurrentCurrencyView.setText(settings.getString("CurrencyUsedKey", ""));
+            CurrentCurrencyView.setText(settings.getString("CurrencyNameKey", "") +
+                    " " +
+                    settings.getString("CurrencySymbolKey", ""));
         }
     }
 
-    // Call Back method  to get the Message form other Activity
+    // Call Back method  to get the currency from other Activity
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode==2)
-        {
+        if (requestCode == 2) {
             String currencyName = data.getStringExtra("CurrencyName");
             String currencySymbol = data.getStringExtra("CurrencySymbol");
+
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString("CurrencySymbolKey", currencySymbol);
+            editor.putString("CurrencyNameKey", currencyName);
+            editor.commit();
+
             CurrentCurrencyView.setText(currencyName + " " + currencySymbol);
 
         }

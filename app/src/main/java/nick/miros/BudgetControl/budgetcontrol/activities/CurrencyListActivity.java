@@ -61,16 +61,12 @@ public class CurrencyListActivity extends Activity {
         CurrencyAdapter adapter = new CurrencyAdapter(this, currencyNames, currencySymbols);
         listView.setAdapter(adapter);
 
-        //saves the currency chosen from the list to sharePreferences
+        //gathers the chosen currency info and sends to the previous activity
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
-
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putString(currencyUsed, currencySymbols.get(position));
-                editor.commit();
 
                 Intent intent=new Intent();
                 intent.putExtra("CurrencyName",currencyNames.get(position));
