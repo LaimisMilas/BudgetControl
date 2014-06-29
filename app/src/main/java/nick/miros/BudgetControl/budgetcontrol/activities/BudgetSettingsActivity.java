@@ -36,6 +36,9 @@ public class BudgetSettingsActivity extends Activity {
     public static final String[] monthNames = {"January", "February", "March", "April", "May",
             "June", "July", "August", "September", "October", "November",
             "December"};
+    private final String currencyPrefs = "currenciesKey";
+    private final String currencySymbolKey = "currencySymbolKey";
+    private final String currencyNameKey = "currencyNameKey";
     private final Context context = this;
     private TextView currentMonth;
     private ImageButton BudgetEditButton;
@@ -51,7 +54,7 @@ public class BudgetSettingsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_budget_settings);
 
-        settings = getPreferences(Context.MODE_PRIVATE);
+        settings = getSharedPreferences(currencyPrefs, Context.MODE_PRIVATE);
 
         currentMonth = (TextView) findViewById(R.id.currentMonth);
         dailyBudget = (TextView) findViewById(R.id.dailyBudgetAmount);
@@ -66,14 +69,18 @@ public class BudgetSettingsActivity extends Activity {
         BudgetEditButton = (ImageButton) findViewById(R.id.EditButton);
         MonthlyBudget = (TextView) findViewById(R.id.currentMonthBudget);
 
-
+        //check if shared preferences contain values for the current month
         if (settings.contains(monthNames[month])) {
-            MonthlyBudget.setText(settings.getString(monthNames[month], ""));
+            //set chosen currency and budget for the month
+            MonthlyBudget.setText(Currency.getCurrentCurrencyUsed(getApplicationContext()) +
+                                  settings.getString(monthNames[month], ""));
 
             DecimalFormat numberFormat = new DecimalFormat("#.00");
 
-            //formats and sets the text for the dailyBudget textview
-            dailyBudget.setText(" " + (numberFormat.format(Double.parseDouble(settings.getString(monthNames[month], "")) / amountOfDays)));
+            //calculate the daily budget and set it to the dailyBudget Textview
+            dailyBudget.setText(Currency.getCurrentCurrencyUsed(getApplicationContext())
+                                + (numberFormat.format(Double.parseDouble(settings.getString(monthNames[month], ""))
+                                / amountOfDays)));
         }
 
         BudgetEditButton.setOnClickListener(new View.OnClickListener() {
@@ -111,7 +118,8 @@ public class BudgetSettingsActivity extends Activity {
                                 if (DecimalDigits.isValidInput(userInput)) {
 
 
-                                    MonthlyBudget.setText(userInput.getText());
+                                    MonthlyBudget.setText(Currency.getCurrentCurrencyUsed(getApplicationContext()) +
+                                                          userInput.getText());
 
                                     SharedPreferences.Editor editor = settings.edit();
                                     editor.putString(monthNames[month], userInput.getText().toString());
@@ -120,7 +128,8 @@ public class BudgetSettingsActivity extends Activity {
                                     DecimalFormat numberFormat = new DecimalFormat("#.00");
 
                                     //formats and sets the text for the dailyBudget textview
-                                    dailyBudget.setText(" " + (numberFormat.format(Double.parseDouble(userInput.getText().toString()) / amountOfDays)));
+                                    dailyBudget.setText(Currency.getCurrentCurrencyUsed(getApplicationContext()) +
+                                                       (numberFormat.format(Double.parseDouble(userInput.getText().toString()) / amountOfDays)));
                                     alertDialog.dismiss();
                                 }
                             }
@@ -143,11 +152,11 @@ public class BudgetSettingsActivity extends Activity {
 
 
         CurrentCurrencyView = (TextView) findViewById(R.id.currentCurrency);
-        if (settings.contains("CurrencySymbolKey") && settings.contains("CurrencyNameKey")) {
+        if (settings.contains(currencySymbolKey) && settings.contains(currencyNameKey)) {
 
-            CurrentCurrencyView.setText(settings.getString("CurrencyNameKey", "") +
+            CurrentCurrencyView.setText(settings.getString(currencyNameKey, "") +
                     " " +
-                    settings.getString("CurrencySymbolKey", ""));
+                    settings.getString(currencySymbolKey, ""));
         }
     }
 
@@ -161,14 +170,16 @@ public class BudgetSettingsActivity extends Activity {
             String currencySymbol = data.getStringExtra("CurrencySymbol");
 
             SharedPreferences.Editor editor = settings.edit();
-            editor.putString("CurrencySymbolKey", currencySymbol);
-            editor.putString("CurrencyNameKey", currencyName);
+            editor.putString(currencySymbolKey, currencySymbol);
+            editor.putString(currencyNameKey, currencyName);
             editor.commit();
 
             CurrentCurrencyView.setText(currencyName + " " + currencySymbol);
 
-        }
+            Bundle tempBundle = new Bundle();
+            onCreate(tempBundle);
 
+        }
     }
 
 
