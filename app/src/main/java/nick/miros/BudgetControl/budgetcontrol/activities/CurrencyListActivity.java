@@ -5,11 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -31,12 +34,12 @@ public class CurrencyListActivity extends Activity {
     private ArrayList<String> currencyNames = new ArrayList<String>();
     private ArrayList<String> currencySymbols = new ArrayList<String>();
     private ArrayList<Currency> currencies = new ArrayList<Currency>();
+    private CurrencyAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_currency_list);
-        final SharedPreferences settings = getPreferences(MODE_PRIVATE);
 
         listView = (ListView) findViewById(R.id.list);
 
@@ -47,18 +50,16 @@ public class CurrencyListActivity extends Activity {
         //create an array to be passed to an adapter
         currencies = new ArrayList<Currency>();
 
-        for (int i = 0; i < countries.size(); i++) {
+        for (int i = 0; i < currencyNames.size(); i++) {
             Currency currency = new Currency();
-            String currentCountry = countries.get(i);
             String currentName = currencyNames.get(i);
             String currentSymbol = currencySymbols.get(i);
-            currency.setCountry(currentCountry);
             currency.setCurrencyName(currentName);
             currency.setSymbol(currentSymbol);
             currencies.add(currency);
         }
 
-        CurrencyAdapter adapter = new CurrencyAdapter(this, currencyNames, currencySymbols);
+        adapter = new CurrencyAdapter(this, currencies);
         listView.setAdapter(adapter);
 
         //gathers the chosen currency info and sends to the previous activity
@@ -67,10 +68,14 @@ public class CurrencyListActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
-
+                //Currency currency = (Currency) parent.getItemAtPosition(parent.getSelectedItemPosition());
+                //String currencyNameStuff = currency.getCurrencyName();
+                //String SymbolStuff = currency.getSymbol();
                 Intent intent=new Intent();
-                intent.putExtra("CurrencyName",currencyNames.get(position));
-                intent.putExtra("CurrencySymbol",currencySymbols.get(position));
+                intent.putExtra("CurrencyName",currencies.get(position).getCurrencyName());
+                intent.putExtra("CurrencySymbol",currencies.get(position).getSymbol());
+                //intent.putExtra("CurrencyName",currencyNameStuff);
+                //intent.putExtra("CurrencyName",SymbolStuff);
 
                 setResult(2,intent);
 
@@ -80,6 +85,33 @@ public class CurrencyListActivity extends Activity {
 
             }
 
+        });
+
+        EditText inputSearch = (EditText) findViewById(R.id.inputSearch);
+
+        inputSearch.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                System.out.println("Text ["+s+"]");
+                if (count < before) {
+                    // We're deleting char so we need to reset the adapter data
+                    adapter.resetData();
+                }
+                adapter.getFilter().filter(s.toString());
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
+                                          int arg3) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
+                // TODO Auto-generated method stub
+            }
         });
 
     }

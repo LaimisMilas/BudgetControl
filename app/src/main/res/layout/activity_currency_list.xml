@@ -3,6 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/inputSearch"
+        android:layout_width="match_parent"
+        android:hint="Search currencies"
+        android:layout_height="wrap_content"
+        android:inputType="textVisiblePassword"
+    />
     <ListView
         android:id="@+id/list"
         android:layout_width="match_parent"
