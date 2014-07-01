@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,25 +12,24 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import nick.miros.BudgetControl.budgetcontrol.app.Currency;
-import nick.miros.BudgetControl.budgetcontrol.app.R;
-import nick.miros.BudgetControl.budgetcontrol.helper.CurrencyAdapter;
-
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import nick.miros.BudgetControl.budgetcontrol.app.Currency;
+import nick.miros.BudgetControl.budgetcontrol.app.R;
+import nick.miros.BudgetControl.budgetcontrol.helper.CurrencyAdapter;
+
 
 public class CurrencyListActivity extends Activity {
-    private ListView listView;
-    public static final String currencyUsed = "CurrencyUsedKey";
 
-    private ArrayList<String> countries = new ArrayList<String>();
+    private ListView listView;
     private ArrayList<String> currencyNames = new ArrayList<String>();
     private ArrayList<String> currencySymbols = new ArrayList<String>();
     private ArrayList<Currency> currencies = new ArrayList<Currency>();
     private CurrencyAdapter adapter;
+    private final int currencyRequestCode = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,15 +63,15 @@ public class CurrencyListActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
+
                 Currency currency = (Currency) parent.getItemAtPosition(position);
-               // Log.e("currency", currency.toString());
+
                 Intent intent=new Intent();
                 intent.putExtra("CurrencyName",currency.getName());
                 intent.putExtra("CurrencySymbol",currency.getSymbol());
 
-                setResult(2,intent);
-
-                finish();//finishing activity
+                setResult(currencyRequestCode,intent);
+                finish();
 
 
 

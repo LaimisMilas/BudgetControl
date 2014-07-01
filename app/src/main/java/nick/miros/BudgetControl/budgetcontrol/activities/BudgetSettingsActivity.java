@@ -41,12 +41,13 @@ public class BudgetSettingsActivity extends Activity {
     private final String currencyNameKey = "currencyNameKey";
     private final Context context = this;
     private TextView currentMonth;
-    private ImageButton BudgetEditButton;
-    private ImageButton CurrencyEditButton;
-    private TextView MonthlyBudget;
+    private ImageButton budgetEditButton;
+    private ImageButton currencyEditButton;
+    private TextView monthlyBudget;
     private TextView dailyBudget;
-    private TextView CurrentCurrencyView;
+    private TextView currentCurrencyView;
     private SharedPreferences settings;
+    private final int currencyRequestCode = 1;
     //
 
     @Override
@@ -58,21 +59,18 @@ public class BudgetSettingsActivity extends Activity {
 
         currentMonth = (TextView) findViewById(R.id.currentMonth);
         dailyBudget = (TextView) findViewById(R.id.dailyBudgetAmount);
+        monthlyBudget = (TextView) findViewById(R.id.currentMonthBudget);
+        budgetEditButton = (ImageButton) findViewById(R.id.EditButton);
 
         Calendar cal = Calendar.getInstance();
         final int month = cal.get(Calendar.MONTH); //current calendar month
-
         final int amountOfDays = cal.getActualMaximum(Calendar.DAY_OF_MONTH); //amount of days in the current month
-
         currentMonth.setText("Budget for " + monthNames[month]);
-
-        BudgetEditButton = (ImageButton) findViewById(R.id.EditButton);
-        MonthlyBudget = (TextView) findViewById(R.id.currentMonthBudget);
 
         //check if shared preferences contain values for the current month
         if (settings.contains(monthNames[month])) {
             //set chosen currency and budget for the month
-            MonthlyBudget.setText(Currency.getCurrentCurrencyUsed(getApplicationContext()) +
+            monthlyBudget.setText(Currency.getCurrentCurrencyUsed(getApplicationContext()) +
                     settings.getString(monthNames[month], ""));
 
             DecimalFormat numberFormat = new DecimalFormat("#.00");
@@ -83,7 +81,7 @@ public class BudgetSettingsActivity extends Activity {
                     / amountOfDays)));
         }
 
-        BudgetEditButton.setOnClickListener(new View.OnClickListener() {
+        budgetEditButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View arg0) {
@@ -119,7 +117,7 @@ public class BudgetSettingsActivity extends Activity {
                                     if (DecimalDigits.isValidInput(userInput)) {
 
 
-                                        MonthlyBudget.setText(Currency.getCurrentCurrencyUsed(getApplicationContext()) +
+                                        monthlyBudget.setText(Currency.getCurrentCurrencyUsed(getApplicationContext()) +
                                                 userInput.getText());
 
                                         SharedPreferences.Editor editor = settings.edit();
@@ -130,7 +128,8 @@ public class BudgetSettingsActivity extends Activity {
 
                                         //formats and sets the text for the dailyBudget textview
                                         dailyBudget.setText(Currency.getCurrentCurrencyUsed(getApplicationContext()) +
-                                                (numberFormat.format(Double.parseDouble(userInput.getText().toString()) / amountOfDays)));
+                                                (numberFormat.format(Double.parseDouble(userInput.getText().toString()) /
+                                                amountOfDays)));
                                         alertDialog.dismiss();
                                     }
                                 }
@@ -144,19 +143,19 @@ public class BudgetSettingsActivity extends Activity {
             }
         });
 
-        CurrencyEditButton = (ImageButton) findViewById(R.id.EditCurrencyButton);
-        CurrencyEditButton.setOnClickListener(new View.OnClickListener() {
+        currencyEditButton = (ImageButton) findViewById(R.id.EditCurrencyButton);
+        currencyEditButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), CurrencyListActivity.class);
-                startActivityForResult(intent, 2);// Activity is started with requestCode 2
+                startActivityForResult(intent, currencyRequestCode);
             }
         });
 
 
-        CurrentCurrencyView = (TextView) findViewById(R.id.currentCurrency);
+        currentCurrencyView = (TextView) findViewById(R.id.currentCurrency);
         if (settings.contains(currencySymbolKey) && settings.contains(currencyNameKey)) {
 
-            CurrentCurrencyView.setText(settings.getString(currencyNameKey, "") +
+            currentCurrencyView.setText(settings.getString(currencyNameKey, "") +
                     " " +
                     settings.getString(currencySymbolKey, ""));
         }
@@ -168,7 +167,7 @@ public class BudgetSettingsActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_CANCELED) {
 
-            if (requestCode == 2) {
+            if (requestCode == currencyRequestCode) {
                 String currencyName = data.getStringExtra("CurrencyName");
                 String currencySymbol = data.getStringExtra("CurrencySymbol");
 
@@ -177,7 +176,7 @@ public class BudgetSettingsActivity extends Activity {
                 editor.putString(currencyNameKey, currencyName);
                 editor.commit();
 
-                CurrentCurrencyView.setText(currencyName + " " + currencySymbol);
+                currentCurrencyView.setText(currencyName + " " + currencySymbol);
 
                 Bundle tempBundle = new Bundle();
                 onCreate(tempBundle);
