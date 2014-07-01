@@ -61,6 +61,11 @@ public class CurrencyAdapter extends ArrayAdapter<Currency> {
         currencies = currenciesListOrig;
     }
 
+    @Override
+    public Currency getItem(int position) {
+        return currencies.get(position);
+    }
+
 
     private class CurrencyFilter extends Filter {
         @Override

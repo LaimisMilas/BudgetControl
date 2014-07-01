@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -64,14 +65,11 @@ public class CurrencyListActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
-                //Currency currency = (Currency) parent.getItemAtPosition(parent.getSelectedItemPosition());
-                //String currencyNameStuff = currency.getName();
-                //String SymbolStuff = currency.getSymbol();
+                Currency currency = (Currency) parent.getItemAtPosition(position);
+               // Log.e("currency", currency.toString());
                 Intent intent=new Intent();
-                intent.putExtra("CurrencyName",currencies.get(position).getName());
-                intent.putExtra("CurrencySymbol",currencies.get(position).getSymbol());
-                //intent.putExtra("CurrencyName",currencyNameStuff);
-                //intent.putExtra("CurrencyName",SymbolStuff);
+                intent.putExtra("CurrencyName",currency.getName());
+                intent.putExtra("CurrencySymbol",currency.getSymbol());
 
                 setResult(2,intent);
 
