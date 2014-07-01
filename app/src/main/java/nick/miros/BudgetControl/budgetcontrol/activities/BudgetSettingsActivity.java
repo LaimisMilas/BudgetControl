@@ -113,24 +113,26 @@ public class BudgetSettingsActivity extends Activity {
 
                             @Override
                             public void onClick(View view) {
+                                //check if the input has something
+                                if (userInput.getText().toString().length() > 0) {
+                                    //checks whether the input is just a dot
+                                    if (DecimalDigits.isValidInput(userInput)) {
 
-                                //checks whether the input is just a dot
-                                if (DecimalDigits.isValidInput(userInput)) {
 
+                                        MonthlyBudget.setText(Currency.getCurrentCurrencyUsed(getApplicationContext()) +
+                                                userInput.getText());
 
-                                    MonthlyBudget.setText(Currency.getCurrentCurrencyUsed(getApplicationContext()) +
-                                            userInput.getText());
+                                        SharedPreferences.Editor editor = settings.edit();
+                                        editor.putString(monthNames[month], userInput.getText().toString());
+                                        editor.commit();
 
-                                    SharedPreferences.Editor editor = settings.edit();
-                                    editor.putString(monthNames[month], userInput.getText().toString());
-                                    editor.commit();
+                                        DecimalFormat numberFormat = new DecimalFormat("#.00");
 
-                                    DecimalFormat numberFormat = new DecimalFormat("#.00");
-
-                                    //formats and sets the text for the dailyBudget textview
-                                    dailyBudget.setText(Currency.getCurrentCurrencyUsed(getApplicationContext()) +
-                                            (numberFormat.format(Double.parseDouble(userInput.getText().toString()) / amountOfDays)));
-                                    alertDialog.dismiss();
+                                        //formats and sets the text for the dailyBudget textview
+                                        dailyBudget.setText(Currency.getCurrentCurrencyUsed(getApplicationContext()) +
+                                                (numberFormat.format(Double.parseDouble(userInput.getText().toString()) / amountOfDays)));
+                                        alertDialog.dismiss();
+                                    }
                                 }
                             }
                         });
