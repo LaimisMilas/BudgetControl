@@ -1,9 +1,7 @@
 package nick.miros.BudgetControl.budgetcontrol.activities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,10 +9,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import nick.miros.BudgetControl.budgetcontrol.app.Currency;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
@@ -54,7 +50,7 @@ public class CurrencyListActivity extends Activity {
             Currency currency = new Currency();
             String currentName = currencyNames.get(i);
             String currentSymbol = currencySymbols.get(i);
-            currency.setCurrencyName(currentName);
+            currency.setName(currentName);
             currency.setSymbol(currentSymbol);
             currencies.add(currency);
         }
@@ -69,10 +65,10 @@ public class CurrencyListActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
                 //Currency currency = (Currency) parent.getItemAtPosition(parent.getSelectedItemPosition());
-                //String currencyNameStuff = currency.getCurrencyName();
+                //String currencyNameStuff = currency.getName();
                 //String SymbolStuff = currency.getSymbol();
                 Intent intent=new Intent();
-                intent.putExtra("CurrencyName",currencies.get(position).getCurrencyName());
+                intent.putExtra("CurrencyName",currencies.get(position).getName());
                 intent.putExtra("CurrencySymbol",currencies.get(position).getSymbol());
                 //intent.putExtra("CurrencyName",currencyNameStuff);
                 //intent.putExtra("CurrencyName",SymbolStuff);

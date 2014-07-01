@@ -38,7 +38,7 @@ public class CurrencyAdapter extends ArrayAdapter<Currency> {
         TextView currencyName = (TextView) rowView.findViewById(R.id.currencyName);
         TextView currencySymbol = (TextView) rowView.findViewById(R.id.currencySymbol);
 
-        currencyName.setText(currencies.get(position).getCurrencyName());
+        currencyName.setText(currencies.get(position).getName());
         currencySymbol.setText(currencies.get(position).getSymbol());
 
         return rowView;
@@ -77,7 +77,7 @@ public class CurrencyAdapter extends ArrayAdapter<Currency> {
                 List<Currency> nCurrencyList = new ArrayList<Currency>();
 
                 for (Currency c : currencies) {
-                    if (c.getCurrencyName().toUpperCase().startsWith(constraint.toString().toUpperCase()))
+                    if (c.getName().toUpperCase().startsWith(constraint.toString().toUpperCase()))
                         nCurrencyList.add(c);
                 }
 

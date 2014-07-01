@@ -7,19 +7,19 @@ import android.content.SharedPreferences;
  * Class for setting and getting countries
  */
 public class Currency {
-    private String currencyName;
+    private String name;
     private String symbol;
     private static SharedPreferences settings;
     private static final String currencySymbolKey = "currencySymbolKey";
     private static final String currencyPrefs = "currenciesKey";
     public static String currentCurrencyUsed;
 
-    public String getCurrencyName() {
-        return currencyName;
+    public String getName() {
+        return name;
     }
 
-    public void setCurrencyName(String currencyName) {
-        this.currencyName = currencyName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getSymbol() {
@@ -44,7 +44,7 @@ public class Currency {
 
     @Override
     public String toString() {
-        return currencyName + " - " + symbol;
+        return name + " - " + symbol;
     }
 
 }
