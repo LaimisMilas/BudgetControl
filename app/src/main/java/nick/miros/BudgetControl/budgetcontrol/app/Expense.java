@@ -2,6 +2,10 @@ package nick.miros.BudgetControl.budgetcontrol.app;
 
 public class Expense {
 
+    /**
+     * Class for setting and getting expenses
+     */
+
 	private long id;
 	private String date;
 	private double amount;
@@ -57,7 +61,7 @@ public class Expense {
 		this.paymentMethod = paymentMethod;
 	}
 
-	// Will be used by the ArrayAdapter in the ListView
+
 	@Override
 	public String toString() {
 		return date + " " + amount + " " + category + " " + description + " " + paymentMethod;

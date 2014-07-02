@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.Toast;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
 
-
 public class MainActivity extends ActionBarActivity {
     View.OnClickListener mainActivityListener = new View.OnClickListener() {
         public void onClick(View v) {

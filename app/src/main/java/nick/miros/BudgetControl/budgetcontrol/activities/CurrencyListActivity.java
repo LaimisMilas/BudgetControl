@@ -21,13 +21,21 @@ import nick.miros.BudgetControl.budgetcontrol.app.Currency;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
 import nick.miros.BudgetControl.budgetcontrol.helper.CurrencyAdapter;
 
+/**
+ * An Activity that contains a listview where the user chooses
+ * their preferred currency. The Activity contains a filter that
+ * sorts the list according to the user input.
+ */
 
 public class CurrencyListActivity extends Activity {
 
     private ListView listView;
+    private EditText inputSearch;
     private ArrayList<String> currencyNames = new ArrayList<String>();
     private ArrayList<String> currencySymbols = new ArrayList<String>();
     private ArrayList<Currency> currencies = new ArrayList<Currency>();
+    private final String nameIdentifier = "currencyName";
+    private final String symbolIdentifier = "currencySymbol";
     private CurrencyAdapter adapter;
     private final int currencyRequestCode = 1;
 
@@ -42,10 +50,11 @@ public class CurrencyListActivity extends Activity {
         currencyNames = extractFileInfo(R.raw.currency_names);
         currencySymbols = extractFileInfo(R.raw.currency_symbols);
 
-        //create an array to be passed to an adapter
+        //create an array of Currencies to be passed to an adapter
         currencies = new ArrayList<Currency>();
 
         for (int i = 0; i < currencyNames.size(); i++) {
+
             Currency currency = new Currency();
             String currentName = currencyNames.get(i);
             String currentSymbol = currencySymbols.get(i);
@@ -66,28 +75,28 @@ public class CurrencyListActivity extends Activity {
 
                 Currency currency = (Currency) parent.getItemAtPosition(position);
 
-                Intent intent=new Intent();
-                intent.putExtra("CurrencyName",currency.getName());
-                intent.putExtra("CurrencySymbol",currency.getSymbol());
+                //return the chosen name and symbol back to the BudgetSettingsActivity
+                Intent intent = new Intent();
+                intent.putExtra(nameIdentifier, currency.getName());
+                intent.putExtra(symbolIdentifier, currency.getSymbol());
 
-                setResult(currencyRequestCode,intent);
+                setResult(currencyRequestCode, intent);
                 finish();
-
 
 
             }
 
         });
 
-        EditText inputSearch = (EditText) findViewById(R.id.inputSearch);
+        inputSearch = (EditText) findViewById(R.id.inputSearch);
 
         inputSearch.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                System.out.println("Text ["+s+"]");
+                //check whether currently there are less letters than before in inputSearch
                 if (count < before) {
-                    // We're deleting char so we need to reset the adapter data
+                    // Resetting the adapter data because we're deleting a character
                     adapter.resetData();
                 }
                 adapter.getFilter().filter(s.toString());

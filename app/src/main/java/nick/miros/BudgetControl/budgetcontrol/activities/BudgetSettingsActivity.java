@@ -1,8 +1,4 @@
-/*
-* This is an Activity where the user will be able to set
-* their monthly budget and the daily budget will be recalculated
-* appropriately.
- */
+
 
 package nick.miros.BudgetControl.budgetcontrol.activities;
 
@@ -30,6 +26,15 @@ import nick.miros.BudgetControl.budgetcontrol.app.Currency;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
 import nick.miros.BudgetControl.budgetcontrol.helper.DecimalDigits;
 
+/**
+ * This is an Activity where the user will be able to set
+ * their monthly budget via an AlertDialog and the daily
+ * budget will be recalculated appropriately.
+ * <p/>
+ * The Activity also contains a button that sends the user
+ * to another activity where the user chooses their preferred
+ * currency.
+ */
 
 public class BudgetSettingsActivity extends Activity {
 
@@ -39,6 +44,8 @@ public class BudgetSettingsActivity extends Activity {
     private final String currencyPrefs = "currenciesKey";
     private final String currencySymbolKey = "currencySymbolKey";
     private final String currencyNameKey = "currencyNameKey";
+    private final String nameIdentifier = "currencyName";
+    private final String symbolIdentifier = "currencySymbol";
     private final Context context = this;
     private TextView currentMonth;
     private ImageButton budgetEditButton;
@@ -116,10 +123,11 @@ public class BudgetSettingsActivity extends Activity {
                                     //checks whether the input is just a dot
                                     if (DecimalDigits.isValidInput(userInput)) {
 
+                                        //apply the monthly budget to the monthly view
+                                        monthlyBudget.setText(Currency.getCurrentCurrencyUsed(getApplicationContext())
+                                                + userInput.getText());
 
-                                        monthlyBudget.setText(Currency.getCurrentCurrencyUsed(getApplicationContext()) +
-                                                userInput.getText());
-
+                                        //save the monthly budget value
                                         SharedPreferences.Editor editor = settings.edit();
                                         editor.putString(monthNames[month], userInput.getText().toString());
                                         editor.commit();
@@ -127,9 +135,9 @@ public class BudgetSettingsActivity extends Activity {
                                         DecimalFormat numberFormat = new DecimalFormat("#.00");
 
                                         //formats and sets the text for the dailyBudget textview
-                                        dailyBudget.setText(Currency.getCurrentCurrencyUsed(getApplicationContext()) +
-                                                (numberFormat.format(Double.parseDouble(userInput.getText().toString()) /
-                                                amountOfDays)));
+                                        dailyBudget.setText(Currency.getCurrentCurrencyUsed(getApplicationContext())
+                                                + (numberFormat.format(Double.parseDouble(userInput.getText().toString())
+                                                / amountOfDays)));
                                         alertDialog.dismiss();
                                     }
                                 }
@@ -146,6 +154,8 @@ public class BudgetSettingsActivity extends Activity {
         currencyEditButton = (ImageButton) findViewById(R.id.EditCurrencyButton);
         currencyEditButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
+                //start the CurrencyListActivity
                 Intent intent = new Intent(v.getContext(), CurrencyListActivity.class);
                 startActivityForResult(intent, currencyRequestCode);
             }
@@ -153,11 +163,14 @@ public class BudgetSettingsActivity extends Activity {
 
 
         currentCurrencyView = (TextView) findViewById(R.id.currentCurrency);
+
+        //check whether the preferences contain the values for the
+        //currency symbol and name. If so, apply them.
         if (settings.contains(currencySymbolKey) && settings.contains(currencyNameKey)) {
 
-            currentCurrencyView.setText(settings.getString(currencyNameKey, "") +
-                    " " +
-                    settings.getString(currencySymbolKey, ""));
+            currentCurrencyView.setText(settings.getString(currencyNameKey, "")
+                    + " "
+                    + settings.getString(currencySymbolKey, ""));
         }
     }
 
@@ -167,10 +180,14 @@ public class BudgetSettingsActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_CANCELED) {
 
+            //receive the info sent from the CurrencyListActivity
             if (requestCode == currencyRequestCode) {
-                String currencyName = data.getStringExtra("CurrencyName");
-                String currencySymbol = data.getStringExtra("CurrencySymbol");
 
+                //get the key-value pairs passed
+                String currencyName = data.getStringExtra(nameIdentifier);
+                String currencySymbol = data.getStringExtra(symbolIdentifier);
+
+                //save the values received into sharedPreferences
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putString(currencySymbolKey, currencySymbol);
                 editor.putString(currencyNameKey, currencyName);
@@ -178,6 +195,8 @@ public class BudgetSettingsActivity extends Activity {
 
                 currentCurrencyView.setText(currencyName + " " + currencySymbol);
 
+                //call the onCreate method again in order to refresh the Activity
+                //so that the chosen currency could be applied to other views
                 Bundle tempBundle = new Bundle();
                 onCreate(tempBundle);
             }

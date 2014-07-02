@@ -15,6 +15,13 @@ import java.util.List;
 import nick.miros.BudgetControl.budgetcontrol.app.Currency;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
 
+/**
+ * A custom adapter used for translating an array of
+ * Currency objects into a listview. Also implements
+ * a filtering class that allows filtering of the listview
+ * according to the input.
+ */
+
 public class CurrencyAdapter extends ArrayAdapter<Currency> {
     private final Context context;
     private List<Currency> currencies;
@@ -41,6 +48,7 @@ public class CurrencyAdapter extends ArrayAdapter<Currency> {
         currencyName.setText(currencies.get(position).getName());
         currencySymbol.setText(currencies.get(position).getSymbol());
 
+        //return the custom rowView for the the listView
         return rowView;
     }
 
@@ -53,8 +61,8 @@ public class CurrencyAdapter extends ArrayAdapter<Currency> {
     }
 
     @Override
-    public int getCount () {
-        return currencies.size ();
+    public int getCount() {
+        return currencies.size();
     }
 
     public void resetData() {
@@ -67,18 +75,18 @@ public class CurrencyAdapter extends ArrayAdapter<Currency> {
     }
 
 
+    //class that filters the listview according to the user input
     private class CurrencyFilter extends Filter {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults results = new FilterResults();
-            // We implement here the filter logic
+
             if (constraint == null || constraint.length() == 0) {
-                // No filter implemented we return all the list
+                // If there's no filter then we return the full list
                 results.values = currencies;
                 results.count = currencies.size();
-            }
-            else {
-                // We perform filtering operation
+            } else {
+                // perform the filtering operation
                 List<Currency> nCurrencyList = new ArrayList<Currency>();
 
                 for (Currency c : currencies) {
@@ -94,7 +102,7 @@ public class CurrencyAdapter extends ArrayAdapter<Currency> {
         }
 
         @Override
-        protected void publishResults(CharSequence constraint,FilterResults results) {
+        protected void publishResults(CharSequence constraint, FilterResults results) {
 
             // Now we have to inform the adapter about the new list filtered
             if (results.count == 0)
