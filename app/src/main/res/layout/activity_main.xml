@@ -4,13 +4,22 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <nick.miros.BudgetControl.budgetcontrol.helper.TextProgressBar
+        android:id="@+id/progressBarWithText"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:maxHeight="30dp"
+        android:minHeight="30dp"/>
+
     <Button
         android:id="@+id/ExpenseDirectionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
-        android:text="+" />
+        android:text="Add Expense" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -22,7 +31,7 @@
             android:id="@+id/DataDirectionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="history / statistics" />
+            android:text="history" />
 
         <Button
             android:id="@+id/BudgetDirectionButton"
