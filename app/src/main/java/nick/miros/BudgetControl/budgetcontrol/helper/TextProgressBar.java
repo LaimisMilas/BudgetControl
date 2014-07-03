@@ -6,16 +6,23 @@ package nick.miros.BudgetControl.budgetcontrol.helper;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LightingColorFilter;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ProgressBar;
+
+import java.text.DecimalFormat;
+
+import nick.miros.BudgetControl.budgetcontrol.app.Currency;
 
 public class TextProgressBar extends ProgressBar {
 
     private String text = "";
     private int textColor = Color.BLACK;
-    private float textSize = 15;
+    private float textSize = 40;
 
     public TextProgressBar(Context context) {
         super(context);
@@ -37,6 +44,9 @@ public class TextProgressBar extends ProgressBar {
         textPaint.setAntiAlias(true);
         textPaint.setColor(textColor);
         textPaint.setTextSize(textSize);
+
+        //Drawable d = this.getProgressDrawable();
+        //d.setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
         //In order to show text in a middle, we need to know its size
         Rect bounds = new Rect();
         textPaint.getTextBounds(text, 0, text.length(), bounds);
@@ -51,8 +61,10 @@ public class TextProgressBar extends ProgressBar {
         return text;
     }
 
-    public synchronized void setText(String text) {
-        this.text = text;
+    public synchronized void setText(float progress, float max) {
+        DecimalFormat df = new DecimalFormat("#.00");
+        this.text = Currency.getCurrentCurrencyUsed(getContext()) + df.format(progress)
+                    + " / " + Currency.getCurrentCurrencyUsed(getContext()) + df.format(max);
     }
 
     public int getTextColor() {
