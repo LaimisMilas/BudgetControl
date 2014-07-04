@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
+import nick.miros.BudgetControl.budgetcontrol.helper.MyProgressBar;
 import nick.miros.BudgetControl.budgetcontrol.helper.TextProgressBar;
 
 public class MainActivity extends ActionBarActivity {
@@ -30,8 +31,7 @@ public class MainActivity extends ActionBarActivity {
     private Button ExpenseDirectionButton;
     private Button DataDirectionButton;
     private Button BudgetDirectionButton;
-    private TextProgressBar monthlyProgress;
-    private int progressStatus = 0;
+    private MyProgressBar monthlyProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +46,9 @@ public class MainActivity extends ActionBarActivity {
         DataDirectionButton.setOnClickListener(mainActivityListener);
         BudgetDirectionButton.setOnClickListener(mainActivityListener);
 
-        monthlyProgress = (TextProgressBar) findViewById(R.id.progressBarWithText);
-        monthlyProgress.setText(50, 70);
-        monthlyProgress.setMax(70);
-        monthlyProgress.setProgress(50);
-        //monthlyProgress.setProgress(50);
-        monthlyProgress.setTextSize(18);
+        monthlyProgress = (MyProgressBar) findViewById(R.id.progressBar);
+
+        monthlyProgress.updateProgress(0.19);
 
 
     }
