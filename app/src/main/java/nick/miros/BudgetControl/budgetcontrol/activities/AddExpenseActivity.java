@@ -24,7 +24,6 @@ public class AddExpenseActivity extends Activity {
     private double amount;
     private TextView currentDateText;
     private TextView amountEntered;
-    private TextView dateView;
     private TextView descriptionView;
     private ImageButton dateButton;
     private Button addExpenseButton;

@@ -7,6 +7,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import nick.miros.BudgetControl.budgetcontrol.app.Expense;
@@ -24,6 +25,11 @@ public class ExpensesDataSource {
 	      MySQLiteHelper.COLUMN_CATEGORY,
 	      MySQLiteHelper.COLUMN_DESCRIPTION,
 	      MySQLiteHelper.COLUMN_PAYMENT_METHOD};
+
+      private String[] dateFilterColumns = { MySQLiteHelper.COLUMN_DAY,
+          MySQLiteHelper.COLUMN_MONTH,
+          MySQLiteHelper.COLUMN_YEAR,
+          MySQLiteHelper.COLUMN_AMOUNT};
 
 	  public ExpensesDataSource(Context context) {
 	    dbHelper = new MySQLiteHelper(context);
@@ -78,10 +84,34 @@ public class ExpensesDataSource {
 	      expenses.add(expense);
 	      cursor.moveToNext();
 	    }
-	    // make sure to close the cursor
+	    //close the cursor
 	    cursor.close();
 	    return expenses;
 	  }
+
+      public double getAllTodayExpenses () {
+
+          double amountSpent = 0;
+          Calendar c = Calendar.getInstance();
+          //give the current date by default
+          int currentDay = c.get(Calendar.DATE);
+          int currentMonth = c.get(Calendar.MONTH) + 1;
+          int currentYear = c.get(Calendar.YEAR);
+
+          Cursor cursor = database.query(MySQLiteHelper.TABLE_EXPENSES, dateFilterColumns,
+                  MySQLiteHelper.COLUMN_DAY + "=" + currentDay + " AND "
+                + MySQLiteHelper.COLUMN_MONTH + "=" + currentMonth + " AND "
+                + MySQLiteHelper.COLUMN_YEAR + "=" + currentYear, null, null, null, null);
+
+          cursor.moveToFirst();
+          while (!cursor.isAfterLast()) {
+              amountSpent+=cursor.getDouble(3);
+              cursor.moveToNext();
+          }
+          //close the cursor
+          cursor.close();
+          return amountSpent;
+      }
 
 	  private Expense cursorToExpense(Cursor cursor) {
 		Expense expense = new Expense();

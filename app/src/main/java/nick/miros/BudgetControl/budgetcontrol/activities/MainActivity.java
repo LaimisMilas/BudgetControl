@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
+import nick.miros.BudgetControl.budgetcontrol.data.ExpensesDataSource;
 import nick.miros.BudgetControl.budgetcontrol.helper.MyProgressBar;
 import nick.miros.BudgetControl.budgetcontrol.helper.TextProgressBar;
 
@@ -32,6 +33,7 @@ public class MainActivity extends ActionBarActivity {
     private Button DataDirectionButton;
     private Button BudgetDirectionButton;
     private MyProgressBar monthlyProgress;
+    private ExpensesDataSource datasource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,12 @@ public class MainActivity extends ActionBarActivity {
         monthlyProgress = (MyProgressBar) findViewById(R.id.progressBar);
 
         monthlyProgress.updateProgress(0.19);
+
+        datasource = new ExpensesDataSource(this);
+        datasource.open();
+        double amountSpent = datasource.getAllTodayExpenses();
+        Toast.makeText(getApplicationContext(), amountSpent + " ", Toast.LENGTH_SHORT).show();
+
 
 
     }
