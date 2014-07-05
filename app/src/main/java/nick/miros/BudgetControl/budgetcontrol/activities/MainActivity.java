@@ -1,6 +1,8 @@
 package nick.miros.BudgetControl.budgetcontrol.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -34,11 +36,15 @@ public class MainActivity extends ActionBarActivity {
     private Button BudgetDirectionButton;
     private MyProgressBar monthlyProgress;
     private ExpensesDataSource datasource;
+    private final String currencyPrefs = "currenciesKey";
+    private SharedPreferences settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        settings = getSharedPreferences(currencyPrefs, Context.MODE_PRIVATE);
 
         ExpenseDirectionButton = (Button) findViewById(R.id.ExpenseDirectionButton);
         DataDirectionButton = (Button) findViewById(R.id.DataDirectionButton);
@@ -50,12 +56,25 @@ public class MainActivity extends ActionBarActivity {
 
         monthlyProgress = (MyProgressBar) findViewById(R.id.progressBar);
 
-        monthlyProgress.updateProgress(0.19);
-
         datasource = new ExpensesDataSource(this);
         datasource.open();
+
+        double dailyBudget = 0;
+
         double amountSpent = datasource.getAllTodayExpenses();
-        Toast.makeText(getApplicationContext(), amountSpent + " ", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), amountSpent + " " + dailyBudget, Toast.LENGTH_SHORT).show();
+
+        if (settings.contains("July")) {
+            //set chosen currency and budget for the month
+
+            dailyBudget = Double.parseDouble(settings.getString("July", ""));
+
+            monthlyProgress.setMax(dailyBudget);
+            monthlyProgress.updateProgress(amountSpent);
+        }
+
+
+
 
 
 

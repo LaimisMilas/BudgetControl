@@ -32,6 +32,7 @@ public class MyProgressBar extends LinearLayout {
 
     LinearLayout valueBar;
     TextView textView;
+    double max;
 
     {
         setWeightSum(1);
@@ -41,7 +42,34 @@ public class MyProgressBar extends LinearLayout {
         addView(valueBar);
     }
 
+    public void setMax(double max) {
+        this.max = max;
+    }
 
+
+    public void updateProgress(double expenses) {
+        double fullCoeff = 1 - (expenses / max);
+
+        textView.setText("" + fullCoeff * 100 + "%");
+        textView.setTextColor(Color.BLACK);
+
+        LayoutParams layoutParams = new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
+        layoutParams.weight = (float) fullCoeff;
+
+        valueBar.setLayoutParams(layoutParams);
+        setBackgroundColor(Color.GRAY);
+
+        if (fullCoeff >= 0.5) {
+            valueBar.setBackgroundColor(Color.GREEN);
+        }
+        else if(fullCoeff >= 0.2) {
+            valueBar.setBackgroundColor(Color.YELLOW);
+        }
+        else {
+            valueBar.setBackgroundColor(Color.RED);
+        }
+    }
+    /*
     public void updateProgress(double percentage) {
 
         textView.setText("" + percentage * 100 + "%");
@@ -64,6 +92,7 @@ public class MyProgressBar extends LinearLayout {
         }
 
     }
+    */
 
 
 }
