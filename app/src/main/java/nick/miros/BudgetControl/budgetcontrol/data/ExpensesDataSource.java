@@ -17,7 +17,9 @@ public class ExpensesDataSource {
 	  private SQLiteDatabase database;
 	  private MySQLiteHelper dbHelper;
 	  private String[] allColumns = { MySQLiteHelper.COLUMN_ID,
-	      MySQLiteHelper.COLUMN_DATE,
+	      MySQLiteHelper.COLUMN_DAY,
+          MySQLiteHelper.COLUMN_MONTH,
+          MySQLiteHelper.COLUMN_YEAR,
 	      MySQLiteHelper.COLUMN_AMOUNT,
 	      MySQLiteHelper.COLUMN_CATEGORY,
 	      MySQLiteHelper.COLUMN_DESCRIPTION,
@@ -37,9 +39,11 @@ public class ExpensesDataSource {
 	    dbHelper.close();
 	  }
 
-	  public Expense createExpense(String date, double amount, String category, String description, String paymentMethod) {
+	  public Expense createExpense(int day, int month, int year, double amount, String category, String description, String paymentMethod) {
 	    ContentValues values = new ContentValues();
-	    values.put(MySQLiteHelper.COLUMN_DATE, date);
+	    values.put(MySQLiteHelper.COLUMN_DAY, day);
+        values.put(MySQLiteHelper.COLUMN_MONTH, month);
+        values.put(MySQLiteHelper.COLUMN_YEAR, year);
 	    values.put(MySQLiteHelper.COLUMN_AMOUNT, amount);
 	    values.put(MySQLiteHelper.COLUMN_CATEGORY, category);
 	    values.put(MySQLiteHelper.COLUMN_DESCRIPTION, description);
@@ -82,11 +86,13 @@ public class ExpensesDataSource {
 	  private Expense cursorToExpense(Cursor cursor) {
 		Expense expense = new Expense();
 	    expense.setId(cursor.getLong(0));
-	    expense.setDate(cursor.getString(1));
-	    expense.setAmount(cursor.getDouble(2));
-	    expense.setCategory(cursor.getString(3));
-	    expense.setDescription(cursor.getString(4));
-	    expense.setPaymentMethod(cursor.getString(5));
+	    expense.setDay(cursor.getInt(1));
+        expense.setMonth(cursor.getInt(2));
+        expense.setYear(cursor.getInt(3));
+	    expense.setAmount(cursor.getDouble(4));
+	    expense.setCategory(cursor.getString(5));
+	    expense.setDescription(cursor.getString(6));
+	    expense.setPaymentMethod(cursor.getString(7));
 	    return expense;
 	  }
 }

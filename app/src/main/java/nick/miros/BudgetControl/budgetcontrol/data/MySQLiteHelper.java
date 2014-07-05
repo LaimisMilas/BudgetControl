@@ -9,7 +9,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
 	  public static final String TABLE_EXPENSES = "expenses";
 	  public static final String COLUMN_ID = "_id";
-	  public static final String COLUMN_DATE = "date";
+	  public static final String COLUMN_DAY = "day";
+      public static final String COLUMN_MONTH = "month";
+      public static final String COLUMN_YEAR = "year";
 	  public static final String COLUMN_AMOUNT = "amount";
 	  public static final String COLUMN_CATEGORY = "category";
 	  public static final String COLUMN_DESCRIPTION = "description";
@@ -23,8 +25,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	  // Database creation sql statement
 	  private static final String DATABASE_CREATE = "create table "
 	      + TABLE_EXPENSES + " (" + COLUMN_ID
-	      + " integer primary key autoincrement, " + COLUMN_DATE
-	      + " text not null, " + COLUMN_AMOUNT
+	      + " integer primary key autoincrement, " + COLUMN_DAY
+          + " integer not null, " + COLUMN_MONTH
+          + " integer not null, " + COLUMN_YEAR
+          + " integer not null, " + COLUMN_AMOUNT
 	      + " real not null, "  + COLUMN_CATEGORY
 	      + " text not null, " + COLUMN_DESCRIPTION
 	      + " text not null, " + COLUMN_PAYMENT_METHOD

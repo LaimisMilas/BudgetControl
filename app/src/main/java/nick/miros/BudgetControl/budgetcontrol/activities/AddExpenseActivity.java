@@ -18,14 +18,10 @@ import java.util.Calendar;
 
 public class AddExpenseActivity extends Activity {
 
-    private String date;
     private String category;
     private String description;
     private String paymentMethod;
     private double amount;
-    private int currentDay;
-    private int currentMonth;
-    private int currentYear;
     private TextView currentDateText;
     private TextView amountEntered;
     private TextView dateView;
@@ -39,6 +35,10 @@ public class AddExpenseActivity extends Activity {
     private ExpensesDataSource datasource;
     private EditText amountView;
 
+    private static int chosenDay;
+    private static int chosenMonth;
+    private static int chosenYear;
+
 
 
     @Override
@@ -48,9 +48,10 @@ public class AddExpenseActivity extends Activity {
 
         Calendar c = Calendar.getInstance();
 
-        currentDay = c.get(Calendar.DATE);
-        currentMonth = c.get(Calendar.MONTH) + 1;
-        currentYear = c.get(Calendar.YEAR);
+        //give the current date by default
+        chosenDay = c.get(Calendar.DATE);
+        chosenMonth = c.get(Calendar.MONTH) + 1;
+        chosenYear = c.get(Calendar.YEAR);
         currentDateText = (TextView) findViewById(R.id.dateView);
 
         dateButton = (ImageButton) findViewById(R.id.chooseDateButton);
@@ -60,8 +61,8 @@ public class AddExpenseActivity extends Activity {
             }
         });
 
-
-        currentDateText.setText(currentDay + " / " + currentMonth + " / " + currentYear);
+        //the default date that is set once the Activity is started
+        currentDateText.setText(chosenMonth + " / " + chosenDay + " / " + chosenYear);
 
 
         categorySpinner = (Spinner) findViewById(R.id.category_spinner);
@@ -97,7 +98,6 @@ public class AddExpenseActivity extends Activity {
 
     public void addNewExpense(View v) {
 
-        dateView = (TextView) findViewById(R.id.dateView);
         categoryView = (Spinner) findViewById(R.id.category_spinner);
         descriptionView = (TextView) findViewById(R.id.expense_description);
         amountView = (EditText) findViewById(R.id.expense_amount);
@@ -107,7 +107,6 @@ public class AddExpenseActivity extends Activity {
 
             if (DecimalDigits.isValidInput(amountView)) {
 
-                date = dateView.getText().toString();
                 amount = Double.parseDouble(amountView.getText().toString());
                 category = categoryView.getSelectedItem().toString();
                 description = descriptionView.getText().toString();
@@ -115,7 +114,7 @@ public class AddExpenseActivity extends Activity {
 
                 datasource = new ExpensesDataSource(this);
                 datasource.open();
-                datasource.createExpense(date, amount, category, description, paymentMethod);
+                datasource.createExpense(chosenDay,chosenMonth, chosenYear, amount, category, description, paymentMethod);
 
                 startActivity(new Intent(this, ExpenseListActivity.class));
             }
@@ -178,6 +177,11 @@ public class AddExpenseActivity extends Activity {
             TextView dateText = (TextView) getActivity().findViewById(R.id.dateView);
             month += 1;
             dateText.setText(month + " / " + day + " / " + year);
+
+            chosenDay = day;
+            chosenMonth = month;
+            chosenYear = year;
+
         }
     }
 }

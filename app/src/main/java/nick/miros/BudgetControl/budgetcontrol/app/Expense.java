@@ -7,7 +7,9 @@ public class Expense {
      */
 
 	private long id;
-	private String date;
+    private int day;
+    private int month;
+    private int year;
 	private double amount;
 	private String category;
 	private String description;
@@ -21,13 +23,29 @@ public class Expense {
 		this.id = id;
 	}
 
-	public String getDate() {
-		return date;
-	}
+    public int getDay() {
+        return day;
+    }
 
-	public void setDate(String date) {
-		this.date = date;
-	}
+    public void setDay(int day) {
+        this.day = day;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public void setMonth(int month) {
+        this.month = month;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
 
 	public double getAmount() {
 		return amount;
@@ -64,6 +82,6 @@ public class Expense {
 
 	@Override
 	public String toString() {
-		return date + " " + amount + " " + category + " " + description + " " + paymentMethod;
+		return month + "/" + day + "/" + year + " " + amount + " " + category + " " + description + " " + paymentMethod;
 	}
 }
