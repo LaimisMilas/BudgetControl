@@ -42,11 +42,12 @@ public class BudgetSettingsActivity extends Activity {
     public static final String[] monthNames = {"January", "February", "March", "April", "May",
             "June", "July", "August", "September", "October", "November",
             "December"};
-    private final String currencyPrefs = "currenciesKey";
-    private final String currencySymbolKey = "currencySymbolKey";
-    private final String currencyNameKey = "currencyNameKey";
-    private final String nameIdentifier = "currencyName";
-    private final String symbolIdentifier = "currencySymbol";
+    private final String MY_PREFS_KEY = "myPrefsKey";
+    private final String CURRENCY_SYMBOL_KEY = "currencySymbolKey";
+    private final String CURRENCY_NAME_KEY = "currencyNameKey";
+    private static final String CURRENT_BUDGET_KEY = "currentBudgetKey";
+    private final String NAME_ID = "currencyName";
+    private final String SYMBOL_ID = "currencySymbol";
     private final Context context = this;
     private TextView currentMonthView;
     private ImageButton budgetEditButton;
@@ -64,7 +65,7 @@ public class BudgetSettingsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_budget_settings);
 
-        settings = getSharedPreferences(currencyPrefs, Context.MODE_PRIVATE);
+        settings = getSharedPreferences(MY_PREFS_KEY, Context.MODE_PRIVATE);
 
         currentMonthView = (TextView) findViewById(R.id.currentMonth);
         dailyBudgetView = (TextView) findViewById(R.id.dailyBudgetAmount);
@@ -77,16 +78,15 @@ public class BudgetSettingsActivity extends Activity {
         currentMonthView.setText("Budget for " + monthNames[month]);
 
         //check if shared preferences contain values for the current month
-        if (settings.contains(monthNames[month])) {
+        if (settings.contains(CURRENT_BUDGET_KEY)) {
             //set chosen currency and budget for the month
             monthlyBudgetView.setText(Currency.getCurrentCurrencyUsed(getApplicationContext()) +
-                    settings.getString(monthNames[month], ""));
-
-            DecimalFormat numberFormat = new DecimalFormat("#.00");
+                    settings.getFloat(CURRENT_BUDGET_KEY, 0));
 
             //calculate the daily budget and set it to the dailyBudgetView Textview
+            DecimalFormat numberFormat = new DecimalFormat("#.00");
             dailyBudgetView.setText(Currency.getCurrentCurrencyUsed(getApplicationContext())
-                    + (numberFormat.format(Double.parseDouble(settings.getString(monthNames[month], ""))
+                    + (numberFormat.format(settings.getFloat(CURRENT_BUDGET_KEY, 0)
                     / amountOfDays)));
         }
 
@@ -166,11 +166,11 @@ public class BudgetSettingsActivity extends Activity {
 
         //check whether the preferences contain the values for the
         //currency symbol and name. If so, apply them.
-        if (settings.contains(currencySymbolKey) && settings.contains(currencyNameKey)) {
+        if (settings.contains(CURRENCY_SYMBOL_KEY) && settings.contains(CURRENCY_NAME_KEY)) {
 
-            currentCurrencyView.setText(settings.getString(currencyNameKey, "")
+            currentCurrencyView.setText(settings.getString(CURRENCY_NAME_KEY, "")
                     + " "
-                    + settings.getString(currencySymbolKey, ""));
+                    + settings.getString(CURRENCY_SYMBOL_KEY, ""));
         }
     }
 
@@ -184,13 +184,13 @@ public class BudgetSettingsActivity extends Activity {
             if (requestCode == currencyRequestCode) {
 
                 //get the key-value pairs passed
-                String currencyName = data.getStringExtra(nameIdentifier);
-                String currencySymbol = data.getStringExtra(symbolIdentifier);
+                String currencyName = data.getStringExtra(NAME_ID);
+                String currencySymbol = data.getStringExtra(SYMBOL_ID);
 
                 //save the values received into sharedPreferences
                 SharedPreferences.Editor editor = settings.edit();
-                editor.putString(currencySymbolKey, currencySymbol);
-                editor.putString(currencyNameKey, currencyName);
+                editor.putString(CURRENCY_SYMBOL_KEY, currencySymbol);
+                editor.putString(CURRENCY_NAME_KEY, currencyName);
                 editor.commit();
 
                 currentCurrencyView.setText(currencyName + " " + currencySymbol);

@@ -14,8 +14,8 @@ public class Currency {
     private String name;
     private String symbol;
     private static SharedPreferences settings;
-    private static final String currencySymbolKey = "currencySymbolKey";
-    private static final String currencyPrefs = "currenciesKey";
+    private static final String MY_PREFS_KEY = "myPrefsKey";
+    private static final String CURRENCY_SYMBOL_KEY = "currencySymbolKey";
     public static String currentCurrencyUsed;
 
     public String getName() {
@@ -42,9 +42,9 @@ public class Currency {
      * @return current currency used
      */
     public static String getCurrentCurrencyUsed(Context context) {
-        settings = context.getSharedPreferences(currencyPrefs, Context.MODE_PRIVATE);
-        if (settings.contains(currencySymbolKey)) {
-            currentCurrencyUsed = settings.getString(currencySymbolKey, "");
+        settings = context.getSharedPreferences(MY_PREFS_KEY, Context.MODE_PRIVATE);
+        if (settings.contains(CURRENCY_SYMBOL_KEY)) {
+            currentCurrencyUsed = settings.getString(CURRENCY_SYMBOL_KEY, "");
         } else {
             currentCurrencyUsed = " ";
         }

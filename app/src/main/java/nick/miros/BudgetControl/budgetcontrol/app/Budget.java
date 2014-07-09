@@ -12,8 +12,8 @@ public class Budget {
     public static double currentMonthlyBudget;
     private double amount;
     private static SharedPreferences settings;
-    private static final String currencyPrefs = "currenciesKey";
-    private static final String currentBudgetKey = "currentBudgetKey";
+    private static final String MY_PREFS_KEY = "myPrefsKey";
+    private static final String CURRENT_BUDGET_KEY = "currentBudgetKey";
 
     public double getAmount() {
         return amount;
@@ -25,7 +25,7 @@ public class Budget {
 
     public static double getCurrentMonthlyBudget() {
 
-        return settings.getFloat(currentBudgetKey, 0);
+        return settings.getFloat(CURRENT_BUDGET_KEY, 0);
     }
 
     /**
@@ -35,9 +35,9 @@ public class Budget {
      * @param context context of the application that is calling the method
      */
     public static void setCurrentMonthlyBudget(double currentMonthlyBudget, Context context) {
-        settings = context.getSharedPreferences(currencyPrefs, Context.MODE_PRIVATE);
+        settings = context.getSharedPreferences(MY_PREFS_KEY, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
-        editor.putFloat(currentBudgetKey, (float) currentMonthlyBudget);
+        editor.putFloat(CURRENT_BUDGET_KEY, (float) currentMonthlyBudget);
         editor.commit();
 
         Budget.currentMonthlyBudget = currentMonthlyBudget;

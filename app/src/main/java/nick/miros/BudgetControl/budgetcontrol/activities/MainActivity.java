@@ -15,7 +15,6 @@ import nick.miros.BudgetControl.budgetcontrol.app.Budget;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
 import nick.miros.BudgetControl.budgetcontrol.data.ExpensesDataSource;
 import nick.miros.BudgetControl.budgetcontrol.helper.MyProgressBar;
-import nick.miros.BudgetControl.budgetcontrol.helper.TextProgressBar;
 
 public class MainActivity extends ActionBarActivity {
     View.OnClickListener mainActivityListener = new View.OnClickListener() {
@@ -38,7 +37,8 @@ public class MainActivity extends ActionBarActivity {
     private Button BudgetDirectionButton;
     private MyProgressBar monthlyProgress;
     private ExpensesDataSource datasource;
-    private final String currencyPrefs = "currenciesKey";
+    private final String MY_PREFS_KEY = "myPrefsKey";
+    private static final String CURRENT_BUDGET_KEY = "currentBudgetKey";
     private SharedPreferences settings;
 
     @Override
@@ -46,7 +46,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        settings = getSharedPreferences(currencyPrefs, Context.MODE_PRIVATE);
+        settings = getSharedPreferences(MY_PREFS_KEY, Context.MODE_PRIVATE);
 
         ExpenseDirectionButton = (Button) findViewById(R.id.ExpenseDirectionButton);
         DataDirectionButton = (Button) findViewById(R.id.DataDirectionButton);
@@ -66,7 +66,7 @@ public class MainActivity extends ActionBarActivity {
         double amountSpent = datasource.getAllTodayExpenses();
         Toast.makeText(getApplicationContext(), amountSpent + " " + monthlyBudget, Toast.LENGTH_SHORT).show();
 
-        if (settings.contains("currentBudgetKey")) {
+        if (settings.contains(CURRENT_BUDGET_KEY)) {
             //set chosen currency and budget for the month
 
             monthlyBudget = Budget.getCurrentMonthlyBudget();
