@@ -14,11 +14,6 @@ public class Budget {
     private static SharedPreferences settings;
     private static final String currencyPrefs = "currenciesKey";
     private static final String currentBudgetKey = "currentBudgetKey";
-    Context context;
-
-    {
-        settings = context.getSharedPreferences(currencyPrefs, Context.MODE_PRIVATE);
-    }
 
     public double getAmount() {
         return amount;
@@ -33,8 +28,14 @@ public class Budget {
         return settings.getFloat(currentBudgetKey, 0);
     }
 
-    public static void setCurrentMonthlyBudget(double currentMonthlyBudget) {
-
+    /**
+     * Saves the monthly budget value passed
+     *
+     * @param currentMonthlyBudget value to be set as a monthly budget
+     * @param context context of the application that is calling the method
+     */
+    public static void setCurrentMonthlyBudget(double currentMonthlyBudget, Context context) {
+        settings = context.getSharedPreferences(currencyPrefs, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putFloat(currentBudgetKey, (float) currentMonthlyBudget);
         editor.commit();

@@ -10,6 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import nick.miros.BudgetControl.budgetcontrol.app.Budget;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
 import nick.miros.BudgetControl.budgetcontrol.data.ExpensesDataSource;
 import nick.miros.BudgetControl.budgetcontrol.helper.MyProgressBar;
@@ -59,27 +61,21 @@ public class MainActivity extends ActionBarActivity {
         datasource = new ExpensesDataSource(this);
         datasource.open();
 
-        double dailyBudget = 0;
+        double monthlyBudget = 0;
 
         double amountSpent = datasource.getAllTodayExpenses();
-        Toast.makeText(getApplicationContext(), amountSpent + " " + dailyBudget, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), amountSpent + " " + monthlyBudget, Toast.LENGTH_SHORT).show();
 
-        if (settings.contains("July")) {
+        if (settings.contains("currentBudgetKey")) {
             //set chosen currency and budget for the month
 
-            dailyBudget = Double.parseDouble(settings.getString("July", ""));
+            monthlyBudget = Budget.getCurrentMonthlyBudget();
 
-            monthlyProgress.setMax(dailyBudget);
+            monthlyProgress.setMax(monthlyBudget);
             monthlyProgress.updateProgress(amountSpent);
         }
 
-
-
-
-
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

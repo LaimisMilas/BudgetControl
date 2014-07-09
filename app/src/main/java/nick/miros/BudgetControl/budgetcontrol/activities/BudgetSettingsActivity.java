@@ -22,6 +22,7 @@ import android.widget.TextView;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 
+import nick.miros.BudgetControl.budgetcontrol.app.Budget;
 import nick.miros.BudgetControl.budgetcontrol.app.Currency;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
 import nick.miros.BudgetControl.budgetcontrol.helper.DecimalDigits;
@@ -47,12 +48,13 @@ public class BudgetSettingsActivity extends Activity {
     private final String nameIdentifier = "currencyName";
     private final String symbolIdentifier = "currencySymbol";
     private final Context context = this;
-    private TextView currentMonth;
+    private TextView currentMonthView;
     private ImageButton budgetEditButton;
     private ImageButton currencyEditButton;
-    private TextView monthlyBudget;
-    private TextView dailyBudget;
+    private TextView monthlyBudgetView;
+    private TextView dailyBudgetView;
     private TextView currentCurrencyView;
+    private double monthlyBudget;
     private SharedPreferences settings;
     private final int currencyRequestCode = 1;
     //
@@ -64,26 +66,26 @@ public class BudgetSettingsActivity extends Activity {
 
         settings = getSharedPreferences(currencyPrefs, Context.MODE_PRIVATE);
 
-        currentMonth = (TextView) findViewById(R.id.currentMonth);
-        dailyBudget = (TextView) findViewById(R.id.dailyBudgetAmount);
-        monthlyBudget = (TextView) findViewById(R.id.currentMonthBudget);
+        currentMonthView = (TextView) findViewById(R.id.currentMonth);
+        dailyBudgetView = (TextView) findViewById(R.id.dailyBudgetAmount);
+        monthlyBudgetView = (TextView) findViewById(R.id.currentMonthBudget);
         budgetEditButton = (ImageButton) findViewById(R.id.EditButton);
 
         Calendar cal = Calendar.getInstance();
         final int month = cal.get(Calendar.MONTH); //current calendar month
         final int amountOfDays = cal.getActualMaximum(Calendar.DAY_OF_MONTH); //amount of days in the current month
-        currentMonth.setText("Budget for " + monthNames[month]);
+        currentMonthView.setText("Budget for " + monthNames[month]);
 
         //check if shared preferences contain values for the current month
         if (settings.contains(monthNames[month])) {
             //set chosen currency and budget for the month
-            monthlyBudget.setText(Currency.getCurrentCurrencyUsed(getApplicationContext()) +
+            monthlyBudgetView.setText(Currency.getCurrentCurrencyUsed(getApplicationContext()) +
                     settings.getString(monthNames[month], ""));
 
             DecimalFormat numberFormat = new DecimalFormat("#.00");
 
-            //calculate the daily budget and set it to the dailyBudget Textview
-            dailyBudget.setText(Currency.getCurrentCurrencyUsed(getApplicationContext())
+            //calculate the daily budget and set it to the dailyBudgetView Textview
+            dailyBudgetView.setText(Currency.getCurrentCurrencyUsed(getApplicationContext())
                     + (numberFormat.format(Double.parseDouble(settings.getString(monthNames[month], ""))
                     / amountOfDays)));
         }
@@ -124,18 +126,16 @@ public class BudgetSettingsActivity extends Activity {
                                     if (DecimalDigits.isValidInput(userInput)) {
 
                                         //apply the monthly budget to the monthly view
-                                        monthlyBudget.setText(Currency.getCurrentCurrencyUsed(getApplicationContext())
+                                        monthlyBudgetView.setText(Currency.getCurrentCurrencyUsed(getApplicationContext())
                                                 + userInput.getText());
 
                                         //save the monthly budget value
-                                        SharedPreferences.Editor editor = settings.edit();
-                                        editor.putString(monthNames[month], userInput.getText().toString());
-                                        editor.commit();
+                                        monthlyBudget = Double.parseDouble(userInput.getText().toString());
+                                        Budget.setCurrentMonthlyBudget(monthlyBudget, getApplicationContext());
 
+                                        //formats and sets the text for the dailyBudgetView textview
                                         DecimalFormat numberFormat = new DecimalFormat("#.00");
-
-                                        //formats and sets the text for the dailyBudget textview
-                                        dailyBudget.setText(Currency.getCurrentCurrencyUsed(getApplicationContext())
+                                        dailyBudgetView.setText(Currency.getCurrentCurrencyUsed(getApplicationContext())
                                                 + (numberFormat.format(Double.parseDouble(userInput.getText().toString())
                                                 / amountOfDays)));
                                         alertDialog.dismiss();
