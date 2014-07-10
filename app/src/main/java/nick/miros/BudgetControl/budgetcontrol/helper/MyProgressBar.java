@@ -5,14 +5,16 @@ import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-/**
- * Created by mymi on 04-Jul-14.
- */
-public class MyProgressBar extends LinearLayout {
+import nick.miros.BudgetControl.budgetcontrol.app.Currency;
 
+/**
+ * A custom view class for the monthly and daily progress bars
+ */
+public class MyProgressBar extends FrameLayout {
 
     Context context;
     public MyProgressBar(Context context) {
@@ -30,43 +32,57 @@ public class MyProgressBar extends LinearLayout {
         this.context = context;
     }
 
+    LinearLayout progressBarBackground;
     LinearLayout valueBar;
-    TextView textView;
+    TextView ratio;
     double max;
 
     {
-        setWeightSum(1);
+        progressBarBackground = new LinearLayout(getContext());
         valueBar = new LinearLayout(getContext());
-        textView = new TextView(getContext());
-        valueBar.addView(textView);
-        addView(valueBar);
+        ratio = new TextView(getContext());
+
+        progressBarBackground.setWeightSum(1);
+        progressBarBackground.setBackgroundColor(Color.GRAY);
+
+        addView(progressBarBackground);
+        progressBarBackground.addView(valueBar);
+
+        addView(ratio);
+        ratio.setTextColor(Color.BLACK);
+        ratio.setGravity(Gravity.CENTER);
     }
 
     public void setMax(double max) {
 
         this.max = max;
 
-        textView.setText(max + "/" + max);
-        textView.setTextColor(Color.BLACK);
-        LayoutParams layoutParams = new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
+        ratio.setText(Currency.getCurrentCurrencyUsed(getContext())
+                      + max
+                      + " / "
+                      + Currency.getCurrentCurrencyUsed(getContext())
+                      + max);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
         layoutParams.weight = 1;
 
         valueBar.setLayoutParams(layoutParams);
         valueBar.setBackgroundColor(Color.GREEN);
     }
 
-
     public void updateProgress(double expenses) {
         double fullCoeff = 1 - (expenses / max);
 
-        textView.setText(max - expenses + "/" + max);
-        textView.setTextColor(Color.BLACK);
+        ratio.setText(Currency.getCurrentCurrencyUsed(getContext())
+                      + (max - expenses)
+                      + " / " 
+                      + Currency.getCurrentCurrencyUsed(getContext())
+                      + max);
 
-        LayoutParams layoutParams = new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
         layoutParams.weight = (float) fullCoeff;
 
         valueBar.setLayoutParams(layoutParams);
-        setBackgroundColor(Color.GRAY);
+        progressBarBackground.setBackgroundColor(Color.GRAY);
 
         if (fullCoeff >= 0.5) {
             valueBar.setBackgroundColor(Color.GREEN);
