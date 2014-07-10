@@ -45,6 +45,9 @@ public class MyProgressBar extends LinearLayout {
     public void setMax(double max) {
 
         this.max = max;
+
+        textView.setText(max + "/" + max);
+        textView.setTextColor(Color.BLACK);
         LayoutParams layoutParams = new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
         layoutParams.weight = 1;
 
@@ -56,7 +59,7 @@ public class MyProgressBar extends LinearLayout {
     public void updateProgress(double expenses) {
         double fullCoeff = 1 - (expenses / max);
 
-        textView.setText("" + fullCoeff * 100 + "%");
+        textView.setText(max - expenses + "/" + max);
         textView.setTextColor(Color.BLACK);
 
         LayoutParams layoutParams = new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
