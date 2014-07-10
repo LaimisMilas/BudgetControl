@@ -43,7 +43,13 @@ public class MyProgressBar extends LinearLayout {
     }
 
     public void setMax(double max) {
+
         this.max = max;
+        LayoutParams layoutParams = new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
+        layoutParams.weight = 1;
+
+        valueBar.setLayoutParams(layoutParams);
+        valueBar.setBackgroundColor(Color.GREEN);
     }
 
 
@@ -69,30 +75,4 @@ public class MyProgressBar extends LinearLayout {
             valueBar.setBackgroundColor(Color.RED);
         }
     }
-    /*
-    public void updateProgress(double percentage) {
-
-        textView.setText("" + percentage * 100 + "%");
-        textView.setTextColor(Color.BLACK);
-
-        LayoutParams layoutParams = new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
-        layoutParams.weight = (float) percentage;
-
-        valueBar.setLayoutParams(layoutParams);
-        setBackgroundColor(Color.GRAY);
-
-        if (percentage >= 0.5) {
-            valueBar.setBackgroundColor(Color.GREEN);
-        }
-        else if(percentage >= 0.2) {
-            valueBar.setBackgroundColor(Color.YELLOW);
-        }
-        else {
-            valueBar.setBackgroundColor(Color.RED);
-        }
-
-    }
-    */
-
-
 }

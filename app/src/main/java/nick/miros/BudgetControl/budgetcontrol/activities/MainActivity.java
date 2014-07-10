@@ -40,6 +40,7 @@ public class MainActivity extends ActionBarActivity {
     private final String MY_PREFS_KEY = "myPrefsKey";
     private static final String CURRENT_BUDGET_KEY = "currentBudgetKey";
     private SharedPreferences settings;
+    double monthlyBudget = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,10 +62,20 @@ public class MainActivity extends ActionBarActivity {
         datasource = new ExpensesDataSource(this);
         datasource.open();
 
-        double monthlyBudget = 0;
+        updateProgressBar();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateProgressBar();
+
+
+    }
+
+    public void updateProgressBar() {
 
         double amountSpent = datasource.getAllTodayExpenses();
-        Toast.makeText(getApplicationContext(), amountSpent + " " + monthlyBudget, Toast.LENGTH_SHORT).show();
 
         if (settings.contains(CURRENT_BUDGET_KEY)) {
             //set chosen currency and budget for the month
@@ -72,9 +83,10 @@ public class MainActivity extends ActionBarActivity {
             monthlyBudget = Budget.getCurrentMonthlyBudget();
 
             monthlyProgress.setMax(monthlyBudget);
-            monthlyProgress.updateProgress(amountSpent);
+            if (amountSpent != 0) {
+                monthlyProgress.updateProgress(amountSpent);
+            }
         }
-
     }
 
     @Override
