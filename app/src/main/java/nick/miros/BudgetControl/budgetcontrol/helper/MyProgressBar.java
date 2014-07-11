@@ -72,26 +72,32 @@ public class MyProgressBar extends FrameLayout {
     public void updateProgress(double expenses) {
         double fullCoeff = 1 - (expenses / max);
 
-        ratio.setText(Currency.getCurrentCurrencyUsed(getContext())
-                      + (max - expenses)
-                      + " / " 
-                      + Currency.getCurrentCurrencyUsed(getContext())
-                      + max);
-
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
-        layoutParams.weight = (float) fullCoeff;
-
-        valueBar.setLayoutParams(layoutParams);
-        progressBarBackground.setBackgroundColor(Color.GRAY);
-
-        if (fullCoeff >= 0.5) {
-            valueBar.setBackgroundColor(Color.GREEN);
-        }
-        else if(fullCoeff >= 0.2) {
-            valueBar.setBackgroundColor(Color.YELLOW);
+        if (fullCoeff <= 0) {
+            ratio.setText("Overdraft!");
+            ratio.setTextColor(Color.RED);
+            progressBarBackground.removeView(valueBar);
         }
         else {
-            valueBar.setBackgroundColor(Color.RED);
+
+            ratio.setText(Currency.getCurrentCurrencyUsed(getContext())
+                    + (max - expenses)
+                    + " / "
+                    + Currency.getCurrentCurrencyUsed(getContext())
+                    + max);
+
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
+            layoutParams.weight = (float) fullCoeff;
+
+            valueBar.setLayoutParams(layoutParams);
+            progressBarBackground.setBackgroundColor(Color.GRAY);
+
+            if (fullCoeff >= 0.5) {
+                valueBar.setBackgroundColor(Color.GREEN);
+            } else if (fullCoeff >= 0.2) {
+                valueBar.setBackgroundColor(Color.YELLOW);
+            } else {
+                valueBar.setBackgroundColor(Color.RED);
+            }
         }
     }
 }
