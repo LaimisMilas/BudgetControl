@@ -92,8 +92,8 @@ public class ExpensesDataSource {
       public double getAllTodayExpenses () {
 
           double amountSpent = 0;
+
           Calendar c = Calendar.getInstance();
-          //give the current date by default
           int currentDay = c.get(Calendar.DATE);
           int currentMonth = c.get(Calendar.MONTH) + 1;
           int currentYear = c.get(Calendar.YEAR);
@@ -102,6 +102,27 @@ public class ExpensesDataSource {
                   MySQLiteHelper.COLUMN_DAY + "=" + currentDay + " AND "
                 + MySQLiteHelper.COLUMN_MONTH + "=" + currentMonth + " AND "
                 + MySQLiteHelper.COLUMN_YEAR + "=" + currentYear, null, null, null, null);
+
+          cursor.moveToFirst();
+          while (!cursor.isAfterLast()) {
+              amountSpent+=cursor.getDouble(3);
+              cursor.moveToNext();
+          }
+          //close the cursor
+          cursor.close();
+          return amountSpent;
+      }
+
+      public double getAllMonthlyExpenses () {
+          double amountSpent = 0;
+
+          Calendar c = Calendar.getInstance();
+          int currentMonth = c.get(Calendar.MONTH) + 1;
+          int currentYear = c.get(Calendar.YEAR);
+
+          Cursor cursor = database.query(MySQLiteHelper.TABLE_EXPENSES, dateFilterColumns,
+                  MySQLiteHelper.COLUMN_MONTH + "=" + currentMonth + " AND "
+                  + MySQLiteHelper.COLUMN_YEAR + "=" + currentYear, null, null, null, null);
 
           cursor.moveToFirst();
           while (!cursor.isAfterLast()) {

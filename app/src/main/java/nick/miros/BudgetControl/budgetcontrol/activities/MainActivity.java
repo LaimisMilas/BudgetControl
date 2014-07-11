@@ -38,7 +38,7 @@ public class MainActivity extends ActionBarActivity {
     private MyProgressBar monthlyProgress;
     private ExpensesDataSource datasource;
     private final String MY_PREFS_KEY = "myPrefsKey";
-    private static final String CURRENT_BUDGET_KEY = "currentBudgetKey";
+    private static final String CURRENT_MONTHLY_BUDGET_KEY = "currentMonthlyBudgetKey";
     private SharedPreferences settings;
     double monthlyBudget = 0;
 
@@ -75,16 +75,15 @@ public class MainActivity extends ActionBarActivity {
 
     public void updateProgressBar() {
 
-        double amountSpent = datasource.getAllTodayExpenses();
+        double spentThisMonth = datasource.getAllMonthlyExpenses();
 
-        if (settings.contains(CURRENT_BUDGET_KEY)) {
-            //set chosen currency and budget for the month
+        if (settings.contains(CURRENT_MONTHLY_BUDGET_KEY)) {
 
             monthlyBudget = Budget.getCurrentMonthlyBudget();
 
             monthlyProgress.setMax(monthlyBudget);
-            if (amountSpent != 0) {
-                monthlyProgress.updateProgress(amountSpent);
+            if (spentThisMonth != 0) {
+                monthlyProgress.updateProgress(spentThisMonth);
             }
         }
     }

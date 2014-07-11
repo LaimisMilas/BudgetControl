@@ -45,7 +45,7 @@ public class BudgetSettingsActivity extends Activity {
     private final String MY_PREFS_KEY = "myPrefsKey";
     private final String CURRENCY_SYMBOL_KEY = "currencySymbolKey";
     private final String CURRENCY_NAME_KEY = "currencyNameKey";
-    private static final String CURRENT_BUDGET_KEY = "currentBudgetKey";
+    private static final String CURRENT_MONTHLY_BUDGET_KEY = "currentMonthlyBudgetKey";
     private final String NAME_ID = "currencyName";
     private final String SYMBOL_ID = "currencySymbol";
     private final Context context = this;
@@ -78,15 +78,15 @@ public class BudgetSettingsActivity extends Activity {
         currentMonthView.setText("Budget for " + monthNames[month]);
 
         //check if shared preferences contain values for the current month
-        if (settings.contains(CURRENT_BUDGET_KEY)) {
+        if (settings.contains(CURRENT_MONTHLY_BUDGET_KEY)) {
             //set chosen currency and budget for the month
             monthlyBudgetView.setText(Currency.getCurrentCurrencyUsed(getApplicationContext()) +
-                    settings.getFloat(CURRENT_BUDGET_KEY, 0));
+                    settings.getFloat(CURRENT_MONTHLY_BUDGET_KEY, 0));
 
             //calculate the daily budget and set it to the dailyBudgetView Textview
             DecimalFormat numberFormat = new DecimalFormat("#.00");
             dailyBudgetView.setText(Currency.getCurrentCurrencyUsed(getApplicationContext())
-                    + (numberFormat.format(settings.getFloat(CURRENT_BUDGET_KEY, 0)
+                    + (numberFormat.format(settings.getFloat(CURRENT_MONTHLY_BUDGET_KEY, 0)
                     / amountOfDays)));
         }
 
