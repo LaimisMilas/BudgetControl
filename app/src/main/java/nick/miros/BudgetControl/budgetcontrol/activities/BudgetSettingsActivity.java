@@ -133,11 +133,9 @@ public class BudgetSettingsActivity extends Activity {
                                         monthlyBudget = Double.parseDouble(userInput.getText().toString());
                                         Budget.setCurrentMonthlyBudget(monthlyBudget, getApplicationContext());
 
-                                        //formats and sets the text for the dailyBudgetView textview
-                                        DecimalFormat numberFormat = new DecimalFormat("#.00");
+                                        //sets the text for the dailyBudgetView textview
                                         dailyBudgetView.setText(Currency.getCurrentCurrencyUsed(getApplicationContext())
-                                                + (numberFormat.format(Double.parseDouble(userInput.getText().toString())
-                                                / amountOfDays)));
+                                                + Budget.getDailyBudget() + "");
                                         alertDialog.dismiss();
                                     }
                                 }

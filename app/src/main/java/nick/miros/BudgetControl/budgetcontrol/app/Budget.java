@@ -3,23 +3,17 @@ package nick.miros.BudgetControl.budgetcontrol.app;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.text.DecimalFormat;
+import java.util.Calendar;
+
 /**
  * Created by admin on 7/5/2014.
  */
 public class Budget {
 
-    private double amount;
     private static SharedPreferences settings;
     private static final String MY_PREFS_KEY = "myPrefsKey";
     private static final String CURRENT_MONTHLY_BUDGET_KEY = "currentMonthlyBudgetKey";
-
-    public double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
 
     public static double getCurrentMonthlyBudget() {
 
@@ -37,5 +31,18 @@ public class Budget {
         SharedPreferences.Editor editor = settings.edit();
         editor.putFloat(CURRENT_MONTHLY_BUDGET_KEY, (float) currentMonthlyBudget);
         editor.commit();
+    }
+
+    public static double getDailyBudget() {
+        double monthlyBudget = settings.getFloat(CURRENT_MONTHLY_BUDGET_KEY, 0);
+
+        DecimalFormat nf = new DecimalFormat("#.00");
+
+        Calendar c = Calendar.getInstance();
+        final int amountOfDays = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+        double dailyBudget = Double.parseDouble(nf.format(monthlyBudget / amountOfDays));
+
+        return dailyBudget;
     }
 }
