@@ -9,6 +9,8 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
+
 import nick.miros.BudgetControl.budgetcontrol.app.Currency;
 
 /**
@@ -36,6 +38,7 @@ public class MyProgressBar extends FrameLayout {
     LinearLayout valueBar;
     TextView ratio;
     double max;
+    DecimalFormat numberFormat = new DecimalFormat("#.00");
 
     {
         progressBarBackground = new LinearLayout(getContext());
@@ -58,10 +61,10 @@ public class MyProgressBar extends FrameLayout {
         this.max = max;
 
         ratio.setText(Currency.getCurrentCurrencyUsed(getContext())
-                      + max
+                      + numberFormat.format(max)
                       + " / "
                       + Currency.getCurrentCurrencyUsed(getContext())
-                      + max);
+                      + numberFormat.format(max));
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
         layoutParams.weight = 1;
 
@@ -80,10 +83,10 @@ public class MyProgressBar extends FrameLayout {
         else {
 
             ratio.setText(Currency.getCurrentCurrencyUsed(getContext())
-                    + (max - expenses)
+                    + numberFormat.format(max - expenses)
                     + " / "
                     + Currency.getCurrentCurrencyUsed(getContext())
-                    + max);
+                    + numberFormat.format(max));
 
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
             layoutParams.weight = (float) fullCoeff;
