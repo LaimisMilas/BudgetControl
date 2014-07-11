@@ -41,7 +41,8 @@ public class MainActivity extends ActionBarActivity {
     private final String MY_PREFS_KEY = "myPrefsKey";
     private static final String CURRENT_MONTHLY_BUDGET_KEY = "currentMonthlyBudgetKey";
     private SharedPreferences settings;
-    double monthlyBudget = 0;
+    private double monthlyBudget = 0;
+    private double dailyBudget = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,28 +65,36 @@ public class MainActivity extends ActionBarActivity {
         datasource = new ExpensesDataSource(this);
         datasource.open();
 
-        updateProgressBar();
+        updateProgressBars();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        updateProgressBar();
+        updateProgressBars();
 
 
     }
 
-    public void updateProgressBar() {
+    public void updateProgressBars() {
 
+        double spentToday = datasource.getAllTodayExpenses();
         double spentThisMonth = datasource.getAllMonthlyExpenses();
 
         if (settings.contains(CURRENT_MONTHLY_BUDGET_KEY)) {
 
             monthlyBudget = Budget.getCurrentMonthlyBudget();
-
             monthlyProgress.setMax(monthlyBudget);
+
+            dailyBudget = Budget.getDailyBudget();
+            dailyProgress.setMax(dailyBudget);
+
             if (spentThisMonth != 0) {
                 monthlyProgress.updateProgress(spentThisMonth);
+            }
+
+            if (spentToday != 0) {
+                dailyProgress.updateProgress(spentToday);
             }
         }
 
