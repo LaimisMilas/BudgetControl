@@ -36,6 +36,7 @@ public class MainActivity extends ActionBarActivity {
     private Button DataDirectionButton;
     private Button BudgetDirectionButton;
     private MyProgressBar monthlyProgress;
+    private MyProgressBar dailyProgress;
     private ExpensesDataSource datasource;
     private final String MY_PREFS_KEY = "myPrefsKey";
     private static final String CURRENT_MONTHLY_BUDGET_KEY = "currentMonthlyBudgetKey";
@@ -57,7 +58,8 @@ public class MainActivity extends ActionBarActivity {
         DataDirectionButton.setOnClickListener(mainActivityListener);
         BudgetDirectionButton.setOnClickListener(mainActivityListener);
 
-        monthlyProgress = (MyProgressBar) findViewById(R.id.progressBar);
+        dailyProgress = (MyProgressBar) findViewById(R.id.dailyProgressBar);
+        monthlyProgress = (MyProgressBar) findViewById(R.id.monthlyProgressBar);
 
         datasource = new ExpensesDataSource(this);
         datasource.open();
@@ -86,6 +88,7 @@ public class MainActivity extends ActionBarActivity {
                 monthlyProgress.updateProgress(spentThisMonth);
             }
         }
+
     }
 
     @Override

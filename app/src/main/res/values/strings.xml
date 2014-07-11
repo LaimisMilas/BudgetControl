@@ -37,5 +37,7 @@
     <string name="initial_budget_value"><b><u>0</u></b></string>
     <string name="initial_daily_budget_value"><b><u>0</u></b></string>
     <string name="title_activity_currency_list">CurrencyListActivity</string>
+    <string name="daily_budget_text">Daily Budget</string>
+    <string name="monthly_budget_text">Monthly Budget</string>
 
 </resources>

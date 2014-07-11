@@ -4,8 +4,30 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <TextView
+        android:text="@string/daily_budget_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textSize="15sp" />
+
     <nick.miros.BudgetControl.budgetcontrol.helper.MyProgressBar
-        android:id="@+id/progressBar"
+        android:id="@+id/dailyProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:maxHeight="30dp"
+        android:minHeight="30dp"/>
+
+    <TextView
+        android:text="@string/monthly_budget_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textSize="15sp" />
+
+    <nick.miros.BudgetControl.budgetcontrol.helper.MyProgressBar
+        android:id="@+id/monthlyProgressBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:max="100"
