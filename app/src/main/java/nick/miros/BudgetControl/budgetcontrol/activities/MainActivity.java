@@ -65,6 +65,11 @@ public class MainActivity extends ActionBarActivity {
         datasource = new ExpensesDataSource(this);
         datasource.open();
 
+        //implement a balance
+        //balance = days * dailyBudget - allExpenses for the month
+        //in case the balance is positive  - say "Money saved"
+        //in case the balance is negative - say "Overdraft size"
+
         updateProgressBars();
     }
 
