@@ -9,7 +9,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Calendar;
 
 import nick.miros.BudgetControl.budgetcontrol.app.Budget;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
@@ -32,6 +35,12 @@ public class MainActivity extends ActionBarActivity {
             }
         }
     };
+
+    private double balance = 0;
+    private double expensesSoFar = 0;
+    private double accumulatedMoney = 0;
+    private TextView balanceTextView;
+    private TextView balanceView;
     private Button ExpenseDirectionButton;
     private Button DataDirectionButton;
     private Button BudgetDirectionButton;
@@ -59,17 +68,10 @@ public class MainActivity extends ActionBarActivity {
         DataDirectionButton.setOnClickListener(mainActivityListener);
         BudgetDirectionButton.setOnClickListener(mainActivityListener);
 
-        dailyProgress = (MyProgressBar) findViewById(R.id.dailyProgressBar);
-        monthlyProgress = (MyProgressBar) findViewById(R.id.monthlyProgressBar);
-
         datasource = new ExpensesDataSource(this);
         datasource.open();
 
-        //implement a balance
-        //balance = days * dailyBudget - allExpenses for the month
-        //in case the balance is positive  - say "Money saved"
-        //in case the balance is negative - say "Overdraft size"
-
+        updateBalance();
         updateProgressBars();
     }
 
@@ -77,11 +79,14 @@ public class MainActivity extends ActionBarActivity {
     public void onResume() {
         super.onResume();
         updateProgressBars();
+        updateBalance();
 
 
     }
 
     public void updateProgressBars() {
+        dailyProgress = (MyProgressBar) findViewById(R.id.dailyProgressBar);
+        monthlyProgress = (MyProgressBar) findViewById(R.id.monthlyProgressBar);
 
         double spentToday = datasource.getAllTodayExpenses();
         double spentThisMonth = datasource.getAllMonthlyExpenses();
@@ -102,6 +107,39 @@ public class MainActivity extends ActionBarActivity {
                 dailyProgress.updateProgress(spentToday);
             }
         }
+
+    }
+
+    public void updateBalance() {
+
+        balanceTextView = (TextView) findViewById(R.id.balanceText);
+        balanceView = (TextView) findViewById(R.id.balance);
+
+        if (settings.contains(CURRENT_MONTHLY_BUDGET_KEY) && datasource.getAllMonthlyExpenses() != 0) {
+
+            balanceTextView.setVisibility(View.VISIBLE);
+            balanceView.setVisibility(View.VISIBLE);
+            Calendar cal = Calendar.getInstance();
+            accumulatedMoney = cal.get(Calendar.DAY_OF_MONTH) * Budget.getDailyBudget();
+            expensesSoFar = datasource.getAllMonthlyExpenses();
+            balance = accumulatedMoney - expensesSoFar;
+
+            balanceView.setText(balance + "");
+
+            if (balance >= 0) {
+                balanceTextView.setText("Money saved:");
+            } else {
+                balanceTextView.setText("Overdraft size:");
+            }
+        }
+        else
+        {
+            balanceTextView.setVisibility(View.GONE);
+            balanceView.setVisibility(View.GONE);
+        }
+
+
+
 
     }
 
