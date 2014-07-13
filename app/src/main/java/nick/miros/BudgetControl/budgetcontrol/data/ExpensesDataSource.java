@@ -134,6 +134,32 @@ public class ExpensesDataSource {
           return amountSpent;
       }
 
+
+      public double getExpensesStartingFrom(int day) {
+
+          double expenses = 0;
+
+          Calendar c = Calendar.getInstance();
+          int currentDay = c.get(Calendar.DATE);
+          int currentMonth = c.get(Calendar.MONTH) + 1;
+          int currentYear = c.get(Calendar.YEAR);
+
+          Cursor cursor = database.query(MySQLiteHelper.TABLE_EXPENSES, dateFilterColumns,
+                  MySQLiteHelper.COLUMN_DAY + " BETWEEN " + day + " AND " + currentDay + " AND "
+                  + MySQLiteHelper.COLUMN_MONTH + "=" + currentMonth + " AND "
+                  + MySQLiteHelper.COLUMN_YEAR + "=" + currentYear, null, null, null, null);
+
+          cursor.moveToFirst();
+          while (!cursor.isAfterLast()) {
+              expenses+=cursor.getDouble(3);
+              cursor.moveToNext();
+          }
+          //close the cursor
+          cursor.close();
+
+          return expenses;
+      }
+
 	  private Expense cursorToExpense(Cursor cursor) {
 		Expense expense = new Expense();
 	    expense.setId(cursor.getLong(0));

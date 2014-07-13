@@ -114,20 +114,21 @@ public class MainActivity extends ActionBarActivity {
 
         balanceTextView = (TextView) findViewById(R.id.balanceText);
         balanceView = (TextView) findViewById(R.id.balance);
+        int dateBudgetWasSet = 10;
 
         if (settings.contains(CURRENT_MONTHLY_BUDGET_KEY) && datasource.getAllMonthlyExpenses() != 0) {
 
             balanceTextView.setVisibility(View.VISIBLE);
             balanceView.setVisibility(View.VISIBLE);
             Calendar cal = Calendar.getInstance();
-            accumulatedMoney = cal.get(Calendar.DAY_OF_MONTH) * Budget.getDailyBudget();
-            expensesSoFar = datasource.getAllMonthlyExpenses();
+            accumulatedMoney = (cal.get(Calendar.DAY_OF_MONTH) - dateBudgetWasSet) * Budget.getDailyBudget();
+            expensesSoFar = datasource.getExpensesStartingFrom(dateBudgetWasSet);
             balance = accumulatedMoney - expensesSoFar;
 
             balanceView.setText(balance + "");
 
             if (balance >= 0) {
-                balanceTextView.setText("Money saved:");
+                balanceTextView.setText("Money saved this month:");
             } else {
                 balanceTextView.setText("Overdraft size:");
             }
