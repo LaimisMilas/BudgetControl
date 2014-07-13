@@ -52,6 +52,7 @@ public class MainActivity extends ActionBarActivity {
     private SharedPreferences settings;
     private double monthlyBudget = 0;
     private double dailyBudget = 0;
+    private Calendar c = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,10 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         settings = getSharedPreferences(MY_PREFS_KEY, Context.MODE_PRIVATE);
+
+        if (c.get(Calendar.DAY_OF_MONTH) == 1) {
+            Budget.resetBudgetSettingDate();
+        }
 
         ExpenseDirectionButton = (Button) findViewById(R.id.ExpenseDirectionButton);
         DataDirectionButton = (Button) findViewById(R.id.DataDirectionButton);
@@ -114,14 +119,15 @@ public class MainActivity extends ActionBarActivity {
 
         balanceTextView = (TextView) findViewById(R.id.balanceText);
         balanceView = (TextView) findViewById(R.id.balance);
-        int dateBudgetWasSet = 10;
 
         if (settings.contains(CURRENT_MONTHLY_BUDGET_KEY) && datasource.getAllMonthlyExpenses() != 0) {
+
+            int dateBudgetWasSet = Budget.getBudgetSettingDate();
 
             balanceTextView.setVisibility(View.VISIBLE);
             balanceView.setVisibility(View.VISIBLE);
             Calendar cal = Calendar.getInstance();
-            accumulatedMoney = (cal.get(Calendar.DAY_OF_MONTH) - dateBudgetWasSet) * Budget.getDailyBudget();
+            accumulatedMoney = (cal.get(Calendar.DAY_OF_MONTH) + 1 - dateBudgetWasSet) * Budget.getDailyBudget();
             expensesSoFar = datasource.getExpensesStartingFrom(dateBudgetWasSet);
             balance = accumulatedMoney - expensesSoFar;
 
@@ -132,14 +138,10 @@ public class MainActivity extends ActionBarActivity {
             } else {
                 balanceTextView.setText("Overdraft size:");
             }
-        }
-        else
-        {
+        } else {
             balanceTextView.setVisibility(View.GONE);
             balanceView.setVisibility(View.GONE);
         }
-
-
 
 
     }

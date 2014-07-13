@@ -14,6 +14,7 @@ public class Budget {
     private static SharedPreferences settings;
     private static final String MY_PREFS_KEY = "myPrefsKey";
     private static final String CURRENT_MONTHLY_BUDGET_KEY = "currentMonthlyBudgetKey";
+    private static final String DATE_BUDGET_WAS_SET_KEY = "dateBudgetWasSetKey";
 
     public static double getCurrentMonthlyBudget() {
 
@@ -24,12 +25,16 @@ public class Budget {
      * Saves the monthly budget value passed
      *
      * @param currentMonthlyBudget value to be set as a monthly budget
-     * @param context context of the application that is calling the method
+     * @param context              context of the application that is calling the method
      */
     public static void setCurrentMonthlyBudget(double currentMonthlyBudget, Context context) {
         settings = context.getSharedPreferences(MY_PREFS_KEY, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putFloat(CURRENT_MONTHLY_BUDGET_KEY, (float) currentMonthlyBudget);
+
+        Calendar c = Calendar.getInstance();
+        editor.putInt(DATE_BUDGET_WAS_SET_KEY, c.get(Calendar.DAY_OF_MONTH));
+
         editor.commit();
     }
 
@@ -44,5 +49,20 @@ public class Budget {
         double dailyBudget = Double.parseDouble(nf.format(monthlyBudget / amountOfDays));
 
         return dailyBudget;
+    }
+
+    public static int getBudgetSettingDate() {
+
+        return settings.getInt(DATE_BUDGET_WAS_SET_KEY, 1);
+
+    }
+
+    public static void resetBudgetSettingDate() {
+
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putInt(DATE_BUDGET_WAS_SET_KEY, 1);
+
+        editor.commit();
+
     }
 }
