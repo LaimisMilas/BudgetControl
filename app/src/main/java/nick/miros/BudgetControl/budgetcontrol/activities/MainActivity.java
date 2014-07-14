@@ -1,22 +1,29 @@
 package nick.miros.BudgetControl.budgetcontrol.activities;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.InputFilter;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Calendar;
 
 import nick.miros.BudgetControl.budgetcontrol.app.Budget;
+import nick.miros.BudgetControl.budgetcontrol.app.Currency;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
 import nick.miros.BudgetControl.budgetcontrol.data.ExpensesDataSource;
+import nick.miros.BudgetControl.budgetcontrol.helper.DecimalDigits;
 import nick.miros.BudgetControl.budgetcontrol.helper.MyProgressBar;
 
 public class MainActivity extends ActionBarActivity {
@@ -53,6 +60,7 @@ public class MainActivity extends ActionBarActivity {
     private double monthlyBudget = 0;
     private double dailyBudget = 0;
     private Calendar c = Calendar.getInstance();
+    private final Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +69,57 @@ public class MainActivity extends ActionBarActivity {
 
         settings = getSharedPreferences(MY_PREFS_KEY, Context.MODE_PRIVATE);
 
+        if (!settings.contains(CURRENT_MONTHLY_BUDGET_KEY)) {
+            LayoutInflater li = LayoutInflater.from(context);
+            View promptsView = li.inflate(R.layout.alert_budget_prompt, null);
+
+            final AlertDialog alertDialog = new AlertDialog.Builder(context)
+                    .setView(promptsView)
+                    .setPositiveButton("OK", null)
+                    .setCancelable(false)
+                    .create();
+
+            final EditText userInput = (EditText) promptsView
+                    .findViewById(R.id.editTextDialogUserInput);
+
+            userInput.setFilters(new InputFilter[]{new DecimalDigits()});
+
+            alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
+                @Override
+                public void onShow(DialogInterface dialog) {
+
+                    Button positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+
+                    positiveButton.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View view) {
+                            //check if the input has something
+                            if (userInput.getText().toString().length() > 0) {
+                                //checks whether the input is just a dot
+                                if (DecimalDigits.isValidInput(userInput)) {
+
+                                    //save the monthly budget value
+                                    monthlyBudget = Double.parseDouble(userInput.getText().toString());
+                                    Budget.setCurrentMonthlyBudget(monthlyBudget, getApplicationContext());
+
+                                    alertDialog.dismiss();
+
+                                    updateBalance();
+                                    updateProgressBars();
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+            alertDialog.show();
+
+        }
+
         if (c.get(Calendar.DAY_OF_MONTH) == 1) {
-            Budget.resetBudgetSettingDate();
+            Budget.resetBudgetSettingDate(getApplicationContext());
         }
 
         ExpenseDirectionButton = (Button) findViewById(R.id.ExpenseDirectionButton);
@@ -98,10 +155,10 @@ public class MainActivity extends ActionBarActivity {
 
         if (settings.contains(CURRENT_MONTHLY_BUDGET_KEY)) {
 
-            monthlyBudget = Budget.getCurrentMonthlyBudget();
+            monthlyBudget = Budget.getCurrentMonthlyBudget(getApplicationContext());
             monthlyProgress.setMax(monthlyBudget);
 
-            dailyBudget = Budget.getDailyBudget();
+            dailyBudget = Budget.getDailyBudget(getApplicationContext());
             dailyProgress.setMax(dailyBudget);
 
             if (spentThisMonth != 0) {
@@ -122,12 +179,12 @@ public class MainActivity extends ActionBarActivity {
 
         if (settings.contains(CURRENT_MONTHLY_BUDGET_KEY) && datasource.getAllMonthlyExpenses() != 0) {
 
-            int dateBudgetWasSet = Budget.getBudgetSettingDate();
+            int dateBudgetWasSet = Budget.getBudgetSettingDate(getApplicationContext());
 
             balanceTextView.setVisibility(View.VISIBLE);
             balanceView.setVisibility(View.VISIBLE);
             Calendar cal = Calendar.getInstance();
-            accumulatedMoney = (cal.get(Calendar.DAY_OF_MONTH) + 1 - dateBudgetWasSet) * Budget.getDailyBudget();
+            accumulatedMoney = (cal.get(Calendar.DAY_OF_MONTH) + 1 - dateBudgetWasSet) * Budget.getDailyBudget(getApplicationContext());
             expensesSoFar = datasource.getExpensesStartingFrom(dateBudgetWasSet);
             balance = accumulatedMoney - expensesSoFar;
 

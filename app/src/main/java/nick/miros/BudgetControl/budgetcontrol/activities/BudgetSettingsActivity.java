@@ -135,7 +135,7 @@ public class BudgetSettingsActivity extends Activity {
 
                                         //sets the text for the dailyBudgetView textview
                                         dailyBudgetView.setText(Currency.getCurrentCurrencyUsed(getApplicationContext())
-                                                + Budget.getDailyBudget() + "");
+                                                + Budget.getDailyBudget(getApplicationContext()) + "");
                                         alertDialog.dismiss();
                                     }
                                 }
