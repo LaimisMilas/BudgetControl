@@ -1,7 +1,9 @@
 package nick.miros.BudgetControl.budgetcontrol.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -38,11 +40,17 @@ public class CurrencyListActivity extends Activity {
     private final String symbolIdentifier = "currencySymbol";
     private CurrencyAdapter adapter;
     private final int currencyRequestCode = 1;
+    private final String MY_PREFS_KEY = "myPrefsKey";
+    private SharedPreferences settings;
+    private final String CURRENCY_SYMBOL_KEY = "currencySymbolKey";
+    private final String CURRENCY_NAME_KEY = "currencyNameKey";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_currency_list);
+
+        settings = getSharedPreferences(MY_PREFS_KEY, Context.MODE_PRIVATE);
 
         listView = (ListView) findViewById(R.id.list);
 
@@ -80,6 +88,11 @@ public class CurrencyListActivity extends Activity {
                 intent.putExtra(nameIdentifier, currency.getName());
                 intent.putExtra(symbolIdentifier, currency.getSymbol());
 
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString(CURRENCY_SYMBOL_KEY, currency.getSymbol());
+                editor.putString(CURRENCY_NAME_KEY, currency.getName());
+                editor.commit();
+
                 setResult(currencyRequestCode, intent);
                 finish();
 
@@ -115,6 +128,10 @@ public class CurrencyListActivity extends Activity {
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 
     /**

@@ -108,6 +108,9 @@ public class MainActivity extends ActionBarActivity {
 
                                     updateBalance();
                                     updateProgressBars();
+
+                                    Intent intent = new Intent(getApplicationContext(), CurrencyListActivity.class);
+                                    startActivity(intent);
                                 }
                             }
                         }
