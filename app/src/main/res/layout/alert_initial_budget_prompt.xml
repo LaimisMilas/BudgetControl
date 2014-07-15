@@ -10,7 +10,8 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Specify the budget for the current month: "
+        android:text="Please specify the budget for the rest of the current month.
+         (You will be asked for a new budget at the start of the next month): "
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText

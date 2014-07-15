@@ -20,7 +20,6 @@ import android.widget.Toast;
 import java.util.Calendar;
 
 import nick.miros.BudgetControl.budgetcontrol.app.Budget;
-import nick.miros.BudgetControl.budgetcontrol.app.Currency;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
 import nick.miros.BudgetControl.budgetcontrol.data.ExpensesDataSource;
 import nick.miros.BudgetControl.budgetcontrol.helper.DecimalDigits;
@@ -70,55 +69,7 @@ public class MainActivity extends ActionBarActivity {
         settings = getSharedPreferences(MY_PREFS_KEY, Context.MODE_PRIVATE);
 
         if (!settings.contains(CURRENT_MONTHLY_BUDGET_KEY)) {
-            LayoutInflater li = LayoutInflater.from(context);
-            View promptsView = li.inflate(R.layout.alert_budget_prompt, null);
-
-            final AlertDialog alertDialog = new AlertDialog.Builder(context)
-                    .setView(promptsView)
-                    .setPositiveButton("OK", null)
-                    .setCancelable(false)
-                    .create();
-
-            final EditText userInput = (EditText) promptsView
-                    .findViewById(R.id.editTextDialogUserInput);
-
-            userInput.setFilters(new InputFilter[]{new DecimalDigits()});
-
-            alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-
-                @Override
-                public void onShow(DialogInterface dialog) {
-
-                    Button positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-
-                    positiveButton.setOnClickListener(new View.OnClickListener() {
-
-                        @Override
-                        public void onClick(View view) {
-                            //check if the input has something
-                            if (userInput.getText().toString().length() > 0) {
-                                //checks whether the input is just a dot
-                                if (DecimalDigits.isValidInput(userInput)) {
-
-                                    //save the monthly budget value
-                                    monthlyBudget = Double.parseDouble(userInput.getText().toString());
-                                    Budget.setCurrentMonthlyBudget(monthlyBudget, getApplicationContext());
-
-                                    alertDialog.dismiss();
-
-                                    updateBalance();
-                                    updateProgressBars();
-
-                                    Intent intent = new Intent(getApplicationContext(), CurrencyListActivity.class);
-                                    startActivity(intent);
-                                }
-                            }
-                        }
-                    });
-                }
-            });
-            alertDialog.show();
-
+            initialBudgetPrompt();
         }
 
         if (c.get(Calendar.DAY_OF_MONTH) == 1) {
@@ -201,6 +152,64 @@ public class MainActivity extends ActionBarActivity {
             balanceView.setVisibility(View.GONE);
         }
 
+
+    }
+
+
+    public void initialBudgetPrompt() {
+
+        LayoutInflater li = LayoutInflater.from(context);
+        View promptsView = li.inflate(R.layout.alert_initial_budget_prompt, null);
+
+        final AlertDialog alertDialog = new AlertDialog.Builder(context)
+                .setView(promptsView)
+                .setPositiveButton("OK", null)
+                .setCancelable(false)
+                .create();
+
+        final EditText userInput = (EditText) promptsView
+                .findViewById(R.id.editTextDialogUserInput);
+
+        userInput.setFilters(new InputFilter[]{new DecimalDigits()});
+
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
+            @Override
+            public void onShow(DialogInterface dialog) {
+
+                Button positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+
+                positiveButton.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        //check if the input has something
+                        if (userInput.getText().toString().length() > 0) {
+                            //checks whether the input is just a dot
+                            if (DecimalDigits.isValidInput(userInput)) {
+
+                                //save the monthly budget value
+                                monthlyBudget = Double.parseDouble(userInput.getText().toString());
+                                Budget.setCurrentMonthlyBudget(monthlyBudget, getApplicationContext());
+
+                                alertDialog.dismiss();
+
+                                updateBalance();
+                                updateProgressBars();
+
+                                Intent intent = new Intent(getApplicationContext(), CurrencyListActivity.class);
+                                startActivity(intent);
+                            }
+                        }
+                    }
+                });
+            }
+        });
+        alertDialog.show();
+
+    }
+
+    public void secondaryBudgetPrompt() {
 
     }
 
