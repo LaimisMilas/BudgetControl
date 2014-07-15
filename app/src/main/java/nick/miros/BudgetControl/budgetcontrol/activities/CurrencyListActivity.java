@@ -83,17 +83,9 @@ public class CurrencyListActivity extends Activity {
 
                 Currency currency = (Currency) parent.getItemAtPosition(position);
 
-                //return the chosen name and symbol back to the BudgetSettingsActivity
-                Intent intent = new Intent();
-                intent.putExtra(nameIdentifier, currency.getName());
-                intent.putExtra(symbolIdentifier, currency.getSymbol());
-
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putString(CURRENCY_SYMBOL_KEY, currency.getSymbol());
-                editor.putString(CURRENCY_NAME_KEY, currency.getName());
-                editor.commit();
-
-                setResult(currencyRequestCode, intent);
+                Currency.setCurrentCurrencyUsed(currency.getName(),
+                                                currency.getSymbol(),
+                                                getApplicationContext());
                 finish();
 
 

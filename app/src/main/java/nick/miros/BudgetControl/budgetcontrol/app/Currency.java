@@ -16,6 +16,7 @@ public class Currency {
     private static SharedPreferences settings;
     private static final String MY_PREFS_KEY = "myPrefsKey";
     private static final String CURRENCY_SYMBOL_KEY = "currencySymbolKey";
+    private static final String CURRENCY_NAME_KEY = "currencyNameKey";
     public static String currentCurrencyUsed;
 
     public String getName() {
@@ -32,6 +33,15 @@ public class Currency {
 
     public void setSymbol(String symbol) {
         this.symbol = symbol;
+    }
+
+    public static void setCurrentCurrencyUsed(String name, String symbol, Context context) {
+
+        settings = context.getSharedPreferences(MY_PREFS_KEY, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(CURRENCY_NAME_KEY, name);
+        editor.putString(CURRENCY_SYMBOL_KEY, symbol);
+        editor.commit();
     }
 
     /**

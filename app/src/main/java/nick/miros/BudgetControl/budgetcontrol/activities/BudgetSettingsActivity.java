@@ -152,53 +152,34 @@ public class BudgetSettingsActivity extends Activity {
 
                 //start the CurrencyListActivity
                 Intent intent = new Intent(v.getContext(), CurrencyListActivity.class);
-                startActivityForResult(intent, currencyRequestCode);
+                //startActivityForResult(intent, currencyRequestCode);
+                startActivity(intent);
             }
         });
 
-
         currentCurrencyView = (TextView) findViewById(R.id.currentCurrency);
-
-        //check whether the preferences contain the values for the
-        //currency symbol and name. If so, apply them.
-        if (settings.contains(CURRENCY_SYMBOL_KEY) && settings.contains(CURRENCY_NAME_KEY)) {
-
-            currentCurrencyView.setText(settings.getString(CURRENCY_NAME_KEY, "")
+        currentCurrencyView.setText(settings.getString(CURRENCY_NAME_KEY, "")
                     + " "
                     + settings.getString(CURRENCY_SYMBOL_KEY, ""));
-        }
     }
 
-    // Call Back method  to get the currency from other Activity
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_CANCELED) {
+    public void onResume() {
+        super.onResume();
 
-            //receive the info sent from the CurrencyListActivity
-            if (requestCode == currencyRequestCode) {
+        currentCurrencyView.setText(settings.getString(CURRENCY_NAME_KEY, "")
+                + " "
+                + settings.getString(CURRENCY_SYMBOL_KEY, ""));
 
-                //get the key-value pairs passed
-                String currencyName = data.getStringExtra(NAME_ID);
-                String currencySymbol = data.getStringExtra(SYMBOL_ID);
+        //apply the monthly budget to the monthly view
+        monthlyBudgetView.setText(Currency.getCurrentCurrencyUsed(getApplicationContext())
+                + Budget.getCurrentMonthlyBudget(getApplicationContext()));
 
-                //save the values received into sharedPreferences
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putString(CURRENCY_SYMBOL_KEY, currencySymbol);
-                editor.putString(CURRENCY_NAME_KEY, currencyName);
-                editor.commit();
+        //sets the text for the dailyBudgetView textview
+        dailyBudgetView.setText(Currency.getCurrentCurrencyUsed(getApplicationContext())
+                + Budget.getDailyBudget(getApplicationContext()) + "");
 
-                currentCurrencyView.setText(currencyName + " " + currencySymbol);
-
-                //call the onCreate method again in order to refresh the Activity
-                //so that the chosen currency could be applied to other views
-                Bundle tempBundle = new Bundle();
-                onCreate(tempBundle);
-            }
-
-        }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
