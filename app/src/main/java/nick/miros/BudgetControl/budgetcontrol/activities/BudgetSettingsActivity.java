@@ -77,18 +77,15 @@ public class BudgetSettingsActivity extends Activity {
         final int amountOfDays = cal.getActualMaximum(Calendar.DAY_OF_MONTH); //amount of days in the current month
         currentMonthView.setText("Budget for " + monthNames[month]);
 
-        //check if shared preferences contain values for the current month
-        if (settings.contains(CURRENT_MONTHLY_BUDGET_KEY)) {
-            //set chosen currency and budget for the month
-            monthlyBudgetView.setText(Currency.getCurrentCurrencyUsed(getApplicationContext()) +
-                    settings.getFloat(CURRENT_MONTHLY_BUDGET_KEY, 0));
+        //set chosen currency and budget for the month
+        monthlyBudgetView.setText(Currency.getCurrentCurrencyUsed(getApplicationContext()) +
+                settings.getFloat(CURRENT_MONTHLY_BUDGET_KEY, 0));
 
-            //calculate the daily budget and set it to the dailyBudgetView Textview
-            DecimalFormat numberFormat = new DecimalFormat("#.00");
-            dailyBudgetView.setText(Currency.getCurrentCurrencyUsed(getApplicationContext())
-                    + (numberFormat.format(settings.getFloat(CURRENT_MONTHLY_BUDGET_KEY, 0)
-                    / amountOfDays)));
-        }
+        //calculate the daily budget and set it to the dailyBudgetView Textview
+        DecimalFormat numberFormat = new DecimalFormat("#.00");
+        dailyBudgetView.setText(Currency.getCurrentCurrencyUsed(getApplicationContext())
+                + (numberFormat.format(settings.getFloat(CURRENT_MONTHLY_BUDGET_KEY, 0)
+                / amountOfDays)));
 
         budgetEditButton.setOnClickListener(new View.OnClickListener() {
 

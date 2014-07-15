@@ -156,21 +156,18 @@ public class MainActivity extends ActionBarActivity {
         double spentToday = datasource.getAllTodayExpenses();
         double spentThisMonth = datasource.getAllMonthlyExpenses();
 
-        if (settings.contains(CURRENT_MONTHLY_BUDGET_KEY)) {
+        monthlyBudget = Budget.getCurrentMonthlyBudget(getApplicationContext());
+        monthlyProgress.setMax(monthlyBudget);
 
-            monthlyBudget = Budget.getCurrentMonthlyBudget(getApplicationContext());
-            monthlyProgress.setMax(monthlyBudget);
+        dailyBudget = Budget.getDailyBudget(getApplicationContext());
+        dailyProgress.setMax(dailyBudget);
 
-            dailyBudget = Budget.getDailyBudget(getApplicationContext());
-            dailyProgress.setMax(dailyBudget);
+        if (spentThisMonth != 0) {
+            monthlyProgress.updateProgress(spentThisMonth);
+        }
 
-            if (spentThisMonth != 0) {
-                monthlyProgress.updateProgress(spentThisMonth);
-            }
-
-            if (spentToday != 0) {
-                dailyProgress.updateProgress(spentToday);
-            }
+        if (spentToday != 0) {
+            dailyProgress.updateProgress(spentToday);
         }
 
     }
@@ -180,7 +177,7 @@ public class MainActivity extends ActionBarActivity {
         balanceTextView = (TextView) findViewById(R.id.balanceText);
         balanceView = (TextView) findViewById(R.id.balance);
 
-        if (settings.contains(CURRENT_MONTHLY_BUDGET_KEY) && datasource.getAllMonthlyExpenses() != 0) {
+        if (datasource.getAllMonthlyExpenses() != 0) {
 
             int dateBudgetWasSet = Budget.getBudgetSettingDate(getApplicationContext());
 
