@@ -55,6 +55,7 @@ public class MainActivity extends ActionBarActivity {
     private ExpensesDataSource datasource;
     private final String MY_PREFS_KEY = "myPrefsKey";
     private static final String CURRENT_MONTHLY_BUDGET_KEY = "currentMonthlyBudgetKey";
+    private static final String INITIAL_BUDGET_SET_DATE_KEY = "initialBudgetSetDateKey";
     private SharedPreferences settings;
     private double monthlyBudget = 0;
     private double dailyBudget = 0;
@@ -68,13 +69,24 @@ public class MainActivity extends ActionBarActivity {
 
         settings = getSharedPreferences(MY_PREFS_KEY, Context.MODE_PRIVATE);
 
-        if (!settings.contains(CURRENT_MONTHLY_BUDGET_KEY)) {
-            initialBudgetPrompt();
-        }
-
         if (c.get(Calendar.DAY_OF_MONTH) == 1) {
+            startNormalBudgetPrompt();
             Budget.resetBudgetSettingDate(getApplicationContext());
         }
+
+        if (!settings.contains(CURRENT_MONTHLY_BUDGET_KEY) && c.get(Calendar.DAY_OF_MONTH)!= 1) {
+            startInitialBudgetPrompt();
+        }
+
+        if (settings.contains(INITIAL_BUDGET_SET_DATE_KEY)) {
+            String currentYearMonthDateString = c.get(Calendar.YEAR) + c.get(Calendar.MONTH) + "";
+            
+            if (Integer.parseInt(currentYearMonthDateString) > Integer.parseInt(settings.getString(INITIAL_BUDGET_SET_DATE_KEY, ""))) {
+                startSecondaryBudgetPrompt();
+            }
+        }
+
+
 
         ExpenseDirectionButton = (Button) findViewById(R.id.ExpenseDirectionButton);
         DataDirectionButton = (Button) findViewById(R.id.DataDirectionButton);
@@ -155,8 +167,11 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+    public void startNormalBudgetPrompt() {
+    }
 
-    public void initialBudgetPrompt() {
+
+    public void startInitialBudgetPrompt() {
 
         LayoutInflater li = LayoutInflater.from(context);
         View promptsView = li.inflate(R.layout.alert_initial_budget_prompt, null);
@@ -192,6 +207,11 @@ public class MainActivity extends ActionBarActivity {
                                 monthlyBudget = Double.parseDouble(userInput.getText().toString());
                                 Budget.setCurrentMonthlyBudget(monthlyBudget, getApplicationContext());
 
+                                SharedPreferences.Editor editor = settings.edit();
+                                editor.putString(INITIAL_BUDGET_SET_DATE_KEY, c.get(Calendar.YEAR)
+                                                                              + c.get(Calendar.MONTH)
+                                                                              + "");
+
                                 alertDialog.dismiss();
 
                                 updateBalance();
@@ -209,7 +229,7 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
-    public void secondaryBudgetPrompt() {
+    public void startSecondaryBudgetPrompt() {
 
     }
 

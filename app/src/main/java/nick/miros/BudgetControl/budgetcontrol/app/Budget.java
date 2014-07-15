@@ -34,7 +34,9 @@ public class Budget {
         editor.putFloat(CURRENT_MONTHLY_BUDGET_KEY, (float) currentMonthlyBudget);
 
         Calendar c = Calendar.getInstance();
-        editor.putInt(DATE_BUDGET_WAS_SET_KEY, c.get(Calendar.DAY_OF_MONTH));
+        String budgetSetDate = c.get(Calendar.YEAR) + c.get(Calendar.MONTH) + "";
+        //editor.putInt(DATE_BUDGET_WAS_SET_KEY, c.get(Calendar.DAY_OF_MONTH));
+        editor.putString(DATE_BUDGET_WAS_SET_KEY, budgetSetDate);
 
         editor.commit();
     }
