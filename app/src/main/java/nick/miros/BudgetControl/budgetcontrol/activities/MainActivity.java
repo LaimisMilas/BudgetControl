@@ -74,8 +74,23 @@ public class MainActivity extends ActionBarActivity {
 
         settings = getSharedPreferences(MY_PREFS_KEY, Context.MODE_PRIVATE);
 
+        if (c.get(Calendar.DAY_OF_MONTH) == 1) {
 
-        startDecisionPrompt();
+            if (!settings.contains(CURRENT_MONTHLY_BUDGET_KEY)) {
+                startNormalBudgetPrompt();
+            } else if ((settings.getInt(MONTH_BUDGET_WAS_SET_KEY, 1) > c.get(Calendar.MONTH)
+                    || settings.getInt(YEAR_BUDGET_WAS_SET_KEY, 1) > c.get(Calendar.YEAR))) {
+                startDecisionPrompt();
+            }
+        } else {
+            if (!settings.contains(CURRENT_MONTHLY_BUDGET_KEY)) {
+                startInitialBudgetPrompt();
+            } else if ((settings.getInt(MONTH_BUDGET_WAS_SET_KEY, 1) > c.get(Calendar.MONTH)
+                    || settings.getInt(YEAR_BUDGET_WAS_SET_KEY, 1) > c.get(Calendar.YEAR))) {
+                startDecisionPrompt();
+
+            }
+        }
         /*
         //if the date is the first day of the month
         //and there was no budget before - prompt the
@@ -116,7 +131,6 @@ public class MainActivity extends ActionBarActivity {
         }
 
         */
-
 
 
         ExpenseDirectionButton = (Button) findViewById(R.id.ExpenseDirectionButton);
@@ -234,9 +248,11 @@ public class MainActivity extends ActionBarActivity {
                                 Budget.setCurrentMonthlyBudget(monthlyBudget, getApplicationContext());
 
                                 SharedPreferences.Editor editor = settings.edit();
+                                /*
                                 editor.putString(INITIAL_BUDGET_SET_DATE_KEY, c.get(Calendar.YEAR)
                                         + c.get(Calendar.MONTH)
                                         + "");
+                                        */
 
                                 alertDialog.dismiss();
 
@@ -270,6 +286,12 @@ public class MainActivity extends ActionBarActivity {
                 .setCancelable(false)
                 .create();
 
+
+        TextView textView = (TextView) promptsView.findViewById(R.id.budgetText);
+        textView.setText("Please specify the budget for the rest of the month, i.e. the "
+                + (c.getActualMaximum(Calendar.DAY_OF_MONTH) + 1 - c.get(Calendar.DAY_OF_MONTH))
+                + " days that are left");
+
         final EditText userInput = (EditText) promptsView
                 .findViewById(R.id.editTextDialogUserInput);
 
@@ -295,10 +317,12 @@ public class MainActivity extends ActionBarActivity {
                                 monthlyBudget = Double.parseDouble(userInput.getText().toString());
                                 Budget.setCurrentMonthlyBudget(monthlyBudget, getApplicationContext());
 
+                                /*
                                 SharedPreferences.Editor editor = settings.edit();
                                 editor.putString(INITIAL_BUDGET_SET_DATE_KEY, c.get(Calendar.YEAR)
-                                                                              + c.get(Calendar.MONTH)
-                                                                              + "");
+                                        + c.get(Calendar.MONTH)
+                                        + "");
+                                        */
 
                                 alertDialog.dismiss();
 
@@ -317,7 +341,7 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
-    public void startDecisionPrompt () {
+    public void startDecisionPrompt() {
         LayoutInflater li = LayoutInflater.from(context);
         View promptsView = li.inflate(R.layout.alert_decision_prompt, null);
 
@@ -330,9 +354,9 @@ public class MainActivity extends ActionBarActivity {
 
         TextView textView = (TextView) promptsView.findViewById(R.id.budgetText);
         textView.setText("Your current monthly budget is: "
-                         + Currency.getCurrentCurrencyUsed(getApplicationContext())
-                         + Budget.getCurrentMonthlyBudget(getApplicationContext())
-                         + ". Do you wish to change it?");
+                + Currency.getCurrentCurrencyUsed(getApplicationContext())
+                + Budget.getCurrentMonthlyBudget(getApplicationContext())
+                + ". Do you wish to change it?");
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
 
             @Override
@@ -344,9 +368,9 @@ public class MainActivity extends ActionBarActivity {
 
                     @Override
                     public void onClick(View view) {
-                                alertDialog.dismiss();
-                                startNormalBudgetPrompt();
-                        }
+                        alertDialog.dismiss();
+                        startNormalBudgetPrompt();
+                    }
                 });
 
                 Button negativeButton = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
