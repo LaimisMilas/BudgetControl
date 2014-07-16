@@ -58,6 +58,9 @@ public class MainActivity extends ActionBarActivity {
     private static final String CURRENT_MONTHLY_BUDGET_KEY = "currentMonthlyBudgetKey";
     private static final String INITIAL_BUDGET_SET_DATE_KEY = "initialBudgetSetDateKey";
     private static final String CURRENCY_SYMBOL_KEY = "currencySymbolKey";
+    private static final String DATE_BUDGET_WAS_SET_KEY = "dateBudgetWasSetKey";
+    private static final String MONTH_BUDGET_WAS_SET_KEY = "monthBudgetWasSetKey";
+    private static final String YEAR_BUDGET_WAS_SET_KEY = "yearBudgetWasSetKey";
     private SharedPreferences settings;
     private double monthlyBudget = 0;
     private double dailyBudget = 0;
@@ -71,23 +74,24 @@ public class MainActivity extends ActionBarActivity {
 
         settings = getSharedPreferences(MY_PREFS_KEY, Context.MODE_PRIVATE);
 
-        startDecisionPrompt ();
-        /*
 
+        startDecisionPrompt();
+        /*
         //if the date is the first day of the month
         //and there was no budget before - prompt the
         //user for the regular monthly budget
         if (c.get(Calendar.DAY_OF_MONTH) == 1 && !settings.contains(CURRENT_MONTHLY_BUDGET_KEY)) {
             startNormalBudgetPrompt();
-            Budget.resetBudgetSettingDate(getApplicationContext());
+            //Budget.resetBudgetSettingDate(getApplicationContext());
         }
 
-        //if the date is the first day of the month
-        //and there was a budget before - prompt the
+        //if the current budget month or year is bigger than the previous
+        // year or month the budget was set - prompt the
         //user whether he wants to change the previous
         //month's budget - if yes - launch the normal
         //budget prompt
-        if (c.get(Calendar.DAY_OF_MONTH) == 1 && settings.contains(CURRENT_MONTHLY_BUDGET_KEY)) {
+        if ((settings.getInt(MONTH_BUDGET_WAS_SET_KEY, 1) > c.get(Calendar.MONTH)
+            || settings.getInt(YEAR_BUDGET_WAS_SET_KEY, 1) > c.get(Calendar.YEAR))) {
             startDecisionPrompt();
         }
 
@@ -100,12 +104,6 @@ public class MainActivity extends ActionBarActivity {
         }
 
         //if the date is not the first day of the month
-        //and there was a budget before - prompt the
-        //user whether he wants to change the previous
-        //month's budget - if yes - launch the normal
-        //budget prompt
-
-        //if the date is not the first day of the month
         //and there was an initial budget before that was set in
         //the previous month - prompt the user for the
         //new budget in this month
@@ -116,6 +114,7 @@ public class MainActivity extends ActionBarActivity {
                 startSecondaryBudgetPrompt();
             }
         }
+
         */
 
 
@@ -326,7 +325,7 @@ public class MainActivity extends ActionBarActivity {
                 .setView(promptsView)
                 .setPositiveButton("Change the budget", null)
                 .setNegativeButton("Keep the old budget", null)
-                .setCancelable(true)
+                .setCancelable(false)
                 .create();
 
         TextView textView = (TextView) promptsView.findViewById(R.id.budgetText);
@@ -348,6 +347,17 @@ public class MainActivity extends ActionBarActivity {
                                 alertDialog.dismiss();
                                 startNormalBudgetPrompt();
                         }
+                });
+
+                Button negativeButton = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+
+                negativeButton.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        alertDialog.dismiss();
+                        Budget.resetBudgetSettingDate(getApplicationContext());
+                    }
                 });
             }
         });
