@@ -20,6 +20,7 @@ import android.widget.Toast;
 import java.util.Calendar;
 
 import nick.miros.BudgetControl.budgetcontrol.app.Budget;
+import nick.miros.BudgetControl.budgetcontrol.app.Currency;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
 import nick.miros.BudgetControl.budgetcontrol.data.ExpensesDataSource;
 import nick.miros.BudgetControl.budgetcontrol.helper.DecimalDigits;
@@ -56,6 +57,7 @@ public class MainActivity extends ActionBarActivity {
     private final String MY_PREFS_KEY = "myPrefsKey";
     private static final String CURRENT_MONTHLY_BUDGET_KEY = "currentMonthlyBudgetKey";
     private static final String INITIAL_BUDGET_SET_DATE_KEY = "initialBudgetSetDateKey";
+    private static final String CURRENCY_SYMBOL_KEY = "currencySymbolKey";
     private SharedPreferences settings;
     private double monthlyBudget = 0;
     private double dailyBudget = 0;
@@ -69,15 +71,44 @@ public class MainActivity extends ActionBarActivity {
 
         settings = getSharedPreferences(MY_PREFS_KEY, Context.MODE_PRIVATE);
 
-        if (c.get(Calendar.DAY_OF_MONTH) == 1) {
+        startDecisionPrompt ();
+        /*
+
+        //if the date is the first day of the month
+        //and there was no budget before - prompt the
+        //user for the regular monthly budget
+        if (c.get(Calendar.DAY_OF_MONTH) == 1 && !settings.contains(CURRENT_MONTHLY_BUDGET_KEY)) {
             startNormalBudgetPrompt();
             Budget.resetBudgetSettingDate(getApplicationContext());
         }
 
-        if (!settings.contains(CURRENT_MONTHLY_BUDGET_KEY) && c.get(Calendar.DAY_OF_MONTH)!= 1) {
+        //if the date is the first day of the month
+        //and there was a budget before - prompt the
+        //user whether he wants to change the previous
+        //month's budget - if yes - launch the normal
+        //budget prompt
+        if (c.get(Calendar.DAY_OF_MONTH) == 1 && settings.contains(CURRENT_MONTHLY_BUDGET_KEY)) {
+            startDecisionPrompt();
+        }
+
+
+        //if the date is not the first day of the month
+        //and there was no budget before - prompt the
+        //user for the partial monthly budget
+        if (c.get(Calendar.DAY_OF_MONTH)!= 1 && !settings.contains(CURRENT_MONTHLY_BUDGET_KEY)) {
             startInitialBudgetPrompt();
         }
 
+        //if the date is not the first day of the month
+        //and there was a budget before - prompt the
+        //user whether he wants to change the previous
+        //month's budget - if yes - launch the normal
+        //budget prompt
+
+        //if the date is not the first day of the month
+        //and there was an initial budget before that was set in
+        //the previous month - prompt the user for the
+        //new budget in this month
         if (settings.contains(INITIAL_BUDGET_SET_DATE_KEY)) {
             String currentYearMonthDateString = c.get(Calendar.YEAR) + c.get(Calendar.MONTH) + "";
             
@@ -85,6 +116,7 @@ public class MainActivity extends ActionBarActivity {
                 startSecondaryBudgetPrompt();
             }
         }
+        */
 
 
 
@@ -168,6 +200,63 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void startNormalBudgetPrompt() {
+        LayoutInflater li = LayoutInflater.from(context);
+        View promptsView = li.inflate(R.layout.alert_budget_prompt, null);
+
+        final AlertDialog alertDialog = new AlertDialog.Builder(context)
+                .setView(promptsView)
+                .setPositiveButton("OK", null)
+                .setCancelable(false)
+                .create();
+
+        final EditText userInput = (EditText) promptsView
+                .findViewById(R.id.editTextDialogUserInput);
+
+        userInput.setFilters(new InputFilter[]{new DecimalDigits()});
+
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
+            @Override
+            public void onShow(DialogInterface dialog) {
+
+                Button positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+
+                positiveButton.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        //check if the input has something
+                        if (userInput.getText().toString().length() > 0) {
+                            //checks whether the input is just a dot
+                            if (DecimalDigits.isValidInput(userInput)) {
+
+                                //save the monthly budget value
+                                monthlyBudget = Double.parseDouble(userInput.getText().toString());
+                                Budget.setCurrentMonthlyBudget(monthlyBudget, getApplicationContext());
+
+                                SharedPreferences.Editor editor = settings.edit();
+                                editor.putString(INITIAL_BUDGET_SET_DATE_KEY, c.get(Calendar.YEAR)
+                                        + c.get(Calendar.MONTH)
+                                        + "");
+
+                                alertDialog.dismiss();
+
+                                updateBalance();
+                                updateProgressBars();
+
+                                if (!settings.contains(CURRENCY_SYMBOL_KEY)) {
+
+                                    Intent intent = new Intent(getApplicationContext(), CurrencyListActivity.class);
+                                    startActivity(intent);
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+        alertDialog.show();
+
     }
 
 
@@ -222,6 +311,43 @@ public class MainActivity extends ActionBarActivity {
                             }
                         }
                     }
+                });
+            }
+        });
+        alertDialog.show();
+
+    }
+
+    public void startDecisionPrompt () {
+        LayoutInflater li = LayoutInflater.from(context);
+        View promptsView = li.inflate(R.layout.alert_decision_prompt, null);
+
+        final AlertDialog alertDialog = new AlertDialog.Builder(context)
+                .setView(promptsView)
+                .setPositiveButton("Change the budget", null)
+                .setNegativeButton("Keep the old budget", null)
+                .setCancelable(true)
+                .create();
+
+        TextView textView = (TextView) promptsView.findViewById(R.id.budgetText);
+        textView.setText("Your current monthly budget is: "
+                         + Currency.getCurrentCurrencyUsed(getApplicationContext())
+                         + Budget.getCurrentMonthlyBudget(getApplicationContext())
+                         + ". Do you wish to change it?");
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
+            @Override
+            public void onShow(DialogInterface dialog) {
+
+                Button positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+
+                positiveButton.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                                alertDialog.dismiss();
+                                startNormalBudgetPrompt();
+                        }
                 });
             }
         });

@@ -16,6 +16,8 @@ public class Budget {
     private static final String MY_PREFS_KEY = "myPrefsKey";
     private static final String CURRENT_MONTHLY_BUDGET_KEY = "currentMonthlyBudgetKey";
     private static final String DATE_BUDGET_WAS_SET_KEY = "dateBudgetWasSetKey";
+    private static final String MONTH_BUDGET_WAS_SET_KEY = "monthBudgetWasSetKey";
+    private static final String YEAR_BUDGET_WAS_SET_KEY = "yearBudgetWasSetKey";
 
     public static double getCurrentMonthlyBudget(Context context) {
         settings = context.getSharedPreferences(MY_PREFS_KEY, Context.MODE_PRIVATE);
@@ -34,9 +36,9 @@ public class Budget {
         editor.putFloat(CURRENT_MONTHLY_BUDGET_KEY, (float) currentMonthlyBudget);
 
         Calendar c = Calendar.getInstance();
-        String budgetSetDate = c.get(Calendar.YEAR) + c.get(Calendar.MONTH) + "";
-        //editor.putInt(DATE_BUDGET_WAS_SET_KEY, c.get(Calendar.DAY_OF_MONTH));
-        editor.putString(DATE_BUDGET_WAS_SET_KEY, budgetSetDate);
+        editor.putInt(DATE_BUDGET_WAS_SET_KEY, c.get(Calendar.DAY_OF_MONTH));
+        editor.putInt(MONTH_BUDGET_WAS_SET_KEY, c.get(Calendar.MONTH));
+        editor.putInt(YEAR_BUDGET_WAS_SET_KEY, c.get(Calendar.YEAR));
 
         editor.commit();
     }
