@@ -95,6 +95,14 @@ public class MainActivity extends ActionBarActivity {
 
             }
         }
+
+        overdraftWarningButton = (ImageButton) findViewById(R.id.overdraftWarningIcon);
+        overdraftWarningButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startRecountBudgetPrompt();
+
+            }
+        });
         /*
         //if the date is the first day of the month
         //and there was no budget before - prompt the
@@ -189,7 +197,6 @@ public class MainActivity extends ActionBarActivity {
 
         balanceTextView = (TextView) findViewById(R.id.balanceText);
         balanceView = (TextView) findViewById(R.id.balance);
-        overdraftWarningButton = (ImageButton) findViewById(R.id.overdraftWarningIcon);
 
         if (datasource.getAllMonthlyExpenses() != 0) {
 
@@ -204,8 +211,8 @@ public class MainActivity extends ActionBarActivity {
 
 
             balanceView.setText(Currency.getCurrentCurrencyUsed(getApplicationContext())
-                                + nf.format(Math.abs(balance))
-                                + "");
+                    + nf.format(Math.abs(balance))
+                    + "");
 
             if (balance >= 0) {
                 balanceTextView.setText("Saved this month:");
@@ -220,6 +227,38 @@ public class MainActivity extends ActionBarActivity {
             overdraftWarningButton.setVisibility(View.GONE);
         }
 
+
+    }
+
+    public void startRecountBudgetPrompt() {
+        LayoutInflater li = LayoutInflater.from(context);
+        View promptsView = li.inflate(R.layout.alert_recount_budget_prompt, null);
+
+        final AlertDialog alertDialog = new AlertDialog.Builder(context)
+                .setView(promptsView)
+                .setPositiveButton("OK", null)
+                .setNegativeButton("No", null)
+                .create();
+
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
+            @Override
+            public void onShow(DialogInterface dialog) {
+
+                Button positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+
+                positiveButton.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+
+                        alertDialog.dismiss();
+
+                    }
+                });
+            }
+        });
+        alertDialog.show();
 
     }
 
