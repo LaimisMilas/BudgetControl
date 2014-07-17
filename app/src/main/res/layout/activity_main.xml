@@ -10,19 +10,37 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:textSize="15sp" />
-    <TextView
-        android:id="@+id/balance"
-        android:text="balls"
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:textSize="15sp" />
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/balance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="balls"
+            android:textSize="15sp" />
+
+        <ImageButton
+            style="?android:attr/borderlessButtonStyle"
+            android:id="@+id/overdraftWarningIcon"
+            android:layout_width="40dip"
+            android:layout_height="28dip"
+            android:scaleType="fitXY"
+            android:src="@drawable/warning"/>
+
+
+    </LinearLayout>
 
     <TextView
-        android:text="@string/daily_budget_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:text="@string/daily_budget_text"
         android:textSize="15sp" />
 
     <nick.miros.BudgetControl.budgetcontrol.helper.MyProgressBar
@@ -31,13 +49,13 @@
         android:layout_height="wrap_content"
         android:max="100"
         android:maxHeight="30dp"
-        android:minHeight="30dp"/>
+        android:minHeight="30dp" />
 
     <TextView
-        android:text="@string/monthly_budget_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:text="@string/monthly_budget_text"
         android:textSize="15sp" />
 
     <nick.miros.BudgetControl.budgetcontrol.helper.MyProgressBar
@@ -46,7 +64,7 @@
         android:layout_height="wrap_content"
         android:max="100"
         android:maxHeight="30dp"
-        android:minHeight="30dp"/>
+        android:minHeight="30dp" />
 
     <Button
         android:id="@+id/ExpenseDirectionButton"
@@ -59,8 +77,8 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/DataDirectionButton"

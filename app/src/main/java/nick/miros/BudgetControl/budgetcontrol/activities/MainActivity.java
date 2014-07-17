@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +53,7 @@ public class MainActivity extends ActionBarActivity {
     private Button ExpenseDirectionButton;
     private Button DataDirectionButton;
     private Button BudgetDirectionButton;
+    private ImageButton overdraftWarningButton;
     private MyProgressBar monthlyProgress;
     private MyProgressBar dailyProgress;
     private ExpensesDataSource datasource;
@@ -187,6 +189,7 @@ public class MainActivity extends ActionBarActivity {
 
         balanceTextView = (TextView) findViewById(R.id.balanceText);
         balanceView = (TextView) findViewById(R.id.balance);
+        overdraftWarningButton = (ImageButton) findViewById(R.id.overdraftWarningIcon);
 
         if (datasource.getAllMonthlyExpenses() != 0) {
 
@@ -201,17 +204,20 @@ public class MainActivity extends ActionBarActivity {
 
 
             balanceView.setText(Currency.getCurrentCurrencyUsed(getApplicationContext())
-                                + nf.format(balance)
+                                + nf.format(Math.abs(balance))
                                 + "");
 
             if (balance >= 0) {
                 balanceTextView.setText("Saved this month:");
+                overdraftWarningButton.setVisibility(View.GONE);
             } else {
                 balanceTextView.setText("Overspent this month:");
+                overdraftWarningButton.setVisibility(View.VISIBLE);
             }
         } else {
             balanceTextView.setVisibility(View.GONE);
             balanceView.setVisibility(View.GONE);
+            overdraftWarningButton.setVisibility(View.GONE);
         }
 
 
