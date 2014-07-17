@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.util.Calendar;
 
 import nick.miros.BudgetControl.budgetcontrol.app.Budget;
@@ -66,6 +67,7 @@ public class MainActivity extends ActionBarActivity {
     private double dailyBudget = 0;
     private Calendar c = Calendar.getInstance();
     private final Context context = this;
+    DecimalFormat nf = new DecimalFormat("#.00");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -197,7 +199,10 @@ public class MainActivity extends ActionBarActivity {
             expensesSoFar = datasource.getAllMonthlyExpenses();
             balance = accumulatedMoney - expensesSoFar;
 
-            balanceView.setText(balance + "");
+
+            balanceView.setText(Currency.getCurrentCurrencyUsed(getApplicationContext())
+                                + nf.format(balance)
+                                + "");
 
             if (balance >= 0) {
                 balanceTextView.setText("Saved this month:");
