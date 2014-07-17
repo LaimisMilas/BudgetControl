@@ -162,7 +162,7 @@ public class MainActivity extends ActionBarActivity {
         monthlyProgress = (MyProgressBar) findViewById(R.id.monthlyProgressBar);
 
         double spentToday = datasource.getAllTodayExpenses();
-        double spentThisMonth = datasource.getExpensesStartingFrom(Budget.getBudgetSettingDate(getApplicationContext()));
+        double spentThisMonth = datasource.getAllMonthlyExpenses();
 
         monthlyBudget = Budget.getCurrentMonthlyBudget(getApplicationContext());
         monthlyProgress.setMax(monthlyBudget);
@@ -194,15 +194,15 @@ public class MainActivity extends ActionBarActivity {
             balanceView.setVisibility(View.VISIBLE);
             Calendar c = Calendar.getInstance();
             accumulatedMoney = (c.get(Calendar.DAY_OF_MONTH) + 1 - dateBudgetWasSet) * Budget.getDailyBudget(getApplicationContext());
-            expensesSoFar = datasource.getExpensesStartingFrom(dateBudgetWasSet);
+            expensesSoFar = datasource.getAllMonthlyExpenses();
             balance = accumulatedMoney - expensesSoFar;
 
             balanceView.setText(balance + "");
 
             if (balance >= 0) {
-                balanceTextView.setText("Money saved this month:");
+                balanceTextView.setText("Saved this month:");
             } else {
-                balanceTextView.setText("Overdraft size:");
+                balanceTextView.setText("Overspent this month:");
             }
         } else {
             balanceTextView.setVisibility(View.GONE);
