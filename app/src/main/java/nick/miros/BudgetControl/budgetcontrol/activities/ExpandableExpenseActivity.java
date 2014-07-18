@@ -10,7 +10,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.ExpandableListView;
 
+import nick.miros.BudgetControl.budgetcontrol.app.Expense;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
+import nick.miros.BudgetControl.budgetcontrol.data.ExpensesDataSource;
 import nick.miros.BudgetControl.budgetcontrol.helper.ExpandableListAdapter;
 
 public class ExpandableExpenseActivity extends Activity {
@@ -19,6 +21,8 @@ public class ExpandableExpenseActivity extends Activity {
     ExpandableListView expListView;
     List<String> listDataHeader;
     HashMap<String, List<String>> listDataChild;
+    ExpensesDataSource datasource;
+    List<Expense> allExpenses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,26 @@ public class ExpandableExpenseActivity extends Activity {
      * Preparing the list data
      */
     private void prepareListData() {
+        /*
+        allExpenses = datasource.getAllExpenses();
+        List<String> expenseDates = new ArrayList<String>();
+
+        for (int i = 0; i < allExpenses.size(); i++) {
+            int day = allExpenses.get(i).getDay();
+            int month = allExpenses.get(i).getMonth();
+            int year = allExpenses.get(i).getYear();
+            String newDate = day + month + year + "";
+            expenseDates.add(newDate);
+        }
+
+        List<String> nonRepeatingExpenseDates = new ArrayList<String>();
+
+        for (int i = 0; i < expenseDates.size(); i++) {
+            if (expenseDates.get(i).equals
+        }
+        */
+
+        /*
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
 
@@ -77,5 +101,6 @@ public class ExpandableExpenseActivity extends Activity {
         listDataChild.put(listDataHeader.get(0), top250); // Header, Child data
         listDataChild.put(listDataHeader.get(1), nowShowing);
         listDataChild.put(listDataHeader.get(2), comingSoon);
+        */
     }
 }
