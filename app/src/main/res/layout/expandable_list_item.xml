@@ -24,14 +24,12 @@
             android:id="@+id/edit"
             android:layout_width="30dp"
             android:layout_height="40dip"
-            android:weight="1"
             android:src="@drawable/edit_icon" />
 
         <ImageButton
             android:id="@+id/delete"
             android:layout_width="100dp"
             android:layout_height="40dip"
-            android:weight="1"
             android:src="@drawable/delete_icon" />
     </LinearLayout>
 

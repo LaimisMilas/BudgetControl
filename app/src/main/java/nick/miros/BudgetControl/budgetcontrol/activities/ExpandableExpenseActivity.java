@@ -35,34 +35,51 @@ public class ExpandableExpenseActivity extends Activity {
         // preparing list data
         prepareListData();
 
-        listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
+       //listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
 
         // setting list adapter
-        expListView.setAdapter(listAdapter);
+        //expListView.setAdapter(listAdapter);
     }
 
     /*
      * Preparing the list data
      */
     private void prepareListData() {
-        /*
-        allExpenses = datasource.getAllExpenses();
-        List<String> expenseDates = new ArrayList<String>();
 
-        for (int i = 0; i < allExpenses.size(); i++) {
+        allExpenses = datasource.getAllExpenses();
+        List<List<Expense>> expensesSortedByDates = new ArrayList<List<Expense>>();
+        List<String> expenseDates = new ArrayList<String>();
+        int i = 1;
+        int j = 0;
+        expensesSortedByDates.get(0).add(allExpenses.get(0));
+        while (i != allExpenses.size() - 1) {
+
+            int day = allExpenses.get(i - 1).getDay();
+            int month = allExpenses.get(i - 1).getMonth();
+            int year = allExpenses.get(i - 1).getYear();
+            String fullDate = day + month + year + "";
+
+            int day1 = allExpenses.get(i).getDay();
+            int month1 = allExpenses.get(i).getMonth();
+            int year1 = allExpenses.get(i).getYear();
+            String fullDate1 = day1 + month1 + year1 + "";
+            if (!fullDate1.equals(fullDate)) {
+                j++;
+            }
+            expensesSortedByDates.get(j).add(allExpenses.get(i));
+        }
+
+        expensesSortedByDates.toString();
+        /*
+        for (int i = 1; i < allExpenses.size(); i++) {
             int day = allExpenses.get(i).getDay();
             int month = allExpenses.get(i).getMonth();
             int year = allExpenses.get(i).getYear();
             String newDate = day + month + year + "";
             expenseDates.add(newDate);
         }
-
-        List<String> nonRepeatingExpenseDates = new ArrayList<String>();
-
-        for (int i = 0; i < expenseDates.size(); i++) {
-            if (expenseDates.get(i).equals
-        }
         */
+
 
         /*
         listDataHeader = new ArrayList<String>();
