@@ -16,7 +16,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
@@ -36,7 +35,8 @@ public class MainActivity extends ActionBarActivity {
                     startActivity(new Intent(v.getContext(), AddExpenseActivity.class));
                     break;
                 case R.id.DataDirectionButton:
-                    Toast.makeText(getApplicationContext(), "dataButton", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "dataButton", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(v.getContext(), ExpandableExpenseActivity.class));
                     break;
                 case R.id.BudgetDirectionButton:
                     startActivity(new Intent(v.getContext(), BudgetSettingsActivity.class));
@@ -248,6 +248,7 @@ public class MainActivity extends ActionBarActivity {
                 Button positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
 
                 positiveButton.setOnClickListener(new View.OnClickListener() {
+
 
                     @Override
                     public void onClick(View view) {

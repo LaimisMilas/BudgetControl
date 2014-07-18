@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:text="Looks like your balance got overdrafted. This way
         you will end up overspending your monthly budget. To prevent this, you can shrink
-        your daily budget accordingly. Do you want to do this?"
+        your daily budget accordingly. Shrink daily budget?"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </LinearLayout>
