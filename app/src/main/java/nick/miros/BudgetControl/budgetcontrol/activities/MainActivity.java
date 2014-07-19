@@ -8,23 +8,30 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.InputFilter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
 
 import nick.miros.BudgetControl.budgetcontrol.app.Budget;
 import nick.miros.BudgetControl.budgetcontrol.app.Currency;
+import nick.miros.BudgetControl.budgetcontrol.app.Expense;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
 import nick.miros.BudgetControl.budgetcontrol.data.ExpensesDataSource;
 import nick.miros.BudgetControl.budgetcontrol.helper.DecimalDigits;
+import nick.miros.BudgetControl.budgetcontrol.helper.ExpandableListAdapter;
 import nick.miros.BudgetControl.budgetcontrol.helper.MyProgressBar;
 
 public class MainActivity extends ActionBarActivity {
@@ -36,7 +43,8 @@ public class MainActivity extends ActionBarActivity {
                     break;
                 case R.id.DataDirectionButton:
                     //Toast.makeText(getApplicationContext(), "dataButton", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(v.getContext(), ExpandableExpenseActivity.class));
+                    //startActivity(new Intent(v.getContext(), ExpandableExpenseActivity.class));
+                    prepareListData1();
                     break;
                 case R.id.BudgetDirectionButton:
                     startActivity(new Intent(v.getContext(), BudgetSettingsActivity.class));
@@ -70,6 +78,14 @@ public class MainActivity extends ActionBarActivity {
     private Calendar c = Calendar.getInstance();
     private final Context context = this;
     DecimalFormat nf = new DecimalFormat("#.00");
+
+
+
+    ExpandableListAdapter listAdapter;
+    ExpandableListView expListView;
+    List<String> listDataHeader;
+    HashMap<String, List<String>> listDataChild;
+    List<Expense> allExpenses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -440,8 +456,85 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
-    public void startSecondaryBudgetPrompt() {
+    private void prepareListData1() {
 
+
+        allExpenses = datasource.getAllExpenses();
+        List<List<Expense>> expensesSortedByDates = new ArrayList<List<Expense>>();
+        int i = 1;
+        int j = 0;
+        List<Expense> firstList = new ArrayList<Expense>();
+        firstList.add(allExpenses.get(0));
+        expensesSortedByDates.add(firstList);
+        while (i != allExpenses.size()) {
+
+            int day = allExpenses.get(i - 1).getDay();
+            int month = allExpenses.get(i - 1).getMonth();
+            int year = allExpenses.get(i - 1).getYear();
+            String fullDate = day + month + year + "";
+
+            int day1 = allExpenses.get(i).getDay();
+            int month1 = allExpenses.get(i).getMonth();
+            int year1 = allExpenses.get(i).getYear();
+            String fullDate1 = day1 + month1 + year1 + "";
+            if (!fullDate1.equals(fullDate)) {
+                j++;
+                List<Expense> anotherList = new ArrayList<Expense>();
+                expensesSortedByDates.add(anotherList);
+            }
+            expensesSortedByDates.get(j).add(allExpenses.get(i));
+            i++;
+        }
+
+        Log.e("Lists!", expensesSortedByDates.toString());
+        Log.e("Lists!", expensesSortedByDates.toString());
+        Log.e("Lists!", expensesSortedByDates.toString());
+        Log.e("Lists!", expensesSortedByDates.toString());
+        Log.e("Lists!", expensesSortedByDates.toString());
+        Log.e("Lists!", expensesSortedByDates.toString());
+        Log.e("Lists!", expensesSortedByDates.toString());
+        Log.e("Lists!", expensesSortedByDates.toString());
+        Log.e("Lists!", expensesSortedByDates.toString());
+
+
+        /*
+        listDataHeader = new ArrayList<String>();
+        listDataChild = new HashMap<String, List<String>>();
+
+        // Adding child data
+        listDataHeader.add("Top 250");
+        listDataHeader.add("Now Showing");
+        listDataHeader.add("Coming Soon..");
+
+        // Adding child data
+        List<String> top250 = new ArrayList<String>();
+        top250.add("The Shawshank Redemption");
+        top250.add("The Godfather");
+        top250.add("The Godfather: Part II");
+        top250.add("Pulp Fiction");
+        top250.add("The Good, the Bad and the Ugly");
+        top250.add("The Dark Knight");
+        top250.add("12 Angry Men");
+
+        List<String> nowShowing = new ArrayList<String>();
+        nowShowing.add("The Conjuring");
+        nowShowing.add("Despicable Me 2");
+        nowShowing.add("Turbo");
+        nowShowing.add("Grown Ups 2");
+        nowShowing.add("Red 2");
+        nowShowing.add("The Wolverine");
+
+        List<String> comingSoon = new ArrayList<String>();
+        comingSoon.add("2 Guns");
+        comingSoon.add("The Smurfs 2");
+        comingSoon.add("The Spectacular Now");
+        comingSoon.add("The Canyons");
+        comingSoon.add("Europa Report");
+
+        listDataChild.put(listDataHeader.get(0), top250); // Header, Child data
+        listDataChild.put(listDataHeader.get(1), nowShowing);
+        listDataChild.put(listDataHeader.get(2), comingSoon);
+        */
     }
 
     @Override

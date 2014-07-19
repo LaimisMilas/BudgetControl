@@ -49,32 +49,32 @@ public class ExpandableExpenseActivity extends Activity {
         allExpenses = datasource.getAllExpenses();
         List<List<Expense>> expensesSortedByDates = new ArrayList<List<Expense>>();
         List<String> expenseDates = new ArrayList<String>();
-        int i = 1;
-        int j = 0;
+        int expensePosition = 1;
+        int arrayPosition = 0;
         expensesSortedByDates.get(0).add(allExpenses.get(0));
-        while (i != allExpenses.size() - 1) {
+        while (expensePosition != allExpenses.size() - 1) {
 
-            int day = allExpenses.get(i - 1).getDay();
-            int month = allExpenses.get(i - 1).getMonth();
-            int year = allExpenses.get(i - 1).getYear();
+            int day = allExpenses.get(expensePosition - 1).getDay();
+            int month = allExpenses.get(expensePosition - 1).getMonth();
+            int year = allExpenses.get(expensePosition - 1).getYear();
             String fullDate = day + month + year + "";
 
-            int day1 = allExpenses.get(i).getDay();
-            int month1 = allExpenses.get(i).getMonth();
-            int year1 = allExpenses.get(i).getYear();
+            int day1 = allExpenses.get(expensePosition).getDay();
+            int month1 = allExpenses.get(expensePosition).getMonth();
+            int year1 = allExpenses.get(expensePosition).getYear();
             String fullDate1 = day1 + month1 + year1 + "";
             if (!fullDate1.equals(fullDate)) {
-                j++;
+                arrayPosition++;
             }
-            expensesSortedByDates.get(j).add(allExpenses.get(i));
+            expensesSortedByDates.get(arrayPosition).add(allExpenses.get(expensePosition));
         }
 
         expensesSortedByDates.toString();
         /*
-        for (int i = 1; i < allExpenses.size(); i++) {
-            int day = allExpenses.get(i).getDay();
-            int month = allExpenses.get(i).getMonth();
-            int year = allExpenses.get(i).getYear();
+        for (int expensePosition = 1; expensePosition < allExpenses.size(); expensePosition++) {
+            int day = allExpenses.get(expensePosition).getDay();
+            int month = allExpenses.get(expensePosition).getMonth();
+            int year = allExpenses.get(expensePosition).getYear();
             String newDate = day + month + year + "";
             expenseDates.add(newDate);
         }
