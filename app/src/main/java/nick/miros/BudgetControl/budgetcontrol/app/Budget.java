@@ -18,6 +18,8 @@ public class Budget {
     private static final String DATE_BUDGET_WAS_SET_KEY = "dateBudgetWasSetKey";
     private static final String MONTH_BUDGET_WAS_SET_KEY = "monthBudgetWasSetKey";
     private static final String YEAR_BUDGET_WAS_SET_KEY = "yearBudgetWasSetKey";
+    private static final String BALANCED_DAILY_BUDGET_KEY = "balancedDailyBudgetKey";
+    private static final String BALANCED_DAILY_BUDGET_MONTH_KEY = "balancedDailyBudgetMonthKey";
 
     public static double getCurrentMonthlyBudget(Context context) {
         settings = context.getSharedPreferences(MY_PREFS_KEY, Context.MODE_PRIVATE);
@@ -55,6 +57,21 @@ public class Budget {
         double dailyBudget = Double.parseDouble(nf.format(monthlyBudget / amountOfDays));
 
         return dailyBudget;
+    }
+
+    public static void balanceDailyBudget(Context context) {
+        Calendar c = Calendar.getInstance();
+        final int currentMonth = c.get(Calendar.MONTH);
+
+        int amountOfDaysLeft = c.getActualMaximum(Calendar.DAY_OF_MONTH) - c.get(Calendar.DAY_OF_MONTH);
+
+        double balancedDailyBudget = getDailyBudget(context) - Balance.getBalance(context) / amountOfDaysLeft;
+
+        settings = context.getSharedPreferences(MY_PREFS_KEY, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putFloat(BALANCED_DAILY_BUDGET_KEY, (float) balancedDailyBudget);
+        editor.putInt(BALANCED_DAILY_BUDGET_MONTH_KEY, currentMonth);
+
     }
 
     public static int getBudgetSettingDate(Context context) {

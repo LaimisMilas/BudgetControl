@@ -76,7 +76,7 @@ public class MyProgressBar extends FrameLayout {
         double fullCoeff = 1 - (expenses / max);
 
         if (fullCoeff <= 0) {
-            ratio.setText("Overdraft!");
+            ratio.setText("0 / " + max);
             ratio.setTextColor(Color.RED);
             progressBarBackground.removeView(valueBar);
         }

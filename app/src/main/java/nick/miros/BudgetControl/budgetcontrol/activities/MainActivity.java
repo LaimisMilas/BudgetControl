@@ -24,7 +24,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import nick.miros.BudgetControl.budgetcontrol.app.Balance;
 import nick.miros.BudgetControl.budgetcontrol.app.Budget;
 import nick.miros.BudgetControl.budgetcontrol.app.Currency;
 import nick.miros.BudgetControl.budgetcontrol.app.Expense;
@@ -72,6 +74,8 @@ public class MainActivity extends ActionBarActivity {
     private static final String DATE_BUDGET_WAS_SET_KEY = "dateBudgetWasSetKey";
     private static final String MONTH_BUDGET_WAS_SET_KEY = "monthBudgetWasSetKey";
     private static final String YEAR_BUDGET_WAS_SET_KEY = "yearBudgetWasSetKey";
+    private static final String BALANCED_DAILY_BUDGET_KEY = "balancedDailyBudgetKey";
+    private static final String BALANCED_DAILY_BUDGET_MONTH_KEY = "balancedDailyBudgetMonthKey";
     private SharedPreferences settings;
     private double monthlyBudget = 0;
     private double dailyBudget = 0;
@@ -79,10 +83,6 @@ public class MainActivity extends ActionBarActivity {
     private final Context context = this;
     DecimalFormat nf = new DecimalFormat("#.00");
 
-
-
-    ExpandableListAdapter listAdapter;
-    ExpandableListView expListView;
     List<String> listDataHeader;
     HashMap<String, List<String>> listDataChild;
     List<Expense> allExpenses;
@@ -119,46 +119,6 @@ public class MainActivity extends ActionBarActivity {
 
             }
         });
-        /*
-        //if the date is the first day of the month
-        //and there was no budget before - prompt the
-        //user for the regular monthly budget
-        if (c.get(Calendar.DAY_OF_MONTH) == 1 && !settings.contains(CURRENT_MONTHLY_BUDGET_KEY)) {
-            startNormalBudgetPrompt();
-            //Budget.resetBudgetSettingDate(getApplicationContext());
-        }
-
-        //if the current budget month or year is bigger than the previous
-        // year or month the budget was set - prompt the
-        //user whether he wants to change the previous
-        //month's budget - if yes - launch the normal
-        //budget prompt
-        if ((settings.getInt(MONTH_BUDGET_WAS_SET_KEY, 1) > c.get(Calendar.MONTH)
-            || settings.getInt(YEAR_BUDGET_WAS_SET_KEY, 1) > c.get(Calendar.YEAR))) {
-            startDecisionPrompt();
-        }
-
-
-        //if the date is not the first day of the month
-        //and there was no budget before - prompt the
-        //user for the partial monthly budget
-        if (c.get(Calendar.DAY_OF_MONTH)!= 1 && !settings.contains(CURRENT_MONTHLY_BUDGET_KEY)) {
-            startInitialBudgetPrompt();
-        }
-
-        //if the date is not the first day of the month
-        //and there was an initial budget before that was set in
-        //the previous month - prompt the user for the
-        //new budget in this month
-        if (settings.contains(INITIAL_BUDGET_SET_DATE_KEY)) {
-            String currentYearMonthDateString = c.get(Calendar.YEAR) + c.get(Calendar.MONTH) + "";
-            
-            if (Integer.parseInt(currentYearMonthDateString) > Integer.parseInt(settings.getString(INITIAL_BUDGET_SET_DATE_KEY, ""))) {
-                startSecondaryBudgetPrompt();
-            }
-        }
-
-        */
 
 
         ExpenseDirectionButton = (Button) findViewById(R.id.ExpenseDirectionButton);
@@ -179,9 +139,8 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public void onResume() {
         super.onResume();
-        updateProgressBars();
         updateBalance();
-
+        updateProgressBars();
 
     }
 
@@ -216,15 +175,10 @@ public class MainActivity extends ActionBarActivity {
 
         if (datasource.getAllMonthlyExpenses() != 0) {
 
-            int dateBudgetWasSet = Budget.getBudgetSettingDate(getApplicationContext());
-
             balanceTextView.setVisibility(View.VISIBLE);
             balanceView.setVisibility(View.VISIBLE);
-            Calendar c = Calendar.getInstance();
-            accumulatedMoney = (c.get(Calendar.DAY_OF_MONTH) + 1 - dateBudgetWasSet) * Budget.getDailyBudget(getApplicationContext());
-            expensesSoFar = datasource.getAllMonthlyExpenses();
-            balance = accumulatedMoney - expensesSoFar;
 
+            balance = Balance.getBalance(getApplicationContext());
 
             balanceView.setText(Currency.getCurrentCurrencyUsed(getApplicationContext())
                     + nf.format(Math.abs(balance))
@@ -252,7 +206,7 @@ public class MainActivity extends ActionBarActivity {
 
         final AlertDialog alertDialog = new AlertDialog.Builder(context)
                 .setView(promptsView)
-                .setPositiveButton("OK", null)
+                .setPositiveButton("Yes", null)
                 .setNegativeButton("No", null)
                 .create();
 
@@ -264,6 +218,23 @@ public class MainActivity extends ActionBarActivity {
                 Button positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
 
                 positiveButton.setOnClickListener(new View.OnClickListener() {
+
+
+                    @Override
+                    public void onClick(View view) {
+
+                        Budget.balanceDailyBudget(getApplicationContext());
+                        alertDialog.dismiss();
+                        updateBalance();
+                        updateProgressBars();
+
+
+                    }
+                });
+
+                Button negativeButton = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+
+                negativeButton.setOnClickListener(new View.OnClickListener() {
 
 
                     @Override
@@ -459,6 +430,8 @@ public class MainActivity extends ActionBarActivity {
     private void prepareListData1() {
 
 
+        listDataHeader = new ArrayList<String>();
+
         allExpenses = datasource.getAllExpenses();
         List<List<Expense>> expensesSortedByDates = new ArrayList<List<Expense>>();
         int i = 1;
@@ -481,6 +454,7 @@ public class MainActivity extends ActionBarActivity {
                 j++;
                 List<Expense> anotherList = new ArrayList<Expense>();
                 expensesSortedByDates.add(anotherList);
+                listDataHeader.add(fullDate1);
             }
             expensesSortedByDates.get(j).add(allExpenses.get(i));
             i++;
@@ -497,15 +471,18 @@ public class MainActivity extends ActionBarActivity {
         Log.e("Lists!", expensesSortedByDates.toString());
 
 
-        /*
-        listDataHeader = new ArrayList<String>();
-        listDataChild = new HashMap<String, List<String>>();
+        //listDataHeader = new ArrayList<String>();
+       //listDataChild = new HashMap<String, List<String>>();
+        //listDataChild = new HashMap<String, List<Expense>>();
 
         // Adding child data
         listDataHeader.add("Top 250");
         listDataHeader.add("Now Showing");
         listDataHeader.add("Coming Soon..");
 
+       // for (int f = 0; f < listDataHeader.size(); f++) {
+           // listDataChild.put(listDataHeader.get(f), expensesSortedByDates.get(f));
+       // }
         // Adding child data
         List<String> top250 = new ArrayList<String>();
         top250.add("The Shawshank Redemption");
@@ -534,7 +511,7 @@ public class MainActivity extends ActionBarActivity {
         listDataChild.put(listDataHeader.get(0), top250); // Header, Child data
         listDataChild.put(listDataHeader.get(1), nowShowing);
         listDataChild.put(listDataHeader.get(2), comingSoon);
-        */
+
     }
 
     @Override
