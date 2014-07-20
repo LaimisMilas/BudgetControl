@@ -47,19 +47,29 @@ public class Budget {
 
     public static double getDailyBudget(Context context) {
         settings = context.getSharedPreferences(MY_PREFS_KEY, Context.MODE_PRIVATE);
-        double monthlyBudget = settings.getFloat(CURRENT_MONTHLY_BUDGET_KEY, 0);
-
-        DecimalFormat nf = new DecimalFormat("#.00");
 
         Calendar c = Calendar.getInstance();
-        final int amountOfDays = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+        double monthlyBudget = settings.getFloat(CURRENT_MONTHLY_BUDGET_KEY, 0);
 
-        double dailyBudget = Double.parseDouble(nf.format(monthlyBudget / amountOfDays));
+        int monthUpdated = 0;
 
-        return dailyBudget;
+        if (settings.contains(BALANCED_DAILY_BUDGET_MONTH_KEY)) {
+            monthUpdated = settings.getInt(BALANCED_DAILY_BUDGET_MONTH_KEY, 0);
+        }
+
+        if (monthUpdated == c.get(Calendar.MONTH)) {
+            return settings.getFloat(BALANCED_DAILY_BUDGET_KEY, 0);
+        }
+        else {
+            DecimalFormat nf = new DecimalFormat("#.00");
+            final int amountOfDays = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+            double dailyBudget = Double.parseDouble(nf.format(monthlyBudget / amountOfDays));
+            return dailyBudget;
+        }
     }
 
     public static void balanceDailyBudget(Context context) {
+
         Calendar c = Calendar.getInstance();
         final int currentMonth = c.get(Calendar.MONTH);
 

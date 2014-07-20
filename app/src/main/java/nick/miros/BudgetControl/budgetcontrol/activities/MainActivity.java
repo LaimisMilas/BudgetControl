@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -24,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import nick.miros.BudgetControl.budgetcontrol.app.Balance;
 import nick.miros.BudgetControl.budgetcontrol.app.Budget;
@@ -33,7 +31,6 @@ import nick.miros.BudgetControl.budgetcontrol.app.Expense;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
 import nick.miros.BudgetControl.budgetcontrol.data.ExpensesDataSource;
 import nick.miros.BudgetControl.budgetcontrol.helper.DecimalDigits;
-import nick.miros.BudgetControl.budgetcontrol.helper.ExpandableListAdapter;
 import nick.miros.BudgetControl.budgetcontrol.helper.MyProgressBar;
 
 public class MainActivity extends ActionBarActivity {
@@ -44,7 +41,6 @@ public class MainActivity extends ActionBarActivity {
                     startActivity(new Intent(v.getContext(), AddExpenseActivity.class));
                     break;
                 case R.id.DataDirectionButton:
-                    //Toast.makeText(getApplicationContext(), "dataButton", Toast.LENGTH_SHORT).show();
                     //startActivity(new Intent(v.getContext(), ExpandableExpenseActivity.class));
                     prepareListData1();
                     break;
@@ -94,17 +90,37 @@ public class MainActivity extends ActionBarActivity {
 
         settings = getSharedPreferences(MY_PREFS_KEY, Context.MODE_PRIVATE);
 
+        //start different budget prompts depending on the
+        //date and the states of the budget
+
+
+        //in case the day is the first of the month
         if (c.get(Calendar.DAY_OF_MONTH) == 1) {
 
+            //and there is no budget that was set before
+            //start a normal budget prompt that should occur
+            //every month
             if (!settings.contains(CURRENT_MONTHLY_BUDGET_KEY)) {
                 startNormalBudgetPrompt();
+
+            //and the last time the budget was changed was in the previous month
+            //start a prompt asking for a decision whether the user wants to
+            //change it or keep the old one
             } else if ((settings.getInt(MONTH_BUDGET_WAS_SET_KEY, 1) > c.get(Calendar.MONTH)
                     || settings.getInt(YEAR_BUDGET_WAS_SET_KEY, 1) > c.get(Calendar.YEAR))) {
                 startDecisionPrompt();
             }
         } else {
+            //in case it is not the first day of the month
+            //and there was no budget set before, start a prompt asking
+            //for an initial budget
             if (!settings.contains(CURRENT_MONTHLY_BUDGET_KEY)) {
                 startInitialBudgetPrompt();
+
+            //or if it is not the first day of the month and
+            //the last time the budget was set in the previous month
+            //start a prompt asking for a decision whether the user wants to
+            //change it or keep the old one
             } else if ((settings.getInt(MONTH_BUDGET_WAS_SET_KEY, 1) > c.get(Calendar.MONTH)
                     || settings.getInt(YEAR_BUDGET_WAS_SET_KEY, 1) > c.get(Calendar.YEAR))) {
                 startDecisionPrompt();
@@ -472,7 +488,7 @@ public class MainActivity extends ActionBarActivity {
 
 
         //listDataHeader = new ArrayList<String>();
-       //listDataChild = new HashMap<String, List<String>>();
+        //listDataChild = new HashMap<String, List<String>>();
         //listDataChild = new HashMap<String, List<Expense>>();
 
         // Adding child data
@@ -480,9 +496,9 @@ public class MainActivity extends ActionBarActivity {
         listDataHeader.add("Now Showing");
         listDataHeader.add("Coming Soon..");
 
-       // for (int f = 0; f < listDataHeader.size(); f++) {
-           // listDataChild.put(listDataHeader.get(f), expensesSortedByDates.get(f));
-       // }
+        // for (int f = 0; f < listDataHeader.size(); f++) {
+        // listDataChild.put(listDataHeader.get(f), expensesSortedByDates.get(f));
+        // }
         // Adding child data
         List<String> top250 = new ArrayList<String>();
         top250.add("The Shawshank Redemption");
