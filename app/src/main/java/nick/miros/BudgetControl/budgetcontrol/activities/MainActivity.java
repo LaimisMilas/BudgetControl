@@ -142,32 +142,18 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void updateBalance() {
-
-        balanceTextView = (TextView) findViewById(R.id.balanceText);
         balanceView = (TextView) findViewById(R.id.balance);
+        overdraftWarningButton.setVisibility(View.GONE);
 
-        if (datasource.getAllMonthlyExpenses() != 0) {
+        balance = Balance.getBalance(getApplicationContext());
+        balanceView.setText(Currency.getCurrentCurrencyUsed(getApplicationContext())
+                + nf.format(balance)
+                + "");
 
-            balanceTextView.setVisibility(View.VISIBLE);
-            balanceView.setVisibility(View.VISIBLE);
-
-            balance = Balance.getBalance(getApplicationContext());
-
-            balanceView.setText(Currency.getCurrentCurrencyUsed(getApplicationContext())
-                    + nf.format(Math.abs(balance))
-                    + "");
-
-            if (balance >= 0) {
-                balanceTextView.setText("Saved this month:");
-                overdraftWarningButton.setVisibility(View.GONE);
-            } else {
-                balanceTextView.setText("Overspent this month:");
-                overdraftWarningButton.setVisibility(View.VISIBLE);
-            }
-        } else {
-            balanceTextView.setVisibility(View.GONE);
-            balanceView.setVisibility(View.GONE);
+        if (balance >= 0) {
             overdraftWarningButton.setVisibility(View.GONE);
+        } else {
+            overdraftWarningButton.setVisibility(View.VISIBLE);
         }
 
 
