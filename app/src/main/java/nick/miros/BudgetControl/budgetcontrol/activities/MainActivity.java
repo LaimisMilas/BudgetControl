@@ -60,6 +60,7 @@ public class MainActivity extends ActionBarActivity {
     private static final String CURRENCY_SYMBOL_KEY = "currencySymbolKey";
     private static final String MONTH_BUDGET_WAS_SET_KEY = "monthBudgetWasSetKey";
     private static final String YEAR_BUDGET_WAS_SET_KEY = "yearBudgetWasSetKey";
+    private static final String MONTH_BUDGET_DECISION_WAS_MADE_KEY = "monthBudgetDecisionWasMadeKey";
     private SharedPreferences settings;
     private double monthlyBudget = 0;
     private double dailyBudget = 0;
@@ -84,7 +85,10 @@ public class MainActivity extends ActionBarActivity {
             //start a prompt asking for a decision whether the user wants to
             //change it or keep the old one
         } else if ((settings.getInt(MONTH_BUDGET_WAS_SET_KEY, 1) < c.get(Calendar.MONTH)
-                || settings.getInt(YEAR_BUDGET_WAS_SET_KEY, 1) < c.get(Calendar.YEAR))) {
+                || settings.getInt(YEAR_BUDGET_WAS_SET_KEY, 1) < c.get(Calendar.YEAR))
+
+                //check whether the user has already made a decision in this prompt
+                && (settings.getInt(MONTH_BUDGET_DECISION_WAS_MADE_KEY, 1) != c.get(Calendar.MONTH))) {
             startDecisionPrompt();
         }
 
@@ -312,6 +316,9 @@ public class MainActivity extends ActionBarActivity {
         });
         alertDialog.show();
 
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putInt(MONTH_BUDGET_DECISION_WAS_MADE_KEY, c.get(Calendar.MONTH));
+        editor.commit();
     }
 
     public void startBalanceInfoAlert() {
