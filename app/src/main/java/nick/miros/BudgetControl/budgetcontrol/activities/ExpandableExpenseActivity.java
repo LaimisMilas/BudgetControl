@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ExpandableListView;
 
 import nick.miros.BudgetControl.budgetcontrol.app.Expense;
@@ -33,7 +34,7 @@ public class ExpandableExpenseActivity extends Activity {
         expListView = (ExpandableListView) findViewById(R.id.lvExp);
 
         // preparing list data
-        prepareListData();
+       // prepareListData();
 
        //listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
 
@@ -44,52 +45,62 @@ public class ExpandableExpenseActivity extends Activity {
     /*
      * Preparing the list data
      */
-    private void prepareListData() {
+    private void prepareListData1() {
+
+
+        listDataHeader = new ArrayList<String>();
 
         allExpenses = datasource.getAllExpenses();
         List<List<Expense>> expensesSortedByDates = new ArrayList<List<Expense>>();
-        List<String> expenseDates = new ArrayList<String>();
-        int expensePosition = 1;
-        int arrayPosition = 0;
-        expensesSortedByDates.get(0).add(allExpenses.get(0));
-        while (expensePosition != allExpenses.size() - 1) {
+        int i = 1;
+        int j = 0;
+        List<Expense> firstList = new ArrayList<Expense>();
+        firstList.add(allExpenses.get(0));
+        expensesSortedByDates.add(firstList);
+        while (i != allExpenses.size()) {
 
-            int day = allExpenses.get(expensePosition - 1).getDay();
-            int month = allExpenses.get(expensePosition - 1).getMonth();
-            int year = allExpenses.get(expensePosition - 1).getYear();
+            int day = allExpenses.get(i - 1).getDay();
+            int month = allExpenses.get(i - 1).getMonth();
+            int year = allExpenses.get(i - 1).getYear();
             String fullDate = day + month + year + "";
 
-            int day1 = allExpenses.get(expensePosition).getDay();
-            int month1 = allExpenses.get(expensePosition).getMonth();
-            int year1 = allExpenses.get(expensePosition).getYear();
+            int day1 = allExpenses.get(i).getDay();
+            int month1 = allExpenses.get(i).getMonth();
+            int year1 = allExpenses.get(i).getYear();
             String fullDate1 = day1 + month1 + year1 + "";
             if (!fullDate1.equals(fullDate)) {
-                arrayPosition++;
+                j++;
+                List<Expense> anotherList = new ArrayList<Expense>();
+                expensesSortedByDates.add(anotherList);
+                listDataHeader.add(fullDate1);
             }
-            expensesSortedByDates.get(arrayPosition).add(allExpenses.get(expensePosition));
+            expensesSortedByDates.get(j).add(allExpenses.get(i));
+            i++;
         }
 
-        expensesSortedByDates.toString();
-        /*
-        for (int expensePosition = 1; expensePosition < allExpenses.size(); expensePosition++) {
-            int day = allExpenses.get(expensePosition).getDay();
-            int month = allExpenses.get(expensePosition).getMonth();
-            int year = allExpenses.get(expensePosition).getYear();
-            String newDate = day + month + year + "";
-            expenseDates.add(newDate);
-        }
-        */
+        Log.e("Lists!", expensesSortedByDates.toString());
+        Log.e("Lists!", expensesSortedByDates.toString());
+        Log.e("Lists!", expensesSortedByDates.toString());
+        Log.e("Lists!", expensesSortedByDates.toString());
+        Log.e("Lists!", expensesSortedByDates.toString());
+        Log.e("Lists!", expensesSortedByDates.toString());
+        Log.e("Lists!", expensesSortedByDates.toString());
+        Log.e("Lists!", expensesSortedByDates.toString());
+        Log.e("Lists!", expensesSortedByDates.toString());
 
 
-        /*
-        listDataHeader = new ArrayList<String>();
-        listDataChild = new HashMap<String, List<String>>();
+        //listDataHeader = new ArrayList<String>();
+        //listDataChild = new HashMap<String, List<String>>();
+        //listDataChild = new HashMap<String, List<Expense>>();
 
         // Adding child data
         listDataHeader.add("Top 250");
         listDataHeader.add("Now Showing");
         listDataHeader.add("Coming Soon..");
 
+        // for (int f = 0; f < listDataHeader.size(); f++) {
+        // listDataChild.put(listDataHeader.get(f), expensesSortedByDates.get(f));
+        // }
         // Adding child data
         List<String> top250 = new ArrayList<String>();
         top250.add("The Shawshank Redemption");
@@ -118,6 +129,6 @@ public class ExpandableExpenseActivity extends Activity {
         listDataChild.put(listDataHeader.get(0), top250); // Header, Child data
         listDataChild.put(listDataHeader.get(1), nowShowing);
         listDataChild.put(listDataHeader.get(2), comingSoon);
-        */
+
     }
 }
