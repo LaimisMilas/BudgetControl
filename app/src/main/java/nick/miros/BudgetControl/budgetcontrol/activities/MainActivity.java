@@ -46,14 +46,13 @@ public class MainActivity extends ActionBarActivity {
     };
 
 
-    private TextView balanceTextView;
     private TextView balanceView;
     private Button ExpenseDirectionButton;
     private Button DataDirectionButton;
     private Button BudgetDirectionButton;
     private ImageButton overdraftWarningButton;
-    private MyProgressBar monthlyProgress;
-    private MyProgressBar dailyProgress;
+    private MyProgressBar monthlyProgressBar;
+    private MyProgressBar dailyProgressBar;
     private ExpensesDataSource datasource;
     private final String MY_PREFS_KEY = "myPrefsKey";
     private static final String CURRENT_MONTHLY_BUDGET_KEY = "currentMonthlyBudgetKey";
@@ -120,23 +119,23 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void updateProgressBars() {
-        dailyProgress = (MyProgressBar) findViewById(R.id.dailyProgressBar);
-        monthlyProgress = (MyProgressBar) findViewById(R.id.monthlyProgressBar);
+        dailyProgressBar = (MyProgressBar) findViewById(R.id.dailyProgressBar);
+        monthlyProgressBar = (MyProgressBar) findViewById(R.id.monthlyProgressBar);
 
         double spentToday = datasource.getAllTodayExpenses();
         double spentThisMonth = datasource.getAllMonthlyExpenses();
 
         monthlyBudget = Budget.getCurrentMonthlyBudget(getApplicationContext());
-        monthlyProgress.setMax(monthlyBudget);
+        monthlyProgressBar.setMax(monthlyBudget);
 
         dailyBudget = Budget.getDailyBudget(getApplicationContext());
-        dailyProgress.setMax(dailyBudget);
+        dailyProgressBar.setMax(dailyBudget);
 
         if (spentThisMonth != 0) {
-            monthlyProgress.updateProgress(spentThisMonth);
+            monthlyProgressBar.updateProgress(spentThisMonth);
         }
         if (spentToday != 0) {
-            dailyProgress.updateProgress(spentToday);
+            dailyProgressBar.updateProgress(spentToday);
         }
 
     }
