@@ -83,8 +83,8 @@ public class MainActivity extends ActionBarActivity {
             //in case there was a budget before, but it was set in the previous month
             //start a prompt asking for a decision whether the user wants to
             //change it or keep the old one
-        } else if ((settings.getInt(MONTH_BUDGET_WAS_SET_KEY, 1) > c.get(Calendar.MONTH)
-                || settings.getInt(YEAR_BUDGET_WAS_SET_KEY, 1) > c.get(Calendar.YEAR))) {
+        } else if ((settings.getInt(MONTH_BUDGET_WAS_SET_KEY, 1) < c.get(Calendar.MONTH)
+                || settings.getInt(YEAR_BUDGET_WAS_SET_KEY, 1) < c.get(Calendar.YEAR))) {
             startDecisionPrompt();
         }
 

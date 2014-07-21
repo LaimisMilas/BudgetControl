@@ -7,12 +7,15 @@ import android.graphics.AvoidXfermode;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 
+import nick.miros.BudgetControl.budgetcontrol.data.ExpensesDataSource;
+
 /**
  * Created by admin on 7/5/2014.
  */
 public class Budget {
 
     private static SharedPreferences settings;
+    private static ExpensesDataSource datasource;
     private static final String MY_PREFS_KEY = "myPrefsKey";
     private static final String CURRENT_MONTHLY_BUDGET_KEY = "currentMonthlyBudgetKey";
     private static final String DATE_BUDGET_WAS_SET_KEY = "dateBudgetWasSetKey";
@@ -51,11 +54,7 @@ public class Budget {
         Calendar c = Calendar.getInstance();
         double monthlyBudget = settings.getFloat(CURRENT_MONTHLY_BUDGET_KEY, 0);
 
-        int monthUpdated = 0;
-
-        if (settings.contains(BALANCED_DAILY_BUDGET_MONTH_KEY)) {
-            monthUpdated = settings.getInt(BALANCED_DAILY_BUDGET_MONTH_KEY, 0);
-        }
+        int monthUpdated = settings.getInt(BALANCED_DAILY_BUDGET_MONTH_KEY, 0);
 
         if (monthUpdated == c.get(Calendar.MONTH)) {
             return settings.getFloat(BALANCED_DAILY_BUDGET_KEY, 0);
@@ -70,17 +69,24 @@ public class Budget {
 
     public static void balanceDailyBudget(Context context) {
 
+        datasource = new ExpensesDataSource(context);
+        datasource.open();
+
         Calendar c = Calendar.getInstance();
-        final int currentMonth = c.get(Calendar.MONTH);
 
         int amountOfDaysLeft = c.getActualMaximum(Calendar.DAY_OF_MONTH) - c.get(Calendar.DAY_OF_MONTH);
 
-        double balancedDailyBudget = getDailyBudget(context) - Balance.getBalance(context) / amountOfDaysLeft;
+        double balancedDailyBudget = (Budget.getCurrentMonthlyBudget(context)
+                                     - datasource.getAllMonthlyExpenses())
+                                     / amountOfDaysLeft;
 
         settings = context.getSharedPreferences(MY_PREFS_KEY, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putFloat(BALANCED_DAILY_BUDGET_KEY, (float) balancedDailyBudget);
+
+        final int currentMonth = c.get(Calendar.MONTH);
         editor.putInt(BALANCED_DAILY_BUDGET_MONTH_KEY, currentMonth);
+        editor.commit();
 
     }
 

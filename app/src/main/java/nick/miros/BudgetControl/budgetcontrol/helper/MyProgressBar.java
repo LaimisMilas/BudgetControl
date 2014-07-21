@@ -73,10 +73,17 @@ public class MyProgressBar extends FrameLayout {
     }
 
     public void updateProgress(double expenses) {
+
+        //shows the coeff of how the progress bar should be
         double fullCoeff = 1 - (expenses / max);
 
+        //in case the value is less than or equals to zero - just remove the green progress
+        //and set zero as the bottom range
         if (fullCoeff <= 0) {
-            ratio.setText("0 / " + max);
+            ratio.setText(Currency.getCurrentCurrencyUsed(getContext()) +
+                          "0 / " +
+                          Currency.getCurrentCurrencyUsed(getContext()) +
+                          max);
             ratio.setTextColor(Color.RED);
             progressBarBackground.removeView(valueBar);
         }
