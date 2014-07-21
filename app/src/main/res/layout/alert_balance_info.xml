@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_root"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="The balance shows whether you're on track with your budget or not.
+        The formula for the balance = days passed since the start of the month * your daily budget - all your expenses for the month."
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+</LinearLayout>

@@ -51,6 +51,7 @@ public class MainActivity extends ActionBarActivity {
     private Button DataDirectionButton;
     private Button BudgetDirectionButton;
     private ImageButton overdraftWarningButton;
+    private ImageButton balanceInfoButton;
     private MyProgressBar monthlyProgressBar;
     private MyProgressBar dailyProgressBar;
     private ExpensesDataSource datasource;
@@ -91,6 +92,12 @@ public class MainActivity extends ActionBarActivity {
         overdraftWarningButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startRecountBudgetPrompt();
+            }
+        });
+        balanceInfoButton = (ImageButton) findViewById(R.id.balanceInfoIcon);
+        balanceInfoButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startBalanceInfoAlert();
 
             }
         });
@@ -305,6 +312,34 @@ public class MainActivity extends ActionBarActivity {
         });
         alertDialog.show();
 
+    }
+
+    public void startBalanceInfoAlert() {
+        LayoutInflater li = LayoutInflater.from(context);
+        View promptsView = li.inflate(R.layout.alert_balance_info, null);
+
+        final AlertDialog alertDialog = new AlertDialog.Builder(context)
+                .setView(promptsView)
+                .setPositiveButton("Yes", null)
+                .create();
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
+            @Override
+            public void onShow(DialogInterface dialog) {
+
+                Button positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+
+                positiveButton.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        alertDialog.dismiss();
+
+                    }
+                });
+            }
+        });
+        alertDialog.show();
     }
 
 

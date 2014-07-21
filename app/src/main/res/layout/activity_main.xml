@@ -18,6 +18,14 @@
         android:layout_gravity="center_horizontal"
         android:orientation="horizontal">
 
+        <ImageButton
+            style="?android:attr/borderlessButtonStyle"
+            android:id="@+id/balanceInfoIcon"
+            android:layout_width="40dip"
+            android:layout_height="28dip"
+            android:scaleType="fitXY"
+            android:src="@drawable/info_icon"/>
+
         <TextView
             android:id="@+id/balance"
             android:layout_width="wrap_content"
