@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.InputFilter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,15 +18,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
 
 import nick.miros.BudgetControl.budgetcontrol.app.Balance;
 import nick.miros.BudgetControl.budgetcontrol.app.Budget;
 import nick.miros.BudgetControl.budgetcontrol.app.Currency;
-import nick.miros.BudgetControl.budgetcontrol.app.Expense;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
 import nick.miros.BudgetControl.budgetcontrol.data.ExpensesDataSource;
 import nick.miros.BudgetControl.budgetcontrol.helper.DecimalDigits;
@@ -50,9 +45,7 @@ public class MainActivity extends ActionBarActivity {
         }
     };
 
-    private double balance = 0;
-    private double expensesSoFar = 0;
-    private double accumulatedMoney = 0;
+
     private TextView balanceTextView;
     private TextView balanceView;
     private Button ExpenseDirectionButton;
@@ -64,23 +57,17 @@ public class MainActivity extends ActionBarActivity {
     private ExpensesDataSource datasource;
     private final String MY_PREFS_KEY = "myPrefsKey";
     private static final String CURRENT_MONTHLY_BUDGET_KEY = "currentMonthlyBudgetKey";
-    private static final String INITIAL_BUDGET_SET_DATE_KEY = "initialBudgetSetDateKey";
     private static final String CURRENCY_SYMBOL_KEY = "currencySymbolKey";
-    private static final String DATE_BUDGET_WAS_SET_KEY = "dateBudgetWasSetKey";
     private static final String MONTH_BUDGET_WAS_SET_KEY = "monthBudgetWasSetKey";
     private static final String YEAR_BUDGET_WAS_SET_KEY = "yearBudgetWasSetKey";
-    private static final String BALANCED_DAILY_BUDGET_KEY = "balancedDailyBudgetKey";
-    private static final String BALANCED_DAILY_BUDGET_MONTH_KEY = "balancedDailyBudgetMonthKey";
     private SharedPreferences settings;
     private double monthlyBudget = 0;
     private double dailyBudget = 0;
+    private double balance = 0;
     private Calendar c = Calendar.getInstance();
     private final Context context = this;
     DecimalFormat nf = new DecimalFormat("#.00");
 
-    List<String> listDataHeader;
-    HashMap<String, List<String>> listDataChild;
-    List<Expense> allExpenses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,9 +80,9 @@ public class MainActivity extends ActionBarActivity {
         if (!settings.contains(CURRENT_MONTHLY_BUDGET_KEY)) {
             startNormalBudgetPrompt();
 
-        //in case there was a budget before, but it was set in the previous month
-        //start a prompt asking for a decision whether the user wants to
-        //change it or keep the old one
+            //in case there was a budget before, but it was set in the previous month
+            //start a prompt asking for a decision whether the user wants to
+            //change it or keep the old one
         } else if ((settings.getInt(MONTH_BUDGET_WAS_SET_KEY, 1) > c.get(Calendar.MONTH)
                 || settings.getInt(YEAR_BUDGET_WAS_SET_KEY, 1) > c.get(Calendar.YEAR))) {
             startDecisionPrompt();
@@ -108,7 +95,6 @@ public class MainActivity extends ActionBarActivity {
 
             }
         });
-
 
         ExpenseDirectionButton = (Button) findViewById(R.id.ExpenseDirectionButton);
         DataDirectionButton = (Button) findViewById(R.id.DataDirectionButton);
@@ -147,10 +133,8 @@ public class MainActivity extends ActionBarActivity {
         dailyProgress.setMax(dailyBudget);
 
         if (spentThisMonth != 0) {
-
             monthlyProgress.updateProgress(spentThisMonth);
         }
-
         if (spentToday != 0) {
             dailyProgress.updateProgress(spentToday);
         }
@@ -216,13 +200,10 @@ public class MainActivity extends ActionBarActivity {
                         alertDialog.dismiss();
                         updateBalance();
                         updateProgressBars();
-
-
                     }
                 });
 
                 Button negativeButton = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
-
                 negativeButton.setOnClickListener(new View.OnClickListener() {
 
 
@@ -230,7 +211,6 @@ public class MainActivity extends ActionBarActivity {
                     public void onClick(View view) {
 
                         alertDialog.dismiss();
-
                     }
                 });
             }
@@ -274,13 +254,6 @@ public class MainActivity extends ActionBarActivity {
                                 monthlyBudget = Double.parseDouble(userInput.getText().toString());
                                 Budget.setCurrentMonthlyBudget(monthlyBudget, getApplicationContext());
 
-                                SharedPreferences.Editor editor = settings.edit();
-                                /*
-                                editor.putString(INITIAL_BUDGET_SET_DATE_KEY, c.get(Calendar.YEAR)
-                                        + c.get(Calendar.MONTH)
-                                        + "");
-                                        */
-
                                 alertDialog.dismiss();
 
                                 updateBalance();
@@ -307,8 +280,8 @@ public class MainActivity extends ActionBarActivity {
 
         final AlertDialog alertDialog = new AlertDialog.Builder(context)
                 .setView(promptsView)
-                .setPositiveButton("Change the budget", null)
-                .setNegativeButton("Keep the old budget", null)
+                .setPositiveButton("Yes", null)
+                .setNegativeButton("No", null)
                 .setCancelable(false)
                 .create();
 

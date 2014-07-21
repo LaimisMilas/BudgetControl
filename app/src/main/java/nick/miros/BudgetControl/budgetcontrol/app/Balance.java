@@ -44,7 +44,6 @@ public class Balance {
             accumulatedMoney = (c.get(Calendar.DAY_OF_MONTH) + 1 - dateBudgetWasSet) * Budget.getDailyBudget(context);
             expensesSoFar = datasource.getAllMonthlyExpenses();
             balance = accumulatedMoney - expensesSoFar;
-
             return balance;
         }
     }
