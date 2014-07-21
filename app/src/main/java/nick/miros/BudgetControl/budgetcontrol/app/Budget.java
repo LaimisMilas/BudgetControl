@@ -23,6 +23,7 @@ public class Budget {
     private static final String YEAR_BUDGET_WAS_SET_KEY = "yearBudgetWasSetKey";
     private static final String BALANCED_DAILY_BUDGET_KEY = "balancedDailyBudgetKey";
     private static final String BALANCED_DAILY_BUDGET_MONTH_KEY = "balancedDailyBudgetMonthKey";
+    private static DecimalFormat nf = new DecimalFormat("#.00");
 
     public static double getCurrentMonthlyBudget(Context context) {
         settings = context.getSharedPreferences(MY_PREFS_KEY, Context.MODE_PRIVATE);
@@ -57,10 +58,9 @@ public class Budget {
         int monthUpdated = settings.getInt(BALANCED_DAILY_BUDGET_MONTH_KEY, 0);
 
         if (monthUpdated == c.get(Calendar.MONTH)) {
-            return settings.getFloat(BALANCED_DAILY_BUDGET_KEY, 0);
+            return Double.parseDouble(nf.format(settings.getFloat(BALANCED_DAILY_BUDGET_KEY, 0)));
         }
         else {
-            DecimalFormat nf = new DecimalFormat("#.00");
             final int amountOfDays = c.getActualMaximum(Calendar.DAY_OF_MONTH);
             double dailyBudget = Double.parseDouble(nf.format(monthlyBudget / amountOfDays));
             return dailyBudget;
@@ -76,9 +76,10 @@ public class Budget {
 
         int amountOfDaysLeft = c.getActualMaximum(Calendar.DAY_OF_MONTH) - c.get(Calendar.DAY_OF_MONTH);
 
-        double balancedDailyBudget = (Budget.getCurrentMonthlyBudget(context)
+        double balancedDailyBudget = Double.parseDouble(
+                                     nf.format((Budget.getCurrentMonthlyBudget(context)
                                      - datasource.getAllMonthlyExpenses())
-                                     / amountOfDaysLeft;
+                                     / amountOfDaysLeft));
 
         settings = context.getSharedPreferences(MY_PREFS_KEY, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
