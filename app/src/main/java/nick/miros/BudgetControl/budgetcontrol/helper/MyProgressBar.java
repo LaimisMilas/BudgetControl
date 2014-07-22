@@ -85,10 +85,13 @@ public class MyProgressBar extends FrameLayout {
                           Currency.getCurrentCurrencyUsed(getContext()) +
                           max);
             ratio.setTextColor(Color.RED);
-            progressBarBackground.removeView(valueBar);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
+            layoutParams.weight = 0;
+            valueBar.setLayoutParams(layoutParams);
         }
         else {
 
+            ratio.setTextColor(Color.BLACK);
             ratio.setText(Currency.getCurrentCurrencyUsed(getContext())
                     + numberFormat.format(max - expenses)
                     + " / "
