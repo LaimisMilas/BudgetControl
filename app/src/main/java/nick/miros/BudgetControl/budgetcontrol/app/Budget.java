@@ -2,7 +2,6 @@ package nick.miros.BudgetControl.budgetcontrol.app;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.AvoidXfermode;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
@@ -22,7 +21,10 @@ public class Budget {
     private static final String MONTH_BUDGET_WAS_SET_KEY = "monthBudgetWasSetKey";
     private static final String YEAR_BUDGET_WAS_SET_KEY = "yearBudgetWasSetKey";
     private static final String BALANCED_DAILY_BUDGET_KEY = "balancedDailyBudgetKey";
-    private static final String BALANCED_DAILY_BUDGET_MONTH_KEY = "balancedDailyBudgetMonthKey";
+    private static final String YEAR_DAILY_BUDGET_WAS_BALANCED_KEY = "yearDailyBudgetWasBalancedKey";
+    private static final String MONTH_DAILY_BUDGET_WAS_BALANCED_KEY = "monthDailyBudgetWasBalancedKey";
+    private static final String DAY_DAILY_BUDGET_WAS_BALANCED_KEY = "dayDailyBudgetWasBalancedKey";
+    private static final String TIME_STAMP_DAILY_BUDGET_BALANCED_KEY = "timeStampDailyBudgetBalancedKey";
     private static DecimalFormat nf = new DecimalFormat("#.00");
 
     public static double getCurrentMonthlyBudget(Context context) {
@@ -55,11 +57,16 @@ public class Budget {
         Calendar c = Calendar.getInstance();
         double monthlyBudget = settings.getFloat(CURRENT_MONTHLY_BUDGET_KEY, 0);
 
-        int monthUpdated = settings.getInt(BALANCED_DAILY_BUDGET_MONTH_KEY, 0);
+        int monthBalanceUpdated = settings.getInt(MONTH_DAILY_BUDGET_WAS_BALANCED_KEY, 0);
+        int yearBalanceUpdated = settings.getInt(YEAR_DAILY_BUDGET_WAS_BALANCED_KEY, 0);
 
-        if (monthUpdated == c.get(Calendar.MONTH)) {
+        //ensure that the balanced daily budget from the previous month
+        //doesn't get transferred to the next month
+        if (monthBalanceUpdated == c.get(Calendar.MONTH) && (yearBalanceUpdated == c.get(Calendar.YEAR))) {
             return Double.parseDouble(nf.format(settings.getFloat(BALANCED_DAILY_BUDGET_KEY, 0)));
         }
+        //if there was no balancing of the budget this month
+        //get the normal daily budget
         else {
             final int amountOfDays = c.getActualMaximum(Calendar.DAY_OF_MONTH);
             double dailyBudget = Double.parseDouble(nf.format(monthlyBudget / amountOfDays));
@@ -85,10 +92,15 @@ public class Budget {
         SharedPreferences.Editor editor = settings.edit();
         editor.putFloat(BALANCED_DAILY_BUDGET_KEY, (float) balancedDailyBudget);
 
+        final int currentYear = c.get(Calendar.YEAR);
         final int currentMonth = c.get(Calendar.MONTH);
-        editor.putInt(BALANCED_DAILY_BUDGET_MONTH_KEY, currentMonth);
+        final int currentDay = c.get(Calendar.DAY_OF_MONTH);
+        final long currentSecond = c.getTimeInMillis() / 1000;
+        editor.putInt(YEAR_DAILY_BUDGET_WAS_BALANCED_KEY, currentYear);
+        editor.putInt(MONTH_DAILY_BUDGET_WAS_BALANCED_KEY, currentMonth);
+        editor.putInt(DAY_DAILY_BUDGET_WAS_BALANCED_KEY, currentDay);
+        editor.putLong(TIME_STAMP_DAILY_BUDGET_BALANCED_KEY, currentSecond);
         editor.commit();
-
     }
 
     public static int getBudgetSettingDate(Context context) {

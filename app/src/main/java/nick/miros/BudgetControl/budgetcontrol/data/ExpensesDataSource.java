@@ -21,6 +21,7 @@ public class ExpensesDataSource {
 	      MySQLiteHelper.COLUMN_DAY,
           MySQLiteHelper.COLUMN_MONTH,
           MySQLiteHelper.COLUMN_YEAR,
+          MySQLiteHelper.COLUMN_TIME_STAMP,
 	      MySQLiteHelper.COLUMN_AMOUNT,
 	      MySQLiteHelper.COLUMN_CATEGORY,
 	      MySQLiteHelper.COLUMN_DESCRIPTION,
@@ -31,6 +32,10 @@ public class ExpensesDataSource {
           MySQLiteHelper.COLUMN_YEAR,
           MySQLiteHelper.COLUMN_AMOUNT};
 
+      private String[] timeStampColumns = { MySQLiteHelper.COLUMN_TIME_STAMP,
+         MySQLiteHelper.COLUMN_AMOUNT
+      };
+
 	  public ExpensesDataSource(Context context) {
 	    dbHelper = new MySQLiteHelper(context);
 	  }
@@ -38,7 +43,6 @@ public class ExpensesDataSource {
 
 	  public void open() throws SQLException {
 	    database = dbHelper.getWritableDatabase();
-	    //database.execSQL("DROP TABLE IF EXISTS " + dbHelper.TABLE_EXPENSES);
 	  }
 
 	  public void close() {
@@ -50,6 +54,10 @@ public class ExpensesDataSource {
 	    values.put(MySQLiteHelper.COLUMN_DAY, day);
         values.put(MySQLiteHelper.COLUMN_MONTH, month);
         values.put(MySQLiteHelper.COLUMN_YEAR, year);
+
+        Calendar c = Calendar.getInstance();
+        final long currentSecond = c.getTimeInMillis() / 1000;
+        values.put(MySQLiteHelper.COLUMN_TIME_STAMP, currentSecond);
 	    values.put(MySQLiteHelper.COLUMN_AMOUNT, amount);
 	    values.put(MySQLiteHelper.COLUMN_CATEGORY, category);
 	    values.put(MySQLiteHelper.COLUMN_DESCRIPTION, description);
@@ -160,16 +168,35 @@ public class ExpensesDataSource {
           return expenses;
       }
 
+    public double getExpensesFromTimeStamp(long timeStamp) {
+
+        double expenses = 0;
+
+        Cursor cursor = database.query(MySQLiteHelper.TABLE_EXPENSES, timeStampColumns,
+                MySQLiteHelper.COLUMN_TIME_STAMP + " > " + timeStamp , null, null, null, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            expenses+=cursor.getDouble(1);
+            cursor.moveToNext();
+        }
+        //close the cursor
+        cursor.close();
+
+        return expenses;
+    }
+
 	  private Expense cursorToExpense(Cursor cursor) {
 		Expense expense = new Expense();
 	    expense.setId(cursor.getLong(0));
 	    expense.setDay(cursor.getInt(1));
         expense.setMonth(cursor.getInt(2));
         expense.setYear(cursor.getInt(3));
-	    expense.setAmount(cursor.getDouble(4));
-	    expense.setCategory(cursor.getString(5));
-	    expense.setDescription(cursor.getString(6));
-	    expense.setPaymentMethod(cursor.getString(7));
+        expense.setTimeStamp(cursor.getLong(4));
+	    expense.setAmount(cursor.getDouble(5));
+	    expense.setCategory(cursor.getString(6));
+	    expense.setDescription(cursor.getString(7));
+	    expense.setPaymentMethod(cursor.getString(8));
 	    return expense;
 	  }
 }

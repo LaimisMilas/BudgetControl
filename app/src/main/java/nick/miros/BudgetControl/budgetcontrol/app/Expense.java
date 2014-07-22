@@ -10,6 +10,7 @@ public class Expense {
     private int day;
     private int month;
     private int year;
+    private long timeStamp;
 	private double amount;
 	private String category;
 	private String description;
@@ -47,6 +48,12 @@ public class Expense {
         this.year = year;
     }
 
+    public long getTimeStamp() {
+    return timeStamp;}
+
+    public void setTimeStamp(long timeStamp) {
+        this.timeStamp = timeStamp;
+    }
 	public double getAmount() {
 		return amount;
 	}

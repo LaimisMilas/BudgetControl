@@ -12,6 +12,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	  public static final String COLUMN_DAY = "day";
       public static final String COLUMN_MONTH = "month";
       public static final String COLUMN_YEAR = "year";
+      public static final String COLUMN_TIME_STAMP="time_stamp";
 	  public static final String COLUMN_AMOUNT = "amount";
 	  public static final String COLUMN_CATEGORY = "category";
 	  public static final String COLUMN_DESCRIPTION = "description";
@@ -27,6 +28,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	      + TABLE_EXPENSES + " (" + COLUMN_ID
 	      + " integer primary key autoincrement, " + COLUMN_DAY
           + " integer not null, " + COLUMN_MONTH
+          + " integer not null, " + COLUMN_TIME_STAMP
           + " integer not null, " + COLUMN_YEAR
           + " integer not null, " + COLUMN_AMOUNT
 	      + " real not null, "  + COLUMN_CATEGORY
