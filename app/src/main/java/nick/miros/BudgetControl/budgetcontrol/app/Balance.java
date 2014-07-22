@@ -22,6 +22,7 @@ public class Balance {
     private static final String MONTH_DAILY_BUDGET_WAS_BALANCED_KEY = "monthDailyBudgetWasBalancedKey";
     private static final String DAY_DAILY_BUDGET_WAS_BALANCED_KEY = "dayDailyBudgetWasBalancedKey";
     private static final String TIME_STAMP_DAILY_BUDGET_BALANCED_KEY = "timeStampDailyBudgetBalancedKey";
+    private static final String TIME_STAMP_MONTHLY_BUDGET_SET_KEY = "timeStampMonthlyBudgetSetKey";
 
 
     public static double getBalance(Context context) {
@@ -33,8 +34,16 @@ public class Balance {
 
 
         //check whether the the daily budget was balanced this month
-        if ((settings.getInt(MONTH_DAILY_BUDGET_WAS_BALANCED_KEY, 0) == c.get(Calendar.MONTH)) &&
-                (settings.getInt(YEAR_DAILY_BUDGET_WAS_BALANCED_KEY, 0) == c.get(Calendar.YEAR))) {
+        //also check whether the it was balanced after the user might have
+        //set the new daily budget - if not, get the balanced daily budget
+
+        int monthDailyBudgetWasBalanced = settings.getInt(MONTH_DAILY_BUDGET_WAS_BALANCED_KEY, 0);
+        int yearDailyBudgetWasBalanced = settings.getInt(YEAR_DAILY_BUDGET_WAS_BALANCED_KEY, 0);
+        long timeStampDailyBudgetBalanced = settings.getLong(TIME_STAMP_DAILY_BUDGET_BALANCED_KEY, 0);
+        long timeStampMonthlyBudgetSet = settings.getLong(TIME_STAMP_MONTHLY_BUDGET_SET_KEY, 0);
+
+        if (((monthDailyBudgetWasBalanced == c.get(Calendar.MONTH)) && (yearDailyBudgetWasBalanced == c.get(Calendar.YEAR)))
+                && (timeStampDailyBudgetBalanced > timeStampMonthlyBudgetSet)) {
 
             accumulatedMoney = (c.get(Calendar.DAY_OF_MONTH)
                     - settings.getInt(DAY_DAILY_BUDGET_WAS_BALANCED_KEY, 0))

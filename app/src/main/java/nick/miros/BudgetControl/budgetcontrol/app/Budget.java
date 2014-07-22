@@ -25,6 +25,7 @@ public class Budget {
     private static final String MONTH_DAILY_BUDGET_WAS_BALANCED_KEY = "monthDailyBudgetWasBalancedKey";
     private static final String DAY_DAILY_BUDGET_WAS_BALANCED_KEY = "dayDailyBudgetWasBalancedKey";
     private static final String TIME_STAMP_DAILY_BUDGET_BALANCED_KEY = "timeStampDailyBudgetBalancedKey";
+    private static final String TIME_STAMP_MONTHLY_BUDGET_SET_KEY = "timeStampMonthlyBudgetSetKey";
     private static DecimalFormat nf = new DecimalFormat("#.00");
 
     public static double getCurrentMonthlyBudget(Context context) {
@@ -47,6 +48,7 @@ public class Budget {
         editor.putInt(DATE_BUDGET_WAS_SET_KEY, c.get(Calendar.DAY_OF_MONTH));
         editor.putInt(MONTH_BUDGET_WAS_SET_KEY, c.get(Calendar.MONTH));
         editor.putInt(YEAR_BUDGET_WAS_SET_KEY, c.get(Calendar.YEAR));
+        editor.putLong(TIME_STAMP_MONTHLY_BUDGET_SET_KEY, c.getTimeInMillis() / 1000);
 
         editor.commit();
     }
@@ -62,7 +64,9 @@ public class Budget {
 
         //ensure that the balanced daily budget from the previous month
         //doesn't get transferred to the next month
-        if (monthBalanceUpdated == c.get(Calendar.MONTH) && (yearBalanceUpdated == c.get(Calendar.YEAR))) {
+        if (monthBalanceUpdated == c.get(Calendar.MONTH) && (yearBalanceUpdated == c.get(Calendar.YEAR))
+           && (settings.getLong(TIME_STAMP_DAILY_BUDGET_BALANCED_KEY, 0) > settings.getLong(TIME_STAMP_MONTHLY_BUDGET_SET_KEY, 0))
+                 ) {
             return Double.parseDouble(nf.format(settings.getFloat(BALANCED_DAILY_BUDGET_KEY, 0)));
         }
         //if there was no balancing of the budget this month
