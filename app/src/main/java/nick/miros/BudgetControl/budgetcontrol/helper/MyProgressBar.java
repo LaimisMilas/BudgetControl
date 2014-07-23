@@ -38,7 +38,7 @@ public class MyProgressBar extends FrameLayout {
     LinearLayout valueBar;
     TextView ratio;
     double max;
-    DecimalFormat numberFormat = new DecimalFormat("#.00");
+    DecimalFormat numberFormat = new DecimalFormat("0.00");
 
     {
         progressBarBackground = new LinearLayout(getContext());
@@ -81,7 +81,7 @@ public class MyProgressBar extends FrameLayout {
         //and set zero as the bottom range
         if (fullCoeff <= 0) {
             ratio.setText(Currency.getCurrentCurrencyUsed(getContext()) +
-                          "0 / " +
+                          "0.00 / " +
                           Currency.getCurrentCurrencyUsed(getContext()) +
                           max);
             ratio.setTextColor(Color.RED);

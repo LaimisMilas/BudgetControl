@@ -67,7 +67,7 @@ public class MainActivity extends ActionBarActivity {
     private double balance = 0;
     private Calendar c = Calendar.getInstance();
     private final Context context = this;
-    DecimalFormat nf = new DecimalFormat("#.00");
+    DecimalFormat nf = new DecimalFormat("0.00");
 
 
     @Override

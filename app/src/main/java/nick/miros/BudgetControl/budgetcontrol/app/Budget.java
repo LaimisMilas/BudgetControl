@@ -26,7 +26,7 @@ public class Budget {
     private static final String DAY_DAILY_BUDGET_WAS_BALANCED_KEY = "dayDailyBudgetWasBalancedKey";
     private static final String TIME_STAMP_DAILY_BUDGET_BALANCED_KEY = "timeStampDailyBudgetBalancedKey";
     private static final String TIME_STAMP_MONTHLY_BUDGET_SET_KEY = "timeStampMonthlyBudgetSetKey";
-    private static DecimalFormat nf = new DecimalFormat("#.00");
+    private static DecimalFormat nf = new DecimalFormat("0.00");
 
     public static double getCurrentMonthlyBudget(Context context) {
         settings = context.getSharedPreferences(MY_PREFS_KEY, Context.MODE_PRIVATE);
