@@ -32,6 +32,9 @@ import nick.miros.BudgetControl.budgetcontrol.helper.DecimalDigits;
  * their monthly budget via an AlertDialog and the daily
  * budget will be recalculated appropriately.
  * <p/>
+ * The Activity also has a control for setting the currency
+ * that will be used throughout the whole application
+ * <p/>
  * The Activity also contains a button that sends the user
  * to another activity where the user chooses their preferred
  * currency.

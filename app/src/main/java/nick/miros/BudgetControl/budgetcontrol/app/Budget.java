@@ -9,7 +9,11 @@ import java.util.Calendar;
 import nick.miros.BudgetControl.budgetcontrol.data.ExpensesDataSource;
 
 /**
- * Created by admin on 7/5/2014.
+ * Class for setting and getting the daily and monthly budgets.
+ * The Class also contains a method for balancing the daily budget, so that the user
+ * doesn't overdraft the monthly budget in the long run.
+ * The Class has a method that resets the monthly budget setting date.
+ *
  */
 public class Budget {
 
@@ -53,6 +57,12 @@ public class Budget {
         editor.commit();
     }
 
+    /**
+     * Returns the daily budget. The daily budget might be balanced or not depending on the values
+     * stored in the keys.
+     * @param context current Application context
+     * @return current balance
+     */
     public static double getDailyBudget(Context context) {
         settings = context.getSharedPreferences(MY_PREFS_KEY, Context.MODE_PRIVATE);
 
@@ -65,8 +75,8 @@ public class Budget {
         //ensure that the balanced daily budget from the previous month
         //doesn't get transferred to the next month
         if (monthBalanceUpdated == c.get(Calendar.MONTH) && (yearBalanceUpdated == c.get(Calendar.YEAR))
-           && (settings.getLong(TIME_STAMP_DAILY_BUDGET_BALANCED_KEY, 0) > settings.getLong(TIME_STAMP_MONTHLY_BUDGET_SET_KEY, 0))
-                 ) {
+                && (settings.getLong(TIME_STAMP_DAILY_BUDGET_BALANCED_KEY, 0) > settings.getLong(TIME_STAMP_MONTHLY_BUDGET_SET_KEY, 0))
+                ) {
             return Double.parseDouble(nf.format(settings.getFloat(BALANCED_DAILY_BUDGET_KEY, 0)));
         }
         //if there was no balancing of the budget this month
@@ -78,6 +88,10 @@ public class Budget {
         }
     }
 
+    /**
+     * Makes the daily budget equal to the sum that will not overdraft the monthly budget at the
+     * end of the month if the user continues with such daily budget till the end of the month.
+     */
     public static void balanceDailyBudget(Context context) {
 
         datasource = new ExpensesDataSource(context);
@@ -88,9 +102,10 @@ public class Budget {
         int amountOfDaysLeft = c.getActualMaximum(Calendar.DAY_OF_MONTH) - c.get(Calendar.DAY_OF_MONTH);
 
         double balancedDailyBudget = Double.parseDouble(
-                                     nf.format((Budget.getCurrentMonthlyBudget(context)
-                                     - datasource.getAllMonthlyExpenses())
-                                     / amountOfDaysLeft));
+                nf.format((Budget.getCurrentMonthlyBudget(context)
+                        - datasource.getAllMonthlyExpenses())
+                        / amountOfDaysLeft)
+        );
 
         settings = context.getSharedPreferences(MY_PREFS_KEY, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
@@ -107,13 +122,9 @@ public class Budget {
         editor.commit();
     }
 
-    public static int getBudgetSettingDate(Context context) {
-
-        settings = context.getSharedPreferences(MY_PREFS_KEY, Context.MODE_PRIVATE);
-        return settings.getInt(DATE_BUDGET_WAS_SET_KEY, 1);
-
-    }
-
+    /**
+     * Makes the budget setting date the first day of the month by default
+     */
     public static void resetBudgetSettingDate(Context context) {
         settings = context.getSharedPreferences(MY_PREFS_KEY, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();

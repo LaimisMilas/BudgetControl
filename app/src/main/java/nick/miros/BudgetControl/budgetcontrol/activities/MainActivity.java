@@ -1,5 +1,6 @@
 package nick.miros.BudgetControl.budgetcontrol.activities;
 
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -28,6 +29,23 @@ import nick.miros.BudgetControl.budgetcontrol.data.ExpensesDataSource;
 import nick.miros.BudgetControl.budgetcontrol.helper.DecimalDigits;
 import nick.miros.BudgetControl.budgetcontrol.helper.MyProgressBar;
 
+/**
+ * The main start-up Activity of the application
+ * <p/>
+ * The Activity is responsible for updating the balance view,
+ * both of the daily budget and the monthly budget progress bars.
+ * The Activity also has buttons for going to other activities of
+ * the application.
+ * <p/>
+ * The Activity shows the prompts and alerts on start-up depending
+ * what data the user has entered in the previous and starts an initial
+ * prompt for currency and monthly budget in case such data is not found.
+ * <p/>
+ * The Activity implements warning buttons for the balance and
+ * the monthly budget in case of overdraft. In case they are clicked
+ * the activity will start prompts that advise the user for further
+ * steps in order to stay on track with their initial monthly budget.
+ */
 public class MainActivity extends ActionBarActivity {
     View.OnClickListener mainActivityListener = new View.OnClickListener() {
         public void onClick(View v) {
@@ -115,6 +133,7 @@ public class MainActivity extends ActionBarActivity {
                 startRaiseMonthlyBudgetPrompt();
             }
         });
+
         balanceInfoButton = (ImageButton) findViewById(R.id.balanceInfoIcon);
         balanceInfoButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -146,6 +165,11 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+    /**
+     * Updates the monthly and daily progress bars
+     * and set the monthly budget overdraft button
+     * in case the monthly budget gets overdrafted
+     */
     public void updateProgressBars() {
         dailyProgressBar = (MyProgressBar) findViewById(R.id.dailyProgressBar);
         monthlyProgressBar = (MyProgressBar) findViewById(R.id.monthlyProgressBar);
@@ -175,6 +199,11 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+    /**
+     * Updates the balance view
+     * sets - or + sign depending on the value
+     * hides or shows the balance overdraft button
+     */
     public void updateBalance() {
         balanceView = (TextView) findViewById(R.id.balance);
         balanceOverdraftButton.setVisibility(View.GONE);
@@ -195,8 +224,7 @@ public class MainActivity extends ActionBarActivity {
             balanceView.setText("-" + Currency.getCurrentCurrencyUsed(getApplicationContext())
                     + nf.format(Math.abs(balance))
                     + "");
-        }
-        else {
+        } else {
             balanceOverdraftButton.setVisibility(View.GONE);
             balanceView.setText("-" + Currency.getCurrentCurrencyUsed(getApplicationContext())
                     + nf.format(Math.abs(balance))
@@ -206,6 +234,12 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+    /**
+     * Shows a prompt where the user is asked whether
+     * they want to recalculate (shrink) their daily budget
+     * so that they don't overdraft the monthly budget by
+     * the end of the month
+     */
     public void startRecountBudgetPrompt() {
         LayoutInflater li = LayoutInflater.from(context);
         View promptsView = li.inflate(R.layout.alert_recount_budget_prompt, null);
@@ -252,6 +286,10 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+    /**
+     * Shows a non-cancelable prompt that asks the user for their
+     * new monthly budget.
+     */
     public void startNormalBudgetPrompt() {
         LayoutInflater li = LayoutInflater.from(context);
         View promptsView = li.inflate(R.layout.alert_budget_prompt, null);
@@ -294,8 +332,8 @@ public class MainActivity extends ActionBarActivity {
                         }
 
                         userInput.setError("Your budget should be at least "
-                                               + Currency.getCurrentCurrencyUsed(getApplicationContext())
-                                               + "100");
+                                + Currency.getCurrentCurrencyUsed(getApplicationContext())
+                                + "100");
 
                     }
                 });
@@ -305,6 +343,11 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+    /**
+     * Shows a non-cancelable prompt where the user must choose
+     * whether they want to keep a budget from the previous month
+     * or set a new one.
+     */
     public void startDecisionPrompt() {
         LayoutInflater li = LayoutInflater.from(context);
         View promptsView = li.inflate(R.layout.alert_decision_prompt, null);
@@ -356,6 +399,10 @@ public class MainActivity extends ActionBarActivity {
         editor.commit();
     }
 
+    /**
+     * Shows an alert dialog with an explanation for how the balance
+     * is set up and the actual values that make up the balance
+     */
     public void startBalanceInfoAlert() {
         LayoutInflater li = LayoutInflater.from(context);
         View promptsView = li.inflate(R.layout.alert_balance_info, null);
@@ -371,14 +418,13 @@ public class MainActivity extends ActionBarActivity {
 
         TextView explanationTextView = (TextView) promptsView.findViewById(R.id.explanationText);
         explanationTextView.setText("The balance shows whether you're on track with your budget or not. Positive balance means you are saving money, negative means that you are losing money. The formula for the balance: " +
-                                    + c.get(Calendar.DAY_OF_MONTH) + " (days passed since the start of the month) * "
-                                    + Currency.getCurrentCurrencyUsed(getApplicationContext())
-                                    + dailyBudget + " (your daily budget) - "
-                                    + Currency.getCurrentCurrencyUsed(getApplicationContext())
-                                    + monthlyExpenses + " (all your expenses for the month) = "
-                                    + Currency.getCurrentCurrencyUsed(getApplicationContext())
-                                    + nf.format(currentBalance));
-
+                +c.get(Calendar.DAY_OF_MONTH) + " (days passed since the start of the month) * "
+                + Currency.getCurrentCurrencyUsed(getApplicationContext())
+                + dailyBudget + " (your daily budget) - "
+                + Currency.getCurrentCurrencyUsed(getApplicationContext())
+                + monthlyExpenses + " (all your expenses for the month) = "
+                + Currency.getCurrentCurrencyUsed(getApplicationContext())
+                + nf.format(currentBalance));
 
 
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
@@ -401,6 +447,10 @@ public class MainActivity extends ActionBarActivity {
         alertDialog.show();
     }
 
+    /**
+     * Shows a prompt that asks the user whether they want to raise their
+     * monthly budget, because they overdrafted the current one.
+     */
     public void startRaiseMonthlyBudgetPrompt() {
         LayoutInflater li = LayoutInflater.from(context);
         View promptsView = li.inflate(R.layout.alert_monthly_budget_overdraft, null);
