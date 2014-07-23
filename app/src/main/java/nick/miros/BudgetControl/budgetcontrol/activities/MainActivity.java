@@ -50,8 +50,9 @@ public class MainActivity extends ActionBarActivity {
     private Button ExpenseDirectionButton;
     private Button DataDirectionButton;
     private Button BudgetDirectionButton;
-    private ImageButton overdraftWarningButton;
+    private ImageButton balanceOverdraftButton;
     private ImageButton balanceInfoButton;
+    private ImageButton monthlyBudgetOverdraftButton;
     private MyProgressBar monthlyProgressBar;
     private MyProgressBar dailyProgressBar;
     private ExpensesDataSource datasource;
@@ -67,7 +68,7 @@ public class MainActivity extends ActionBarActivity {
     private double balance = 0;
     private Calendar c = Calendar.getInstance();
     private final Context context = this;
-    DecimalFormat nf = new DecimalFormat("0.00");
+    private DecimalFormat nf = new DecimalFormat("0.00");
 
 
     @Override
@@ -92,10 +93,19 @@ public class MainActivity extends ActionBarActivity {
             startDecisionPrompt();
         }
 
-        overdraftWarningButton = (ImageButton) findViewById(R.id.overdraftWarningIcon);
-        overdraftWarningButton.setOnClickListener(new View.OnClickListener() {
+        //set the onClickListener to the balanceOverDraftButton
+        balanceOverdraftButton = (ImageButton) findViewById(R.id.balanceOverdraftIcon);
+        balanceOverdraftButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startRecountBudgetPrompt();
+            }
+        });
+
+        //set the onClickListener to the monthlyBudgetOverdraftButton
+        monthlyBudgetOverdraftButton = (ImageButton) findViewById(R.id.monthlyBudgetOverdraftIcon);
+        monthlyBudgetOverdraftButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startRaiseMonthlyBudgetPrompt();
             }
         });
         balanceInfoButton = (ImageButton) findViewById(R.id.balanceInfoIcon);
@@ -132,6 +142,7 @@ public class MainActivity extends ActionBarActivity {
     public void updateProgressBars() {
         dailyProgressBar = (MyProgressBar) findViewById(R.id.dailyProgressBar);
         monthlyProgressBar = (MyProgressBar) findViewById(R.id.monthlyProgressBar);
+        monthlyBudgetOverdraftButton.setVisibility(View.GONE);
 
         double spentToday = datasource.getAllTodayExpenses();
         double spentThisMonth = datasource.getAllMonthlyExpenses();
@@ -144,6 +155,12 @@ public class MainActivity extends ActionBarActivity {
 
         if (spentThisMonth != 0) {
             monthlyProgressBar.updateProgress(spentThisMonth);
+
+            //in case the user overdrafts their monthly budget
+            //show them the monthlyBudgetOverdraftButton
+            if (spentThisMonth > monthlyBudget) {
+                monthlyBudgetOverdraftButton.setVisibility(View.VISIBLE);
+            }
         }
         if (spentToday != 0) {
             dailyProgressBar.updateProgress(spentToday);
@@ -153,17 +170,21 @@ public class MainActivity extends ActionBarActivity {
 
     public void updateBalance() {
         balanceView = (TextView) findViewById(R.id.balance);
-        overdraftWarningButton.setVisibility(View.GONE);
+        balanceOverdraftButton.setVisibility(View.GONE);
 
         balance = Balance.getBalance(getApplicationContext());
         balanceView.setText(Currency.getCurrentCurrencyUsed(getApplicationContext())
                 + nf.format(balance)
                 + "");
 
+        //don't show the button in case the balance is positive
         if (balance >= 0) {
-            overdraftWarningButton.setVisibility(View.GONE);
-        } else {
-            overdraftWarningButton.setVisibility(View.VISIBLE);
+            balanceOverdraftButton.setVisibility(View.GONE);
+        }
+        //show the overdraft button but only in case all of the monthly expenses
+        //are not bigger than the total monthly budget
+        else if (Budget.getCurrentMonthlyBudget(getApplicationContext()) > datasource.getAllMonthlyExpenses()) {
+            balanceOverdraftButton.setVisibility(View.VISIBLE);
         }
 
 
@@ -347,6 +368,55 @@ public class MainActivity extends ActionBarActivity {
             }
         });
         alertDialog.show();
+    }
+
+    public void startRaiseMonthlyBudgetPrompt() {
+        LayoutInflater li = LayoutInflater.from(context);
+        View promptsView = li.inflate(R.layout.alert_monthly_budget_overdraft, null);
+
+        final AlertDialog alertDialog = new AlertDialog.Builder(context)
+                .setView(promptsView)
+                .setPositiveButton("Yes", null)
+                .setNegativeButton("No", null)
+                .setCancelable(false)
+                .create();
+
+        TextView textView = (TextView) promptsView.findViewById(R.id.monthlyBudgetOverdraftText);
+        textView.setText("Looks like your budget of "
+                + Currency.getCurrentCurrencyUsed(getApplicationContext())
+                + Budget.getCurrentMonthlyBudget(getApplicationContext())
+                + " doesn't seem to fit your needs. Your budget should be at least "
+                + datasource.getAllMonthlyExpenses()
+                + " + the amount you need for the rest of the month. Do you wish to raise your monthly budget?");
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
+            @Override
+            public void onShow(DialogInterface dialog) {
+
+                Button positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+
+                positiveButton.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        alertDialog.dismiss();
+                        startNormalBudgetPrompt();
+                    }
+                });
+
+                Button negativeButton = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+
+                negativeButton.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        alertDialog.dismiss();
+                    }
+                });
+            }
+        });
+        alertDialog.show();
+
     }
 
 

@@ -19,12 +19,12 @@
         android:orientation="horizontal">
 
         <ImageButton
-            style="?android:attr/borderlessButtonStyle"
             android:id="@+id/balanceInfoIcon"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="40dip"
             android:layout_height="28dip"
             android:scaleType="fitXY"
-            android:src="@drawable/info_icon"/>
+            android:src="@drawable/info_icon" />
 
         <TextView
             android:id="@+id/balance"
@@ -34,12 +34,12 @@
             android:textSize="15sp" />
 
         <ImageButton
+            android:id="@+id/balanceOverdraftIcon"
             style="?android:attr/borderlessButtonStyle"
-            android:id="@+id/overdraftWarningIcon"
             android:layout_width="40dip"
             android:layout_height="28dip"
             android:scaleType="fitXY"
-            android:src="@drawable/warning"/>
+            android:src="@drawable/warning" />
 
 
     </LinearLayout>
@@ -59,12 +59,29 @@
         android:maxHeight="30dp"
         android:minHeight="30dp" />
 
-    <TextView
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="@string/monthly_budget_text"
-        android:textSize="15sp" />
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/monthly_budget_text"
+            android:textSize="15sp" />
+
+        <ImageButton
+            android:id="@+id/monthlyBudgetOverdraftIcon"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="40dip"
+            android:layout_height="28dip"
+            android:scaleType="fitXY"
+            android:src="@drawable/warning" />
+
+
+    </LinearLayout>
 
     <nick.miros.BudgetControl.budgetcontrol.helper.MyProgressBar
         android:id="@+id/monthlyProgressBar"
