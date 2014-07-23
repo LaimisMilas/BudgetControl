@@ -180,18 +180,27 @@ public class MainActivity extends ActionBarActivity {
         balanceOverdraftButton.setVisibility(View.GONE);
 
         balance = Balance.getBalance(getApplicationContext());
-        balanceView.setText(Currency.getCurrentCurrencyUsed(getApplicationContext())
-                + nf.format(balance)
-                + "");
 
         //don't show the button in case the balance is positive
         if (balance >= 0) {
             balanceOverdraftButton.setVisibility(View.GONE);
+            balanceView.setText("+" + Currency.getCurrentCurrencyUsed(getApplicationContext())
+                    + nf.format(balance)
+                    + "");
         }
         //show the overdraft button but only in case all of the monthly expenses
         //are not bigger than the total monthly budget
         else if (Budget.getCurrentMonthlyBudget(getApplicationContext()) > datasource.getAllMonthlyExpenses()) {
             balanceOverdraftButton.setVisibility(View.VISIBLE);
+            balanceView.setText("-" + Currency.getCurrentCurrencyUsed(getApplicationContext())
+                    + nf.format(Math.abs(balance))
+                    + "");
+        }
+        else {
+            balanceOverdraftButton.setVisibility(View.GONE);
+            balanceView.setText("-" + Currency.getCurrentCurrencyUsed(getApplicationContext())
+                    + nf.format(Math.abs(balance))
+                    + "");
         }
 
 
