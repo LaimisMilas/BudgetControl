@@ -89,78 +89,91 @@ public class BudgetSettingsActivity extends Activity {
 
         budgetEditButton.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View arg0) {
+                                                @Override
+                                                public void onClick(View arg0) {
 
-                LayoutInflater li = LayoutInflater.from(context);
-                View promptsView = li.inflate(R.layout.alert_budget_prompt, null);
+                                                    LayoutInflater li = LayoutInflater.from(context);
+                                                    View promptsView = li.inflate(R.layout.alert_budget_prompt, null);
 
-                final AlertDialog alertDialog = new AlertDialog.Builder(context)
-                        .setView(promptsView)
-                        .setPositiveButton("OK", null)
-                        .setNegativeButton("Cancel", null)
-                        .create();
+                                                    final AlertDialog alertDialog = new AlertDialog.Builder(context)
+                                                            .setView(promptsView)
+                                                            .setPositiveButton("OK", null)
+                                                            .setNegativeButton("Cancel", null)
+                                                            .create();
 
-                final EditText userInput = (EditText) promptsView
-                        .findViewById(R.id.editTextDialogUserInput);
+                                                    final EditText userInput = (EditText) promptsView
+                                                            .findViewById(R.id.editTextDialogUserInput);
 
-                userInput.setFilters(new InputFilter[]{new DecimalDigits()});
+                                                    userInput.setFilters(new InputFilter[]{new DecimalDigits()});
 
-                alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                                                    alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
 
-                    @Override
-                    public void onShow(DialogInterface dialog) {
+                                                                                      @Override
+                                                                                      public void onShow(DialogInterface dialog) {
 
-                        Button positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                                                                                          Button positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
 
-                        positiveButton.setOnClickListener(new View.OnClickListener() {
+                                                                                          positiveButton.setOnClickListener(new View.OnClickListener() {
 
-                            @Override
-                            public void onClick(View view) {
-                                //check if the input has something
-                                if (userInput.getText().toString().length() > 0) {
-                                    //checks whether the input is just a dot
-                                    if (DecimalDigits.isValidInput(userInput)) {
+                                                                                                                                @Override
+                                                                                                                                public void onClick(View view) {
+                                                                                                                                    if (userInput.getText().toString().length() > 2) {
+                                                                                                                                        if (Double.parseDouble(userInput.getText().toString()) > 100) {
+                                                                                                                                            //apply the monthly budget to the monthly view
+                                                                                                                                            monthlyBudgetView.setText(Currency.getCurrentCurrencyUsed(getApplicationContext())
+                                                                                                                                                    + userInput.getText());
 
-                                        //apply the monthly budget to the monthly view
-                                        monthlyBudgetView.setText(Currency.getCurrentCurrencyUsed(getApplicationContext())
-                                                + userInput.getText());
+                                                                                                                                            //save the monthly budget value
+                                                                                                                                            monthlyBudget = Double.parseDouble(userInput.getText().toString());
+                                                                                                                                            Budget.setCurrentMonthlyBudget(monthlyBudget, getApplicationContext());
 
-                                        //save the monthly budget value
-                                        monthlyBudget = Double.parseDouble(userInput.getText().toString());
-                                        Budget.setCurrentMonthlyBudget(monthlyBudget, getApplicationContext());
+                                                                                                                                            //sets the text for the dailyBudgetView textview
+                                                                                                                                            dailyBudgetView.setText(Currency.getCurrentCurrencyUsed(getApplicationContext())
+                                                                                                                                                    + Budget.getDailyBudget(getApplicationContext()) + "");
+                                                                                                                                            alertDialog.dismiss();
+                                                                                                                                        }
+                                                                                                                                    }
 
-                                        //sets the text for the dailyBudgetView textview
-                                        dailyBudgetView.setText(Currency.getCurrentCurrencyUsed(getApplicationContext())
-                                                + Budget.getDailyBudget(getApplicationContext()) + "");
-                                        alertDialog.dismiss();
-                                    }
-                                }
-                            }
-                        });
-                    }
-                });
+                                                                                                                                    userInput.setError("Your budget should be at least "
+                                                                                                                                            + Currency.getCurrentCurrencyUsed(getApplicationContext())
+                                                                                                                                            + "100");
+                                                                                                                                }
+                                                                                                                            }
+                                                                                          );
+                                                                                      }
+                                                                                  }
+                                                    );
 
-                alertDialog.show();
+                                                    alertDialog.show();
 
-            }
-        });
+                                                }
+                                            }
+        );
 
-        currencyEditButton = (ImageButton) findViewById(R.id.EditCurrencyButton);
-        currencyEditButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+        currencyEditButton = (ImageButton)
 
-                //start the CurrencyListActivity
-                Intent intent = new Intent(v.getContext(), CurrencyListActivity.class);
-                //startActivityForResult(intent, currencyRequestCode);
-                startActivity(intent);
-            }
-        });
+                findViewById(R.id.EditCurrencyButton);
 
-        currentCurrencyView = (TextView) findViewById(R.id.currentCurrency);
+        currencyEditButton.setOnClickListener(new View.OnClickListener()
+
+                                              {
+                                                  public void onClick(View v) {
+
+                                                      //start the CurrencyListActivity
+                                                      Intent intent = new Intent(v.getContext(), CurrencyListActivity.class);
+                                                      //startActivityForResult(intent, currencyRequestCode);
+                                                      startActivity(intent);
+                                                  }
+                                              }
+        );
+
+        currentCurrencyView = (TextView)
+
+                findViewById(R.id.currentCurrency);
+
         currentCurrencyView.setText(settings.getString(CURRENCY_NAME_KEY, "")
-                    + " "
-                    + settings.getString(CURRENCY_SYMBOL_KEY, ""));
+                + " "
+                + settings.getString(CURRENCY_SYMBOL_KEY, ""));
     }
 
     @Override

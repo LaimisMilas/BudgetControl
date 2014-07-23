@@ -78,6 +78,13 @@ public class MainActivity extends ActionBarActivity {
 
         settings = getSharedPreferences(MY_PREFS_KEY, Context.MODE_PRIVATE);
 
+        //if there was no currency chosen before - start this prompt first
+        if (!settings.contains(CURRENCY_SYMBOL_KEY)) {
+
+            Intent intent = new Intent(getApplicationContext(), CurrencyListActivity.class);
+            startActivity(intent);
+        }
+
         //if there was no budget before - start a normal budget prompt
         if (!settings.contains(CURRENT_MONTHLY_BUDGET_KEY)) {
             startNormalBudgetPrompt();
@@ -263,10 +270,8 @@ public class MainActivity extends ActionBarActivity {
                     @Override
                     public void onClick(View view) {
                         //check if the input has something
-                        if (userInput.getText().toString().length() > 0) {
-                            //checks whether the input is just a dot
-                            if (DecimalDigits.isValidInput(userInput)) {
-
+                        if (userInput.getText().toString().length() > 2) {
+                            if (Double.parseDouble(userInput.getText().toString()) > 100) {
                                 //save the monthly budget value
                                 monthlyBudget = Double.parseDouble(userInput.getText().toString());
                                 Budget.setCurrentMonthlyBudget(monthlyBudget, getApplicationContext());
@@ -276,13 +281,13 @@ public class MainActivity extends ActionBarActivity {
                                 updateBalance();
                                 updateProgressBars();
 
-                                if (!settings.contains(CURRENCY_SYMBOL_KEY)) {
-
-                                    Intent intent = new Intent(getApplicationContext(), CurrencyListActivity.class);
-                                    startActivity(intent);
-                                }
                             }
                         }
+
+                        userInput.setError("Your budget should be at least "
+                                               + Currency.getCurrentCurrencyUsed(getApplicationContext())
+                                               + "100");
+
                     }
                 });
             }
