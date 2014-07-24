@@ -4,6 +4,7 @@ package nick.miros.BudgetControl.budgetcontrol.activities;
  * Created by mymi on 18-Jul-14.
  */
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import android.app.Activity;
@@ -34,7 +35,7 @@ public class ExpandableExpenseActivity extends Activity {
         expListView = (ExpandableListView) findViewById(R.id.lvExp);
 
         // preparing list data
-       // prepareListData();
+        //prepareListData();
 
        //listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
 
@@ -45,12 +46,13 @@ public class ExpandableExpenseActivity extends Activity {
     /*
      * Preparing the list data
      */
-    private void prepareListData1() {
+    private void prepareListData() {
 
 
         listDataHeader = new ArrayList<String>();
 
         allExpenses = datasource.getAllExpenses();
+        Collections.sort(allExpenses);
         List<List<Expense>> expensesSortedByDates = new ArrayList<List<Expense>>();
         int i = 1;
         int j = 0;
@@ -78,21 +80,12 @@ public class ExpandableExpenseActivity extends Activity {
             i++;
         }
 
-        Log.e("Lists!", expensesSortedByDates.toString());
-        Log.e("Lists!", expensesSortedByDates.toString());
-        Log.e("Lists!", expensesSortedByDates.toString());
-        Log.e("Lists!", expensesSortedByDates.toString());
-        Log.e("Lists!", expensesSortedByDates.toString());
-        Log.e("Lists!", expensesSortedByDates.toString());
-        Log.e("Lists!", expensesSortedByDates.toString());
-        Log.e("Lists!", expensesSortedByDates.toString());
-        Log.e("Lists!", expensesSortedByDates.toString());
-
 
         //listDataHeader = new ArrayList<String>();
         //listDataChild = new HashMap<String, List<String>>();
         //listDataChild = new HashMap<String, List<Expense>>();
 
+        /*
         // Adding child data
         listDataHeader.add("Top 250");
         listDataHeader.add("Now Showing");
@@ -129,6 +122,7 @@ public class ExpandableExpenseActivity extends Activity {
         listDataChild.put(listDataHeader.get(0), top250); // Header, Child data
         listDataChild.put(listDataHeader.get(1), nowShowing);
         listDataChild.put(listDataHeader.get(2), comingSoon);
+        */
 
     }
 }

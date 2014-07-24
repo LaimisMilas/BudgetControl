@@ -1,6 +1,6 @@
 package nick.miros.BudgetControl.budgetcontrol.app;
 
-public class Expense {
+public class Expense implements Comparable<Expense>{
 
     /**
      * Expense class with setters and getters for the fields
@@ -86,9 +86,58 @@ public class Expense {
 		this.paymentMethod = paymentMethod;
 	}
 
-
 	@Override
 	public String toString() {
 		return month + "/" + day + "/" + year + " " + amount + " " + category + " " + description + " " + paymentMethod;
 	}
+
+    public int compareTo(Expense compareExpense) {
+
+        String compareDay;
+        String compareMonth;
+
+        if (compareExpense.getDay() < 10) {
+            compareDay = "0" + compareExpense.getDay();
+        }
+        else {
+            compareDay = compareExpense.getDay() + "";
+        }
+
+        if (compareExpense.getMonth() < 10) {
+            compareMonth = "0" + compareExpense.getMonth();
+        }
+        else {
+            compareMonth = compareExpense.getMonth() + "";
+        }
+        String compareYear = compareExpense.getYear() + "";
+
+        int compareFullDate = Integer.parseInt(compareYear + compareMonth + compareDay);
+
+        String thisDay;
+        String thisMonth;
+
+        if (compareExpense.getDay() < 10) {
+            thisDay = "0" + this.getDay();
+        }
+        else {
+            thisDay = this.getDay() + "";
+        }
+
+        if (compareExpense.getMonth() < 10) {
+            thisMonth = "0" + this.getMonth();
+        }
+        else {
+            thisMonth = this.getMonth() + "";
+        }
+        String thisYear = this.getYear() + "";
+
+        int thisFullDate = Integer.parseInt(thisYear + thisMonth + thisDay);
+
+        //ascending order
+        //return  thisFullDate - compareFullDate;
+
+        //descending order
+        return compareFullDate - thisFullDate;
+
+    }
 }
