@@ -3,7 +3,7 @@ package nick.miros.BudgetControl.budgetcontrol.app;
 public class Expense {
 
     /**
-     * Class for setting and getting expenses
+     * Expense class with setters and getters for the fields
      */
 
 	private long id;

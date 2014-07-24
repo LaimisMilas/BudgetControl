@@ -166,8 +166,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     * Updates the monthly and daily progress bars
-     * and set the monthly budget overdraft button
+     * Updates the monthly and daily progress bars and sets the monthly budget overdraft button
      * in case the monthly budget gets overdrafted
      */
     public void updateProgressBars() {
@@ -200,9 +199,8 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     * Updates the balance view
-     * sets - or + sign depending on the value
-     * hides or shows the balance overdraft button
+     * Updates the balance view. Sets - or + sign depending on the value.
+     * Hides or shows the balance overdraft button.
      */
     public void updateBalance() {
         balanceView = (TextView) findViewById(R.id.balance);
@@ -235,10 +233,8 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     * Shows a prompt where the user is asked whether
-     * they want to recalculate (shrink) their daily budget
-     * so that they don't overdraft the monthly budget by
-     * the end of the month
+     * Shows a prompt where the user is asked whether they want to recalculate (shrink)
+     * their daily budget so that they don't overdraft the monthly budget by the end of the month.
      */
     public void startRecountBudgetPrompt() {
         LayoutInflater li = LayoutInflater.from(context);
@@ -287,8 +283,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     * Shows a non-cancelable prompt that asks the user for their
-     * new monthly budget.
+     * Shows a non-cancelable prompt that asks the user for their new monthly budget.
      */
     public void startNormalBudgetPrompt() {
         LayoutInflater li = LayoutInflater.from(context);
@@ -344,9 +339,8 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     * Shows a non-cancelable prompt where the user must choose
-     * whether they want to keep a budget from the previous month
-     * or set a new one.
+     * Shows a non-cancelable prompt where the user must choose whether they want to keep a budget
+     * from the previous month or set a new one.
      */
     public void startDecisionPrompt() {
         LayoutInflater li = LayoutInflater.from(context);
@@ -400,8 +394,8 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     * Shows an alert dialog with an explanation for how the balance
-     * is set up and the actual values that make up the balance
+     * Shows an alert dialog with an explanation for how the balance is set up and the actual
+     * values that make up the balance.
      */
     public void startBalanceInfoAlert() {
         LayoutInflater li = LayoutInflater.from(context);
@@ -448,8 +442,8 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     * Shows a prompt that asks the user whether they want to raise their
-     * monthly budget, because they overdrafted the current one.
+     * Shows a prompt that asks the user whether they want to raise their monthly budget, because
+     * they overdrafted the current one.
      */
     public void startRaiseMonthlyBudgetPrompt() {
         LayoutInflater li = LayoutInflater.from(context);

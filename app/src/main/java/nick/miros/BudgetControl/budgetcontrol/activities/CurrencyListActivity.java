@@ -2,7 +2,6 @@ package nick.miros.BudgetControl.budgetcontrol.activities;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -27,6 +26,9 @@ import nick.miros.BudgetControl.budgetcontrol.helper.CurrencyAdapter;
  * An Activity that contains a listview where the user chooses
  * their preferred currency. The Activity contains a filter that
  * sorts the list according to the user input.
+ * <p/>
+ * The Activity extracts the needed currencies by going through 2
+ * .txt files with world currency names and their countries of origin
  */
 
 public class CurrencyListActivity extends Activity {
@@ -36,14 +38,9 @@ public class CurrencyListActivity extends Activity {
     private ArrayList<String> currencyNames = new ArrayList<String>();
     private ArrayList<String> currencySymbols = new ArrayList<String>();
     private ArrayList<Currency> currencies = new ArrayList<Currency>();
-    private final String nameIdentifier = "currencyName";
-    private final String symbolIdentifier = "currencySymbol";
     private CurrencyAdapter adapter;
-    private final int currencyRequestCode = 1;
     private final String MY_PREFS_KEY = "myPrefsKey";
     private SharedPreferences settings;
-    private final String CURRENCY_SYMBOL_KEY = "currencySymbolKey";
-    private final String CURRENCY_NAME_KEY = "currencyNameKey";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +48,6 @@ public class CurrencyListActivity extends Activity {
         setContentView(R.layout.activity_currency_list);
 
         settings = getSharedPreferences(MY_PREFS_KEY, Context.MODE_PRIVATE);
-
         listView = (ListView) findViewById(R.id.list);
 
         //extract the needed Strings from currency files
@@ -80,12 +76,11 @@ public class CurrencyListActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
-
                 Currency currency = (Currency) parent.getItemAtPosition(position);
 
                 Currency.setCurrentCurrencyUsed(currency.getName(),
-                                                currency.getSymbol(),
-                                                getApplicationContext());
+                        currency.getSymbol(),
+                        getApplicationContext());
                 finish();
 
 
@@ -95,6 +90,8 @@ public class CurrencyListActivity extends Activity {
 
         inputSearch = (EditText) findViewById(R.id.inputSearch);
 
+        //attach a listener that will sort through
+        //the list of expenses depending on the input
         inputSearch.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -122,13 +119,14 @@ public class CurrencyListActivity extends Activity {
 
     }
 
+    //don't allow the user to back-out from the activity
+    //this is needed in the initial app start-up
     @Override
     public void onBackPressed() {
     }
 
     /**
-     * Extracts text line by line from a file specified
-     * and puts it into an array of Strings
+     * Extracts text line by line from a file specified and puts it into an array of Strings.
      *
      * @param fileId id of a txt file that is to be parsed
      * @return an array of Strings that were extracted from the file

@@ -10,36 +10,39 @@ import nick.miros.BudgetControl.budgetcontrol.app.Expense;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
 import nick.miros.BudgetControl.budgetcontrol.data.ExpensesDataSource;
 
+/**
+ * An Activity for showing the list of all of the Expenses
+ */
 public class ExpenseListActivity extends ListActivity {
-	private ExpensesDataSource datasource;
+    private ExpensesDataSource datasource;
 
-	 public void onCreate(Bundle savedInstanceState) {
-		    super.onCreate(savedInstanceState);
-		    setContentView(R.layout.activity_expense_list);
-		    
-		    datasource = new ExpensesDataSource(this);
-		    datasource.open();
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_expense_list);
 
-		    List<Expense> values = datasource.getAllExpenses();
+        datasource = new ExpensesDataSource(this);
+        datasource.open();
 
-		    // use the SimpleCursorAdapter to show the
-		    // elements in a ListView
-		    ArrayAdapter<Expense> adapter = new ArrayAdapter<Expense>(this,
-		        android.R.layout.simple_list_item_1, values);
-		    setListAdapter(adapter);
+        List<Expense> values = datasource.getAllExpenses();
 
-		  }
-	 
-	  @Override
-	  protected void onResume() {
-	    datasource.open();
-	    super.onResume();
-	  }
+        // use the SimpleCursorAdapter to show the
+        // elements in a ListView
+        ArrayAdapter<Expense> adapter = new ArrayAdapter<Expense>(this,
+                android.R.layout.simple_list_item_1, values);
+        setListAdapter(adapter);
 
-	  @Override
-	  protected void onPause() {
-	    datasource.close();
-	    super.onPause();
-	  }
+    }
+
+    @Override
+    protected void onResume() {
+        datasource.open();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        datasource.close();
+        super.onPause();
+    }
 
 }

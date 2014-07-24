@@ -3,13 +3,12 @@ package nick.miros.BudgetControl.budgetcontrol.app;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import java.text.DecimalFormat;
 import java.util.Calendar;
 
 import nick.miros.BudgetControl.budgetcontrol.data.ExpensesDataSource;
 
 /**
- * Created by admin on 7/19/2014.
+ * Class for getting the current user balance
  */
 public class Balance {
 
@@ -25,6 +24,13 @@ public class Balance {
     private static final String TIME_STAMP_DAILY_BUDGET_BALANCED_KEY = "timeStampDailyBudgetBalancedKey";
     private static final String TIME_STAMP_MONTHLY_BUDGET_SET_KEY = "timeStampMonthlyBudgetSetKey";
 
+    /**
+     * Gets the current user balance. The balance might be calculated using standard formula
+     * or using the balanced daily budget value, depending on the values in the keys passed.
+     *
+     * @param context current application context
+     * @return current user balance
+     */
 
     public static double getBalance(Context context) {
         settings = context.getSharedPreferences(MY_PREFS_KEY, Context.MODE_PRIVATE);
@@ -33,15 +39,14 @@ public class Balance {
         datasource.open();
         Calendar c = Calendar.getInstance();
 
-
-        //check whether the the daily budget was balanced this month
-        //also check whether the it was balanced after the user might have
-        //set the new daily budget - if not, get the balanced daily budget
-
         int monthDailyBudgetWasBalanced = settings.getInt(MONTH_DAILY_BUDGET_WAS_BALANCED_KEY, 0);
         int yearDailyBudgetWasBalanced = settings.getInt(YEAR_DAILY_BUDGET_WAS_BALANCED_KEY, 0);
         long timeStampDailyBudgetBalanced = settings.getLong(TIME_STAMP_DAILY_BUDGET_BALANCED_KEY, 0);
         long timeStampMonthlyBudgetSet = settings.getLong(TIME_STAMP_MONTHLY_BUDGET_SET_KEY, 0);
+
+        //check whether the the daily budget was balanced this month
+        //also check whether the it was balanced after the user might have
+        //set the new daily budget - if not, get the balanced daily budget
 
         if (((monthDailyBudgetWasBalanced == c.get(Calendar.MONTH)) && (yearDailyBudgetWasBalanced == c.get(Calendar.YEAR)))
                 && (timeStampDailyBudgetBalanced > timeStampMonthlyBudgetSet)) {
