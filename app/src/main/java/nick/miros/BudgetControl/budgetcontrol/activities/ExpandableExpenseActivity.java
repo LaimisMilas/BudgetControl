@@ -21,8 +21,6 @@ public class ExpandableExpenseActivity extends Activity {
 
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
-    List<String> listDataHeader;
-    HashMap<String, List<String>> listDataChild;
     ExpensesDataSource datasource;
     List<Expense> allExpenses;
 
@@ -31,25 +29,24 @@ public class ExpandableExpenseActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.expandable_list);
 
+        datasource = new ExpensesDataSource(this);
+        datasource.open();
+
         // get the listview
         expListView = (ExpandableListView) findViewById(R.id.lvExp);
 
-        // preparing list data
-        //prepareListData();
+        List<List<Expense>> preparedListData = prepareListData();
 
-       //listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
+       listAdapter = new ExpandableListAdapter(this, preparedListData);
 
         // setting list adapter
-        //expListView.setAdapter(listAdapter);
+        expListView.setAdapter(listAdapter);
     }
 
     /*
      * Preparing the list data
      */
-    private void prepareListData() {
-
-
-        listDataHeader = new ArrayList<String>();
+    private List<List<Expense>> prepareListData() {
 
         allExpenses = datasource.getAllExpenses();
         Collections.sort(allExpenses);
@@ -74,55 +71,12 @@ public class ExpandableExpenseActivity extends Activity {
                 j++;
                 List<Expense> anotherList = new ArrayList<Expense>();
                 expensesSortedByDates.add(anotherList);
-                listDataHeader.add(fullDate1);
+                //listDataHeader.add(fullDate1);
             }
             expensesSortedByDates.get(j).add(allExpenses.get(i));
             i++;
         }
-
-
-        //listDataHeader = new ArrayList<String>();
-        //listDataChild = new HashMap<String, List<String>>();
-        //listDataChild = new HashMap<String, List<Expense>>();
-
-        /*
-        // Adding child data
-        listDataHeader.add("Top 250");
-        listDataHeader.add("Now Showing");
-        listDataHeader.add("Coming Soon..");
-
-        // for (int f = 0; f < listDataHeader.size(); f++) {
-        // listDataChild.put(listDataHeader.get(f), expensesSortedByDates.get(f));
-        // }
-        // Adding child data
-        List<String> top250 = new ArrayList<String>();
-        top250.add("The Shawshank Redemption");
-        top250.add("The Godfather");
-        top250.add("The Godfather: Part II");
-        top250.add("Pulp Fiction");
-        top250.add("The Good, the Bad and the Ugly");
-        top250.add("The Dark Knight");
-        top250.add("12 Angry Men");
-
-        List<String> nowShowing = new ArrayList<String>();
-        nowShowing.add("The Conjuring");
-        nowShowing.add("Despicable Me 2");
-        nowShowing.add("Turbo");
-        nowShowing.add("Grown Ups 2");
-        nowShowing.add("Red 2");
-        nowShowing.add("The Wolverine");
-
-        List<String> comingSoon = new ArrayList<String>();
-        comingSoon.add("2 Guns");
-        comingSoon.add("The Smurfs 2");
-        comingSoon.add("The Spectacular Now");
-        comingSoon.add("The Canyons");
-        comingSoon.add("Europa Report");
-
-        listDataChild.put(listDataHeader.get(0), top250); // Header, Child data
-        listDataChild.put(listDataHeader.get(1), nowShowing);
-        listDataChild.put(listDataHeader.get(2), comingSoon);
-        */
+        return expensesSortedByDates;
 
     }
 }

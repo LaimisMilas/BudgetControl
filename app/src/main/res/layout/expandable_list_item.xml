@@ -13,24 +13,4 @@
         android:paddingBottom="5dp"
         android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft" />
 
-    <LinearLayout
-        android:id="@+id/action_buttons"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_weight="2"
-        android:orientation="horizontal">
-
-        <ImageButton
-            android:id="@+id/edit"
-            android:layout_width="30dp"
-            android:layout_height="40dip"
-            android:src="@drawable/edit_icon" />
-
-        <ImageButton
-            android:id="@+id/delete"
-            android:layout_width="100dp"
-            android:layout_height="40dip"
-            android:src="@drawable/delete_icon" />
-    </LinearLayout>
-
 </LinearLayout>
