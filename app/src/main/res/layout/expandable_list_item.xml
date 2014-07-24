@@ -5,7 +5,16 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/lblListItem"
+        android:id="@+id/group_expense_description"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="17dip"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft" />
+
+    <TextView
+        android:id="@+id/group_expense_amount"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textSize="17dip"

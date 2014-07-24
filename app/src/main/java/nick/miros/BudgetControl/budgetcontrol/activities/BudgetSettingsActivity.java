@@ -49,8 +49,6 @@ public class BudgetSettingsActivity extends Activity {
     private final String CURRENCY_SYMBOL_KEY = "currencySymbolKey";
     private final String CURRENCY_NAME_KEY = "currencyNameKey";
     private static final String CURRENT_MONTHLY_BUDGET_KEY = "currentMonthlyBudgetKey";
-    private final String NAME_ID = "currencyName";
-    private final String SYMBOL_ID = "currencySymbol";
     private final Context context = this;
     private TextView currentMonthView;
     private ImageButton budgetEditButton;
@@ -60,8 +58,6 @@ public class BudgetSettingsActivity extends Activity {
     private TextView currentCurrencyView;
     private double monthlyBudget;
     private SharedPreferences settings;
-    private final int currencyRequestCode = 1;
-    //
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
