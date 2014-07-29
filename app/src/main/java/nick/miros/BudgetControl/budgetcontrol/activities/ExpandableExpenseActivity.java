@@ -27,20 +27,27 @@ public class ExpandableExpenseActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.expandable_list);
 
         datasource = new ExpensesDataSource(this);
         datasource.open();
 
-        // get the listview
-        expListView = (ExpandableListView) findViewById(R.id.lvExp);
+        if (datasource.getAllExpenses().size() != 0) {
+            setContentView(R.layout.expandable_list);
 
-        List<List<Expense>> preparedListData = prepareListData();
+            // get the listview
+            expListView = (ExpandableListView) findViewById(R.id.lvExp);
 
-       listAdapter = new ExpandableListAdapter(this, preparedListData);
+            List<List<Expense>> preparedListData = prepareListData();
 
-        // setting list adapter
-        expListView.setAdapter(listAdapter);
+            listAdapter = new ExpandableListAdapter(this, preparedListData);
+
+            // setting list adapter
+            expListView.setAdapter(listAdapter);
+        }
+        else
+        {
+            setContentView(R.layout.expandable_list_empty);
+        }
     }
 
     /*
