@@ -10,7 +10,9 @@ import java.util.List;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import nick.miros.BudgetControl.budgetcontrol.app.Expense;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
@@ -50,7 +52,7 @@ public class ExpandableExpenseActivity extends Activity {
         }
     }
 
-    /*
+    /**
      * Preparing the list data
      */
     private List<List<Expense>> prepareListData() {
