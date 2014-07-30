@@ -13,7 +13,6 @@
         <activity
             android:name="nick.miros.BudgetControl.budgetcontrol.activities.ExpandableExpenseActivity"
             android:label="@string/app_name"></activity>
-        <activity android:name="nick.miros.BudgetControl.budgetcontrol.activities.ExpenseListActivity"></activity>
         <activity
             android:name="nick.miros.BudgetControl.budgetcontrol.activities.MainActivity"
             android:label="@string/app_name">

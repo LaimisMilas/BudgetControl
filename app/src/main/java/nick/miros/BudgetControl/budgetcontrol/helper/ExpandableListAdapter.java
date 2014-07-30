@@ -92,10 +92,21 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter{
 
         Expense expense = _sortedExpenses.get(groupPosition).get(0);
 
-        TextView groupHeader = (TextView) convertView
-                .findViewById(R.id.groupHeader);
-        groupHeader.setTypeface(null, Typeface.BOLD);
-        groupHeader.setText(monthNames[expense.getMonth()] + " " + expense.getDay() + " " + expense.getYear());
+        TextView groupDate = (TextView) convertView
+                .findViewById(R.id.groupDate);
+        groupDate.setTypeface(null, Typeface.BOLD);
+        groupDate.setText(monthNames[expense.getMonth()] + " " + expense.getDay() + " " + expense.getYear());
+
+
+        double groupAmount = 0;
+
+        for (int i = 0; i < _sortedExpenses.get(groupPosition).size(); i++) {
+            groupAmount+=_sortedExpenses.get(groupPosition).get(i).getAmount();
+        }
+        TextView groupAmountView = (TextView) convertView.findViewById(R.id.groupAmount);
+        groupAmountView.setTypeface(null, Typeface.BOLD);
+        groupAmountView.setText(groupAmount + "");
+
 
         return convertView;
     }
