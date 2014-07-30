@@ -95,7 +95,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter{
         TextView groupHeader = (TextView) convertView
                 .findViewById(R.id.groupHeader);
         groupHeader.setTypeface(null, Typeface.BOLD);
-        groupHeader.setText(expense.getYear() + " " + monthNames[expense.getMonth()] + " " + expense.getDay() );
+        groupHeader.setText(monthNames[expense.getMonth()] + " " + expense.getDay() + " " + expense.getYear());
 
         return convertView;
     }

@@ -49,7 +49,7 @@ public class AddExpenseActivity extends Activity {
 
         //give the current date by default
         chosenDay = c.get(Calendar.DATE);
-        chosenMonth = c.get(Calendar.MONTH) + 1;
+        chosenMonth = c.get(Calendar.MONTH);
         chosenYear = c.get(Calendar.YEAR);
         currentDateText = (TextView) findViewById(R.id.dateView);
 
@@ -61,7 +61,7 @@ public class AddExpenseActivity extends Activity {
         });
 
         //the default date that is set once the Activity is started
-        currentDateText.setText(chosenMonth + " / " + chosenDay + " / " + chosenYear);
+        currentDateText.setText((chosenMonth + 1) + " / " + chosenDay + " / " + chosenYear);
 
 
         categorySpinner = (Spinner) findViewById(R.id.category_spinner);
@@ -113,9 +113,9 @@ public class AddExpenseActivity extends Activity {
 
                 datasource = new ExpensesDataSource(this);
                 datasource.open();
-                datasource.createExpense(chosenDay,chosenMonth, chosenYear, amount, category, description, paymentMethod);
+                datasource.createExpense(chosenDay, chosenMonth, chosenYear, amount, category, description, paymentMethod);
 
-                startActivity(new Intent(this, ExpenseListActivity.class));
+                startActivity(new Intent(this, ExpandableExpenseActivity.class));
             }
         }
     }
@@ -174,8 +174,7 @@ public class AddExpenseActivity extends Activity {
         public void onDateSet(DatePicker view, int year, int month, int day) {
             // Do something with the date chosen by the user
             TextView dateText = (TextView) getActivity().findViewById(R.id.dateView);
-            month += 1;
-            dateText.setText(month + " / " + day + " / " + year);
+            dateText.setText((month + 1) + " / " + day + " / " + year);
 
             chosenDay = day;
             chosenMonth = month;

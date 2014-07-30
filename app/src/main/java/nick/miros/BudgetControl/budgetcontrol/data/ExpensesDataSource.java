@@ -103,7 +103,7 @@ public class ExpensesDataSource {
 
           Calendar c = Calendar.getInstance();
           int currentDay = c.get(Calendar.DATE);
-          int currentMonth = c.get(Calendar.MONTH) + 1;
+          int currentMonth = c.get(Calendar.MONTH);
           int currentYear = c.get(Calendar.YEAR);
 
           Cursor cursor = database.query(MySQLiteHelper.TABLE_EXPENSES, dateFilterColumns,
@@ -125,7 +125,7 @@ public class ExpensesDataSource {
           double amountSpent = 0;
 
           Calendar c = Calendar.getInstance();
-          int currentMonth = c.get(Calendar.MONTH) + 1;
+          int currentMonth = c.get(Calendar.MONTH);
           int currentYear = c.get(Calendar.YEAR);
 
           Cursor cursor = database.query(MySQLiteHelper.TABLE_EXPENSES, dateFilterColumns,
@@ -149,7 +149,7 @@ public class ExpensesDataSource {
 
           Calendar c = Calendar.getInstance();
           int currentDay = c.get(Calendar.DATE);
-          int currentMonth = c.get(Calendar.MONTH) + 1;
+          int currentMonth = c.get(Calendar.MONTH);
           int currentYear = c.get(Calendar.YEAR);
 
           Cursor cursor = database.query(MySQLiteHelper.TABLE_EXPENSES, dateFilterColumns,
