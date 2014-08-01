@@ -8,8 +8,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ExpandableListView;
 
 import nick.miros.BudgetControl.budgetcontrol.app.Expense;
@@ -17,12 +19,13 @@ import nick.miros.BudgetControl.budgetcontrol.app.R;
 import nick.miros.BudgetControl.budgetcontrol.data.ExpensesDataSource;
 import nick.miros.BudgetControl.budgetcontrol.helper.ExpandableListAdapter;
 
-public class ExpandableExpenseActivity extends Activity {
+public class ExpandableExpenseActivity extends Activity implements ExpandableListView.OnChildClickListener {
 
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
     ExpensesDataSource datasource;
     List<Expense> allExpenses;
+    List<List<Expense>> preparedListData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,17 +40,30 @@ public class ExpandableExpenseActivity extends Activity {
             // get the listview
             expListView = (ExpandableListView) findViewById(R.id.lvExp);
 
-            List<List<Expense>> preparedListData = prepareListData();
+            preparedListData = prepareListData();
 
             listAdapter = new ExpandableListAdapter(this, preparedListData);
 
             // setting list adapter
             expListView.setAdapter(listAdapter);
+            expListView.setOnChildClickListener(this);
         }
         else
         {
             setContentView(R.layout.expandable_list_empty);
         }
+    }
+
+    @Override
+    public boolean onChildClick(ExpandableListView parent, View v,
+                                int groupPosition, int childPosition, long id) {
+        // TODO Auto-generated method stub
+
+        Intent intent = new Intent(getApplicationContext(), ShowExpenseActivity.class);
+        preparedListData = prepareListData();
+        intent.putExtra("Expense Id", preparedListData.get(groupPosition).get(childPosition).getId());
+        startActivity(intent);
+        return true;
     }
 
     /*

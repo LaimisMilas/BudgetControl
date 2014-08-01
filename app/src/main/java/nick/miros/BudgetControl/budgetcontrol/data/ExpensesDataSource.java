@@ -186,6 +186,15 @@ public class ExpensesDataSource {
         return expenses;
     }
 
+    public Expense getExpenseBasedOnId(long id) {
+        Cursor cursor = database.query(MySQLiteHelper.TABLE_EXPENSES, allColumns,
+                MySQLiteHelper.COLUMN_ID + " = " + id , null, null, null, null);
+        cursor.moveToFirst();
+        Expense expense = cursorToExpense(cursor);
+        cursor.close();
+        return expense;
+    }
+
 	  private Expense cursorToExpense(Cursor cursor) {
 		Expense expense = new Expense();
 	    expense.setId(cursor.getLong(0));
