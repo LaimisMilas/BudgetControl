@@ -18,19 +18,13 @@ import java.util.Calendar;
 
 public class AddExpenseActivity extends Activity {
 
-    private String category;
     private String description;
-    private String paymentMethod;
     private double amount;
     private TextView currentDateText;
     private TextView amountEntered;
     private TextView descriptionView;
     private ImageButton dateButton;
     private Button addExpenseButton;
-    private Spinner categorySpinner;
-    private Spinner paymentSpinner;
-    private Spinner categoryView;
-    private Spinner paymentSpinnerView;
     private ExpensesDataSource datasource;
     private EditText amountView;
 
@@ -63,19 +57,6 @@ public class AddExpenseActivity extends Activity {
         //the default date that is set once the Activity is started
         currentDateText.setText((chosenMonth + 1) + " / " + chosenDay + " / " + chosenYear);
 
-
-        categorySpinner = (Spinner) findViewById(R.id.category_spinner);
-        ArrayAdapter<CharSequence> simpleTextViewAdapter = ArrayAdapter.createFromResource(this,
-                R.array.expense_category_array, R.layout.adapter_simple_textview);
-        simpleTextViewAdapter.setDropDownViewResource(R.layout.adapter_simple_textview);
-        categorySpinner.setAdapter(simpleTextViewAdapter);
-
-        paymentSpinner = (Spinner) findViewById(R.id.payment_spinner);
-        ArrayAdapter<CharSequence> paymentAdapter = ArrayAdapter.createFromResource(this,
-                R.array.payment_method, R.layout.adapter_simple_textview);
-        simpleTextViewAdapter.setDropDownViewResource(R.layout.adapter_simple_textview);
-        paymentSpinner.setAdapter(paymentAdapter);
-
         amountEntered = (TextView) findViewById(R.id.expense_amount);
         amountEntered.setFilters(new InputFilter[]{new DecimalDigits()});
 
@@ -97,23 +78,19 @@ public class AddExpenseActivity extends Activity {
 
     public void addNewExpense(View v) {
 
-        categoryView = (Spinner) findViewById(R.id.category_spinner);
         descriptionView = (TextView) findViewById(R.id.expense_description);
         amountView = (EditText) findViewById(R.id.expense_amount);
-        paymentSpinnerView = (Spinner) findViewById(R.id.payment_spinner);
 
         if (checkForEmpty(amountView, descriptionView)) {
 
             if (DecimalDigits.isValidInput(amountView)) {
 
                 amount = Double.parseDouble(amountView.getText().toString());
-                category = categoryView.getSelectedItem().toString();
                 description = descriptionView.getText().toString();
-                paymentMethod = paymentSpinnerView.getSelectedItem().toString();
 
                 datasource = new ExpensesDataSource(this);
                 datasource.open();
-                datasource.createExpense(chosenDay, chosenMonth, chosenYear, amount, category, description, paymentMethod);
+                datasource.createExpense(chosenDay, chosenMonth, chosenYear, amount, description);
 
                 startActivity(new Intent(this, ExpandableExpenseActivity.class));
             }

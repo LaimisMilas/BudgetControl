@@ -14,9 +14,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
       public static final String COLUMN_YEAR = "year";
       public static final String COLUMN_TIME_STAMP="time_stamp";
 	  public static final String COLUMN_AMOUNT = "amount";
-	  public static final String COLUMN_CATEGORY = "category";
 	  public static final String COLUMN_DESCRIPTION = "description";
-	  public static final String COLUMN_PAYMENT_METHOD = "payment_method";
 	  
 	  
 
@@ -31,9 +29,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
           + " integer not null, " + COLUMN_TIME_STAMP
           + " integer not null, " + COLUMN_YEAR
           + " integer not null, " + COLUMN_AMOUNT
-	      + " real not null, "  + COLUMN_CATEGORY
-	      + " text not null, " + COLUMN_DESCRIPTION
-	      + " text not null, " + COLUMN_PAYMENT_METHOD
+	      + " real not null, "  + COLUMN_DESCRIPTION
 	      + " text not null);";
 
 	  public MySQLiteHelper(Context context) {

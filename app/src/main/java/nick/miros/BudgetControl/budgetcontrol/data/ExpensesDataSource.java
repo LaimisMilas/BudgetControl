@@ -23,9 +23,7 @@ public class ExpensesDataSource {
           MySQLiteHelper.COLUMN_YEAR,
           MySQLiteHelper.COLUMN_TIME_STAMP,
 	      MySQLiteHelper.COLUMN_AMOUNT,
-	      MySQLiteHelper.COLUMN_CATEGORY,
-	      MySQLiteHelper.COLUMN_DESCRIPTION,
-	      MySQLiteHelper.COLUMN_PAYMENT_METHOD};
+	      MySQLiteHelper.COLUMN_DESCRIPTION};
 
       private String[] dateFilterColumns = { MySQLiteHelper.COLUMN_DAY,
           MySQLiteHelper.COLUMN_MONTH,
@@ -49,7 +47,7 @@ public class ExpensesDataSource {
 	    dbHelper.close();
 	  }
 
-	  public Expense createExpense(int day, int month, int year, double amount, String category, String description, String paymentMethod) {
+	  public Expense createExpense(int day, int month, int year, double amount, String description) {
 	    ContentValues values = new ContentValues();
 	    values.put(MySQLiteHelper.COLUMN_DAY, day);
         values.put(MySQLiteHelper.COLUMN_MONTH, month);
@@ -59,9 +57,7 @@ public class ExpensesDataSource {
         final long currentSecond = c.getTimeInMillis() / 1000;
         values.put(MySQLiteHelper.COLUMN_TIME_STAMP, currentSecond);
 	    values.put(MySQLiteHelper.COLUMN_AMOUNT, amount);
-	    values.put(MySQLiteHelper.COLUMN_CATEGORY, category);
 	    values.put(MySQLiteHelper.COLUMN_DESCRIPTION, description);
-	    values.put(MySQLiteHelper.COLUMN_PAYMENT_METHOD, paymentMethod);
 	    long insertId = database.insert(MySQLiteHelper.TABLE_EXPENSES, null,
 	        values);
 	    Cursor cursor = database.query(MySQLiteHelper.TABLE_EXPENSES,
@@ -203,9 +199,7 @@ public class ExpensesDataSource {
         expense.setYear(cursor.getInt(3));
         expense.setTimeStamp(cursor.getLong(4));
 	    expense.setAmount(cursor.getDouble(5));
-	    expense.setCategory(cursor.getString(6));
-	    expense.setDescription(cursor.getString(7));
-	    expense.setPaymentMethod(cursor.getString(8));
+	    expense.setDescription(cursor.getString(6));
 	    return expense;
 	  }
 }
