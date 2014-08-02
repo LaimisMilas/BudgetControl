@@ -9,33 +9,24 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.InputFilter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
 
 import nick.miros.BudgetControl.budgetcontrol.app.Balance;
 import nick.miros.BudgetControl.budgetcontrol.app.Budget;
 import nick.miros.BudgetControl.budgetcontrol.app.Currency;
-import nick.miros.BudgetControl.budgetcontrol.app.Expense;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
 import nick.miros.BudgetControl.budgetcontrol.data.ExpensesDataSource;
 import nick.miros.BudgetControl.budgetcontrol.helper.DecimalDigits;
-import nick.miros.BudgetControl.budgetcontrol.helper.ExpandableListAdapter;
 import nick.miros.BudgetControl.budgetcontrol.helper.MyProgressBar;
 
 /**
@@ -60,7 +51,7 @@ public class MainActivity extends ActionBarActivity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.ExpenseDirectionButton:
-                    startActivity(new Intent(v.getContext(), AddExpenseActivity.class));
+                    startActivity(new Intent(v.getContext(), SaveExpenseActivity.class));
                     break;
                 case R.id.DataDirectionButton:
                     startActivity(new Intent(v.getContext(), ExpandableExpenseActivity.class));

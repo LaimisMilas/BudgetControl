@@ -16,7 +16,7 @@ import nick.miros.BudgetControl.budgetcontrol.helper.DecimalDigits;
 
 import java.util.Calendar;
 
-public class AddExpenseActivity extends Activity {
+public class SaveExpenseActivity extends Activity {
 
     private String description;
     private double amount;
