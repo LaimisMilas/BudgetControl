@@ -59,7 +59,8 @@ public class ShowExpenseActivity extends Activity {
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(v.getContext(), SaveExpenseActivity.class), 1);
+                Intent intent = new Intent(getApplicationContext(), SaveExpenseActivity.class);
+                startActivity(intent);
             }
         });
 

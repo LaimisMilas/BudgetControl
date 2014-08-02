@@ -19,7 +19,7 @@ import nick.miros.BudgetControl.budgetcontrol.app.R;
 import nick.miros.BudgetControl.budgetcontrol.data.ExpensesDataSource;
 import nick.miros.BudgetControl.budgetcontrol.helper.ExpandableListAdapter;
 
-public class ExpandableExpenseActivity extends Activity implements ExpandableListView.OnChildClickListener {
+public class ExpenseListActivity extends Activity implements ExpandableListView.OnChildClickListener {
 
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;

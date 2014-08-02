@@ -54,7 +54,7 @@ public class MainActivity extends ActionBarActivity {
                     startActivity(new Intent(v.getContext(), SaveExpenseActivity.class));
                     break;
                 case R.id.DataDirectionButton:
-                    startActivity(new Intent(v.getContext(), ExpandableExpenseActivity.class));
+                    startActivity(new Intent(v.getContext(), ExpenseListActivity.class));
                     //prepareListData();
                     break;
                 case R.id.BudgetDirectionButton:

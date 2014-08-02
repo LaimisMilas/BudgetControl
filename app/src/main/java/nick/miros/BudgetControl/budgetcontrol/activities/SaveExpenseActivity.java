@@ -92,7 +92,7 @@ public class SaveExpenseActivity extends Activity {
                 datasource.open();
                 datasource.createExpense(chosenDay, chosenMonth, chosenYear, amount, description);
 
-                startActivity(new Intent(this, ExpandableExpenseActivity.class));
+                startActivity(new Intent(this, ExpenseListActivity.class));
             }
         }
     }
