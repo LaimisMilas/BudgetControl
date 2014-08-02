@@ -25,6 +25,7 @@ public class ShowExpenseActivity extends Activity {
     TextView amountView;
     TextView descriptionView;
     Button deleteButton;
+    Button editButton;
     ExpensesDataSource dataSource;
     Expense chosenExpense;
 
@@ -54,6 +55,15 @@ public class ShowExpenseActivity extends Activity {
                 startDeleteExpensePrompt();
             }
         });
+
+        editButton = (Button) findViewById(R.id.editExpenseButton);
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(v.getContext(), AddExpenseActivity.class), 1);
+            }
+        });
+
 
 
 
