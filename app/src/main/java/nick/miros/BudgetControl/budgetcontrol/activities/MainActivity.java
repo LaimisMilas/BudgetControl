@@ -504,49 +504,6 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
-    ExpandableListAdapter listAdapter;
-    ExpandableListView expListView;
-    List<String> listDataHeader;
-    HashMap<String, List<String>> listDataChild;
-    List<Expense> allExpenses;
-
-    private void prepareListData() {
-
-
-        listDataHeader = new ArrayList<String>();
-
-        allExpenses = datasource.getAllExpenses();
-        Collections.sort(allExpenses);
-
-        List<List<Expense>> expensesSortedByDates = new ArrayList<List<Expense>>();
-        int i = 1;
-        int j = 0;
-        List<Expense> firstList = new ArrayList<Expense>();
-        firstList.add(allExpenses.get(0));
-        expensesSortedByDates.add(firstList);
-        while (i != allExpenses.size()) {
-
-            int day = allExpenses.get(i - 1).getDay();
-            int month = allExpenses.get(i - 1).getMonth();
-            int year = allExpenses.get(i - 1).getYear();
-            String fullDate = day + month + year + "";
-
-            int day1 = allExpenses.get(i).getDay();
-            int month1 = allExpenses.get(i).getMonth();
-            int year1 = allExpenses.get(i).getYear();
-            String fullDate1 = day1 + month1 + year1 + "";
-            if (!fullDate1.equals(fullDate)) {
-                j++;
-                List<Expense> anotherList = new ArrayList<Expense>();
-                expensesSortedByDates.add(anotherList);
-                listDataHeader.add(fullDate1);
-            }
-            expensesSortedByDates.get(j).add(allExpenses.get(i));
-            i++;
-        }
-    }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

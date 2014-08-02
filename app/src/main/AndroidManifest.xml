@@ -9,6 +9,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name="nick.miros.BudgetControl.budgetcontrol.activities.AddExpenseActivity"
+            android:noHistory="true"
             android:label="@string/app_name" />
         <activity
             android:name="nick.miros.BudgetControl.budgetcontrol.activities.BudgetSettingsActivity"
@@ -30,7 +31,8 @@
         </activity>
         <activity
             android:name="nick.miros.BudgetControl.budgetcontrol.activities.ShowExpenseActivity"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:noHistory="true"/>
     </application>
 
 </manifest>

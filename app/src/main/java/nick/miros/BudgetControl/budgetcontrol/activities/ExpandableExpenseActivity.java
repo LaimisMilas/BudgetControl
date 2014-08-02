@@ -94,12 +94,34 @@ public class ExpandableExpenseActivity extends Activity implements ExpandableLis
                 j++;
                 List<Expense> anotherList = new ArrayList<Expense>();
                 expensesSortedByDates.add(anotherList);
-                //listDataHeader.add(fullDate1);
             }
             expensesSortedByDates.get(j).add(allExpenses.get(i));
             i++;
         }
         return expensesSortedByDates;
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (datasource.getAllExpenses().size() != 0) {
+            setContentView(R.layout.expandable_list);
+
+            // get the listview
+            expListView = (ExpandableListView) findViewById(R.id.lvExp);
+
+            preparedListData = prepareListData();
+
+            listAdapter = new ExpandableListAdapter(this, preparedListData);
+
+            // setting list adapter
+            expListView.setAdapter(listAdapter);
+            expListView.setOnChildClickListener(this);
+        }
+        else
+        {
+            setContentView(R.layout.expandable_list_empty);
+        }
     }
 }

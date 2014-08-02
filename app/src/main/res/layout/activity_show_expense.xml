@@ -84,14 +84,14 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/deleteExpense"
+            android:id="@+id/deleteExpenseButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="Delete Expense" />
 
         <Button
-            android:id="@+id/editExpense"
+            android:id="@+id/editExpenseButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
