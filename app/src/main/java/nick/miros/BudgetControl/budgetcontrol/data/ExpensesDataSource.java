@@ -69,6 +69,23 @@ public class ExpensesDataSource {
 	    return newExpense;
 	  }
 
+      public void modifyExpense (int day, int month, int year, double amount, String description, long expenseId) {
+          ContentValues values = new ContentValues();
+          values.put(MySQLiteHelper.COLUMN_DAY, day);
+          values.put(MySQLiteHelper.COLUMN_MONTH, month);
+          values.put(MySQLiteHelper.COLUMN_YEAR, year);
+
+          Calendar c = Calendar.getInstance();
+          final long currentSecond = c.getTimeInMillis() / 1000;
+          values.put(MySQLiteHelper.COLUMN_TIME_STAMP, currentSecond);
+          values.put(MySQLiteHelper.COLUMN_AMOUNT, amount);
+          values.put(MySQLiteHelper.COLUMN_DESCRIPTION, description);
+
+          database.update(MySQLiteHelper.TABLE_EXPENSES, values, MySQLiteHelper.COLUMN_ID + " = " + expenseId, null);
+
+
+      }
+
 	  public void deleteExpense(Expense expense) {
 	    long id = expense.getId();
 	    System.out.println("Expense deleted with id: " + id);

@@ -26,6 +26,7 @@ public class ExpenseListActivity extends Activity implements ExpandableListView.
     ExpensesDataSource datasource;
     List<Expense> allExpenses;
     List<List<Expense>> preparedListData;
+    private static final String EXPENSE_ID_KEY = "expenseIdKey";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +62,7 @@ public class ExpenseListActivity extends Activity implements ExpandableListView.
 
         Intent intent = new Intent(getApplicationContext(), ShowExpenseActivity.class);
         preparedListData = prepareListData();
-        intent.putExtra("Expense Id", preparedListData.get(groupPosition).get(childPosition).getId());
+        intent.putExtra(EXPENSE_ID_KEY, preparedListData.get(groupPosition).get(childPosition).getId());
         startActivity(intent);
         return true;
     }

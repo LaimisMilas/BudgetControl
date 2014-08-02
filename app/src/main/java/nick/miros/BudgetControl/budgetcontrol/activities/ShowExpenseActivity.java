@@ -29,6 +29,7 @@ public class ShowExpenseActivity extends Activity {
     Expense chosenExpense;
     private static final String ACTIVITY_COMING_FROM_KEY = "activityComingFromKey";
     private static final int SHOW_EXPENSE_ACTIVITY_KEY = 2;
+    private static final String EXPENSE_ID_KEY = "expenseIdKey";
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +43,8 @@ public class ShowExpenseActivity extends Activity {
         amountView = (TextView) findViewById(R.id.expenseAmountView);
         descriptionView = (TextView) findViewById(R.id.expenseDescription);
 
-        Intent intent = getIntent();
-        chosenExpense = dataSource.getExpenseBasedOnId(intent.getLongExtra("Expense Id", 0));
+        Intent receivingIntent = getIntent();
+        chosenExpense = dataSource.getExpenseBasedOnId(receivingIntent.getLongExtra(EXPENSE_ID_KEY, 0));
 
         dateView.setText((chosenExpense.getMonth() + 1) + "/" + chosenExpense.getDay() + "/" + chosenExpense.getYear());
         amountView.setText(chosenExpense.getAmount() + "");
@@ -63,6 +64,7 @@ public class ShowExpenseActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), SaveExpenseActivity.class);
                 intent.putExtra(ACTIVITY_COMING_FROM_KEY, SHOW_EXPENSE_ACTIVITY_KEY);
+                intent.putExtra(EXPENSE_ID_KEY, chosenExpense.getId());
                 startActivity(intent);
             }
         });

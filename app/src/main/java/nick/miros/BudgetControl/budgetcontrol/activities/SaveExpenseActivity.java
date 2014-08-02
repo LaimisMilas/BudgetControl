@@ -10,6 +10,8 @@ import android.text.InputFilter;
 import android.view.Menu;
 import android.view.View;
 import android.widget.*;
+
+import nick.miros.BudgetControl.budgetcontrol.app.Expense;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
 import nick.miros.BudgetControl.budgetcontrol.data.ExpensesDataSource;
 import nick.miros.BudgetControl.budgetcontrol.helper.DecimalDigits;
@@ -20,14 +22,15 @@ public class SaveExpenseActivity extends Activity {
 
     private String description;
     private double amount;
-    private TextView currentDateText;
+    private TextView dateView;
     private TextView amountEntered;
     private TextView descriptionView;
     private ImageButton dateButton;
     private Button saveExpenseButton;
-    private ExpensesDataSource datasource;
     private EditText amountView;
     private int activityComingFrom;
+    private Expense chosenExpense;
+    ExpensesDataSource dataSource;
 
     private static int chosenDay;
     private static int chosenMonth;
@@ -35,7 +38,7 @@ public class SaveExpenseActivity extends Activity {
     private static final String ACTIVITY_COMING_FROM_KEY = "activityComingFromKey";
     private static final int MAIN_ACTIVITY_KEY = 1;
     private static final int SHOW_EXPENSE_ACTIVITY_KEY = 2;
-
+    private static final String EXPENSE_ID_KEY = "expenseIdKey";
 
 
     @Override
@@ -43,8 +46,32 @@ public class SaveExpenseActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_save_expense);
 
-        Intent intent = getIntent();
-        activityComingFrom = intent.getIntExtra(ACTIVITY_COMING_FROM_KEY, 0);
+        dataSource = new ExpensesDataSource(this);
+        dataSource.open();
+
+        Intent receivingIntent = getIntent();
+        activityComingFrom = receivingIntent.getIntExtra(ACTIVITY_COMING_FROM_KEY, 0);
+
+        dateView = (TextView) findViewById(R.id.dateView);
+        descriptionView = (TextView) findViewById(R.id.expense_description);
+        amountView = (EditText) findViewById(R.id.expense_amount);
+
+        dateButton = (ImageButton) findViewById(R.id.chooseDateButton);
+        dateButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                showDatePickerDialog(v);
+            }
+        });
+
+        amountEntered = (TextView) findViewById(R.id.expense_amount);
+        amountEntered.setFilters(new InputFilter[]{new DecimalDigits()});
+
+        saveExpenseButton = (Button) findViewById(R.id.saveExpense);
+        saveExpenseButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                saveExpense(v);
+            }
+        });
 
         if (activityComingFrom == MAIN_ACTIVITY_KEY) {
 
@@ -54,36 +81,17 @@ public class SaveExpenseActivity extends Activity {
             chosenDay = c.get(Calendar.DATE);
             chosenMonth = c.get(Calendar.MONTH);
             chosenYear = c.get(Calendar.YEAR);
-            currentDateText = (TextView) findViewById(R.id.dateView);
 
             //the default date that is set once the Activity is started
-            currentDateText.setText((chosenMonth + 1) + " / " + chosenDay + " / " + chosenYear);
+            dateView.setText((chosenMonth + 1) + " / " + chosenDay + " / " + chosenYear);
 
-            dateButton = (ImageButton) findViewById(R.id.chooseDateButton);
-            dateButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    showDatePickerDialog(v);
-                }
-            });
+        } else if (activityComingFrom == SHOW_EXPENSE_ACTIVITY_KEY) {
 
-            amountEntered = (TextView) findViewById(R.id.expense_amount);
-            amountEntered.setFilters(new InputFilter[]{new DecimalDigits()});
+            chosenExpense = dataSource.getExpenseBasedOnId(receivingIntent.getLongExtra(EXPENSE_ID_KEY, 0));
 
-            saveExpenseButton = (Button) findViewById(R.id.saveExpense);
-            saveExpenseButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    saveExpense(v);
-                }
-            });
-        }
-        else if (activityComingFrom == SHOW_EXPENSE_ACTIVITY_KEY) {
-            saveExpenseButton = (Button) findViewById(R.id.saveExpense);
-            saveExpenseButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "stuff", Toast.LENGTH_SHORT);
-
-                }
-            });
+            dateView.setText((chosenExpense.getMonth() + 1) + "/" + chosenExpense.getDay() + "/" + chosenExpense.getYear());
+            amountView.setText(chosenExpense.getAmount() + "");
+            descriptionView.setText(chosenExpense.getDescription() + "");
         }
 
     }
@@ -97,21 +105,26 @@ public class SaveExpenseActivity extends Activity {
 
     public void saveExpense(View v) {
 
-        descriptionView = (TextView) findViewById(R.id.expense_description);
-        amountView = (EditText) findViewById(R.id.expense_amount);
-
         if (checkForEmpty(amountView, descriptionView)) {
 
             if (DecimalDigits.isValidInput(amountView)) {
 
-                amount = Double.parseDouble(amountView.getText().toString());
-                description = descriptionView.getText().toString();
+                if (activityComingFrom == MAIN_ACTIVITY_KEY) {
 
-                datasource = new ExpensesDataSource(this);
-                datasource.open();
-                datasource.createExpense(chosenDay, chosenMonth, chosenYear, amount, description);
+                    amount = Double.parseDouble(amountView.getText().toString());
+                    description = descriptionView.getText().toString();
 
-                startActivity(new Intent(this, ExpenseListActivity.class));
+                    dataSource.createExpense(chosenDay, chosenMonth, chosenYear, amount, description);
+                    startActivity(new Intent(this, ExpenseListActivity.class));
+                }
+
+                else if (activityComingFrom == SHOW_EXPENSE_ACTIVITY_KEY) {
+                    amount = Double.parseDouble(amountView.getText().toString());
+                    description = descriptionView.getText().toString();
+                    dataSource.modifyExpense(chosenDay, chosenMonth, chosenYear, amount, description, chosenExpense.getId());
+                    finish();
+
+                }
             }
         }
     }
@@ -121,7 +134,7 @@ public class SaveExpenseActivity extends Activity {
      * the information to the given textview.
      * If not - set an error to an appropriate View.
      *
-     * @param amountView amount field to be checked
+     * @param amountView      amount field to be checked
      * @param descriptionView description field to be checked
      * @return whether both fields are not empty
      */
