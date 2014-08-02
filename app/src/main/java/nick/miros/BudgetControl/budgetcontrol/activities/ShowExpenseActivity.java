@@ -27,6 +27,8 @@ public class ShowExpenseActivity extends Activity {
     Button editButton;
     ExpensesDataSource dataSource;
     Expense chosenExpense;
+    private static final String ACTIVITY_COMING_FROM_KEY = "activityComingFromKey";
+    private static final int SHOW_EXPENSE_ACTIVITY_KEY = 2;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +62,7 @@ public class ShowExpenseActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), SaveExpenseActivity.class);
+                intent.putExtra(ACTIVITY_COMING_FROM_KEY, SHOW_EXPENSE_ACTIVITY_KEY);
                 startActivity(intent);
             }
         });

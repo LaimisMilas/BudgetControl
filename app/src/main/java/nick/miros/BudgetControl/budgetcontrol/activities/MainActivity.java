@@ -51,7 +51,9 @@ public class MainActivity extends ActionBarActivity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.ExpenseDirectionButton:
-                    startActivity(new Intent(v.getContext(), SaveExpenseActivity.class));
+                    Intent intent = new Intent(v.getContext(), SaveExpenseActivity.class);
+                    intent.putExtra(ACTIVITY_COMING_FROM_KEY, MAIN_ACTIVITY_KEY);
+                    startActivity(intent);
                     break;
                 case R.id.DataDirectionButton:
                     startActivity(new Intent(v.getContext(), ExpenseListActivity.class));
@@ -81,6 +83,8 @@ public class MainActivity extends ActionBarActivity {
     private static final String MONTH_BUDGET_WAS_SET_KEY = "monthBudgetWasSetKey";
     private static final String YEAR_BUDGET_WAS_SET_KEY = "yearBudgetWasSetKey";
     private static final String MONTH_BUDGET_DECISION_WAS_MADE_KEY = "monthBudgetDecisionWasMadeKey";
+    private static final String ACTIVITY_COMING_FROM_KEY = "activityComingFromKey";
+    private static final int MAIN_ACTIVITY_KEY = 1;
     private SharedPreferences settings;
     private double monthlyBudget = 0;
     private double dailyBudget = 0;

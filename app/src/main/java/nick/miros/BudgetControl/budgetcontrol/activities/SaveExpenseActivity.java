@@ -24,48 +24,67 @@ public class SaveExpenseActivity extends Activity {
     private TextView amountEntered;
     private TextView descriptionView;
     private ImageButton dateButton;
-    private Button addExpenseButton;
+    private Button saveExpenseButton;
     private ExpensesDataSource datasource;
     private EditText amountView;
+    private int activityComingFrom;
 
     private static int chosenDay;
     private static int chosenMonth;
     private static int chosenYear;
+    private static final String ACTIVITY_COMING_FROM_KEY = "activityComingFromKey";
+    private static final int MAIN_ACTIVITY_KEY = 1;
+    private static final int SHOW_EXPENSE_ACTIVITY_KEY = 2;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_expense);
+        setContentView(R.layout.activity_save_expense);
 
-        Calendar c = Calendar.getInstance();
+        Intent intent = getIntent();
+        activityComingFrom = intent.getIntExtra(ACTIVITY_COMING_FROM_KEY, 0);
 
-        //give the current date by default
-        chosenDay = c.get(Calendar.DATE);
-        chosenMonth = c.get(Calendar.MONTH);
-        chosenYear = c.get(Calendar.YEAR);
-        currentDateText = (TextView) findViewById(R.id.dateView);
+        if (activityComingFrom == MAIN_ACTIVITY_KEY) {
 
-        dateButton = (ImageButton) findViewById(R.id.chooseDateButton);
-        dateButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                showDatePickerDialog(v);
-            }
-        });
+            Calendar c = Calendar.getInstance();
 
-        //the default date that is set once the Activity is started
-        currentDateText.setText((chosenMonth + 1) + " / " + chosenDay + " / " + chosenYear);
+            //give the current date by default
+            chosenDay = c.get(Calendar.DATE);
+            chosenMonth = c.get(Calendar.MONTH);
+            chosenYear = c.get(Calendar.YEAR);
+            currentDateText = (TextView) findViewById(R.id.dateView);
 
-        amountEntered = (TextView) findViewById(R.id.expense_amount);
-        amountEntered.setFilters(new InputFilter[]{new DecimalDigits()});
+            //the default date that is set once the Activity is started
+            currentDateText.setText((chosenMonth + 1) + " / " + chosenDay + " / " + chosenYear);
 
-        addExpenseButton = (Button) findViewById(R.id.addExpense);
-        addExpenseButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                addNewExpense(v);
-            }
-        });
+            dateButton = (ImageButton) findViewById(R.id.chooseDateButton);
+            dateButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    showDatePickerDialog(v);
+                }
+            });
+
+            amountEntered = (TextView) findViewById(R.id.expense_amount);
+            amountEntered.setFilters(new InputFilter[]{new DecimalDigits()});
+
+            saveExpenseButton = (Button) findViewById(R.id.saveExpense);
+            saveExpenseButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    saveExpense(v);
+                }
+            });
+        }
+        else if (activityComingFrom == SHOW_EXPENSE_ACTIVITY_KEY) {
+            saveExpenseButton = (Button) findViewById(R.id.saveExpense);
+            saveExpenseButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Toast.makeText(v.getContext(), "stuff", Toast.LENGTH_SHORT);
+
+                }
+            });
+        }
 
     }
 
@@ -76,7 +95,7 @@ public class SaveExpenseActivity extends Activity {
         return true;
     }
 
-    public void addNewExpense(View v) {
+    public void saveExpense(View v) {
 
         descriptionView = (TextView) findViewById(R.id.expense_description);
         amountView = (EditText) findViewById(R.id.expense_amount);

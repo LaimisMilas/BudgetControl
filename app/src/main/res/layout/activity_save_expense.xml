@@ -87,13 +87,13 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/addExpense"
+        android:id="@+id/saveExpense"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="fill_parent"
         android:layout_height="30dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
         android:background="@color/translucent_red"
-        android:text="@string/add_expense" />
+        android:text="@string/save_expense" />
 
 </LinearLayout>
