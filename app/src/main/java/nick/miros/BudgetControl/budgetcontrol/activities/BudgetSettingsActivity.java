@@ -49,6 +49,8 @@ public class BudgetSettingsActivity extends Activity {
     private final String CURRENCY_SYMBOL_KEY = "currencySymbolKey";
     private final String CURRENCY_NAME_KEY = "currencyNameKey";
     private static final String CURRENT_MONTHLY_BUDGET_KEY = "currentMonthlyBudgetKey";
+    private static final String ACTIVITY_COMING_FROM_KEY = "activityComingFromKey";
+    private static final int BUDGET_SETTINGS_ACTIVITY_KEY = 3;
     private final Context context = this;
     private TextView currentMonthView;
     private ImageButton budgetEditButton;
@@ -160,7 +162,7 @@ public class BudgetSettingsActivity extends Activity {
 
                                                       //start the CurrencyListActivity
                                                       Intent intent = new Intent(v.getContext(), CurrencyListActivity.class);
-                                                      //startActivityForResult(intent, currencyRequestCode);
+                                                      intent.putExtra(ACTIVITY_COMING_FROM_KEY, BUDGET_SETTINGS_ACTIVITY_KEY);
                                                       startActivity(intent);
                                                   }
                                               }

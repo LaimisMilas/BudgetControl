@@ -1,7 +1,9 @@
 package nick.miros.BudgetControl.budgetcontrol.activities;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -17,6 +19,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 
 import nick.miros.BudgetControl.budgetcontrol.app.Currency;
 import nick.miros.BudgetControl.budgetcontrol.app.R;
@@ -38,6 +41,8 @@ public class CurrencyListActivity extends Activity {
     private ArrayList<String> currencyNames = new ArrayList<String>();
     private ArrayList<String> currencySymbols = new ArrayList<String>();
     private ArrayList<Currency> currencies = new ArrayList<Currency>();
+    private static final String ACTIVITY_COMING_FROM_KEY = "activityComingFromKey";
+    private static final int BUDGET_SETTINGS_ACTIVITY_KEY = 3;
     private CurrencyAdapter adapter;
     private final String MY_PREFS_KEY = "myPrefsKey";
     private SharedPreferences settings;
@@ -123,6 +128,15 @@ public class CurrencyListActivity extends Activity {
     //this is needed in the initial app start-up
     @Override
     public void onBackPressed() {
+
+        Intent intent = getIntent();
+
+        if(intent.getIntExtra(ACTIVITY_COMING_FROM_KEY, 0) != BUDGET_SETTINGS_ACTIVITY_KEY) {
+
+        }
+        else {
+            finish();
+        }
     }
 
     /**
