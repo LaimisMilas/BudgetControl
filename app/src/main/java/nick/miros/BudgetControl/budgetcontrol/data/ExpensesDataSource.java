@@ -47,6 +47,17 @@ public class ExpensesDataSource {
 	    dbHelper.close();
 	  }
 
+    /**
+     * Creates an expense record with a timestamp in the database and returns this expense.
+     *
+     * @param day day expense was made
+     * @param month month expense was made
+     * @param year year expense was made
+     * @param amount expense amount
+     * @param description expense description
+     * @return newly created Expense object
+     */
+
 	  public Expense createExpense(int day, int month, int year, double amount, String description) {
 	    ContentValues values = new ContentValues();
 	    values.put(MySQLiteHelper.COLUMN_DAY, day);
@@ -69,6 +80,16 @@ public class ExpensesDataSource {
 	    return newExpense;
 	  }
 
+    /**
+     * Changes values of the fields in an existing expense record
+     *
+     * @param day new day value
+     * @param month new month value
+     * @param year new year value
+     * @param amount new amount value
+     * @param description new description
+     * @param expenseId Id of the expense record to be changed
+     */
       public void modifyExpense (int day, int month, int year, double amount, String description, long expenseId) {
           ContentValues values = new ContentValues();
           values.put(MySQLiteHelper.COLUMN_DAY, day);
@@ -110,6 +131,11 @@ public class ExpensesDataSource {
 	    return expenses;
 	  }
 
+    /**
+     *
+     * @return the sum of all expenses' amounts for the current day
+     */
+
       public double getAllTodayExpenses () {
 
           double amountSpent = 0;
@@ -134,6 +160,11 @@ public class ExpensesDataSource {
           return amountSpent;
       }
 
+    /**
+     *
+     * @return the sum of all expenses' amounts for the current month
+     */
+
       public double getAllMonthlyExpenses () {
           double amountSpent = 0;
 
@@ -155,32 +186,11 @@ public class ExpensesDataSource {
           return amountSpent;
       }
 
-
-      public double getExpensesStartingFrom(int day) {
-
-          double expenses = 0;
-
-          Calendar c = Calendar.getInstance();
-          int currentDay = c.get(Calendar.DATE);
-          int currentMonth = c.get(Calendar.MONTH);
-          int currentYear = c.get(Calendar.YEAR);
-
-          Cursor cursor = database.query(MySQLiteHelper.TABLE_EXPENSES, dateFilterColumns,
-                  MySQLiteHelper.COLUMN_DAY + " BETWEEN " + day + " AND " + currentDay + " AND "
-                  + MySQLiteHelper.COLUMN_MONTH + "=" + currentMonth + " AND "
-                  + MySQLiteHelper.COLUMN_YEAR + "=" + currentYear, null, null, null, null);
-
-          cursor.moveToFirst();
-          while (!cursor.isAfterLast()) {
-              expenses+=cursor.getDouble(3);
-              cursor.moveToNext();
-          }
-          //close the cursor
-          cursor.close();
-
-          return expenses;
-      }
-
+    /**
+     * Returns the sum of all expenses' amounts that are bigger than the time stamp provided
+     * @param timeStamp time passed in seconds since the beginning of UNIX time
+     * @return all expenses' amounts that are bigger than the time stamp provided
+     */
     public double getExpensesFromTimeStamp(long timeStamp) {
 
         double expenses = 0;
@@ -199,6 +209,11 @@ public class ExpensesDataSource {
         return expenses;
     }
 
+    /**
+     * Gets an Expense by being passed that Expense's id
+     * @param id of the Expense object that should be returned
+     * @return Expense with the id provided in the parameter
+     */
     public Expense getExpenseBasedOnId(long id) {
         Cursor cursor = database.query(MySQLiteHelper.TABLE_EXPENSES, allColumns,
                 MySQLiteHelper.COLUMN_ID + " = " + id , null, null, null, null);

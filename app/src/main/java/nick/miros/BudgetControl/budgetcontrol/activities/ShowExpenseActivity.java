@@ -15,7 +15,9 @@ import nick.miros.BudgetControl.budgetcontrol.app.R;
 import nick.miros.BudgetControl.budgetcontrol.data.ExpensesDataSource;
 
 /**
- * Created by admin on 8/1/2014.
+ * Activity for showing the information about the Expense chosen from ExpandableListActivity by
+ * the user. User has the ability to edit or delete the Expense shown in this activity via the
+ * "delete" and "edit" buttons.
  */
 
 public class ShowExpenseActivity extends Activity {
@@ -63,6 +65,9 @@ public class ShowExpenseActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), SaveExpenseActivity.class);
+
+                //put the SHOW_EXPENSE_ACTIVITY_KEY so that SaveExpenseActivity class will know
+                //that we want to edit an Expense instead of creating a new one.
                 intent.putExtra(ACTIVITY_COMING_FROM_KEY, SHOW_EXPENSE_ACTIVITY_KEY);
                 intent.putExtra(EXPENSE_ID_KEY, chosenExpense.getId());
                 startActivity(intent);
@@ -73,6 +78,11 @@ public class ShowExpenseActivity extends Activity {
 
 
     }
+
+    /**
+     * Opens up an Alert Dialog that asks the user whether he wants to delete the current Expense
+     * or not.
+     */
     public void startDeleteExpensePrompt() {
         LayoutInflater li = LayoutInflater.from(ShowExpenseActivity.this);
         View promptsView = li.inflate(R.layout.alert_delete_expense_prompt, null);
@@ -96,6 +106,7 @@ public class ShowExpenseActivity extends Activity {
                     @Override
                     public void onClick(View view) {
 
+                        //delete the Expense and close this Activity in case the user clicks "Yes"
                         dataSource.deleteExpense(chosenExpense);
                         alertDialog.dismiss();
                         finish();

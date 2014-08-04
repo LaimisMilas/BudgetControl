@@ -1,7 +1,8 @@
 package nick.miros.BudgetControl.budgetcontrol.helper;
 
 /**
- * Created by mymi on 18-Jul-14.
+ * A custom adapter that translates a list of lists of Expenses objects sorted by dates
+ * into an Expandable List.
  */
 
 import android.content.Context;
@@ -97,16 +98,15 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter{
         groupDate.setTypeface(null, Typeface.BOLD);
         groupDate.setText(monthNames[expense.getMonth()] + " " + expense.getDay() + " " + expense.getYear());
 
-
+        //set the group amount total from all of the Expense amounts in the group
         double groupAmount = 0;
-
         for (int i = 0; i < _sortedExpenses.get(groupPosition).size(); i++) {
             groupAmount+=_sortedExpenses.get(groupPosition).get(i).getAmount();
         }
+
         TextView groupAmountView = (TextView) convertView.findViewById(R.id.groupAmount);
         groupAmountView.setTypeface(null, Typeface.BOLD);
         groupAmountView.setText(groupAmount + "");
-
 
         return convertView;
     }

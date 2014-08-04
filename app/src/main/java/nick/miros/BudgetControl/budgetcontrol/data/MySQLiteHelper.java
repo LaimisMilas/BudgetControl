@@ -5,6 +5,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+/**
+ * Helper class for working with SQLite
+ */
 public class MySQLiteHelper extends SQLiteOpenHelper {
 
 	  public static final String TABLE_EXPENSES = "expenses";

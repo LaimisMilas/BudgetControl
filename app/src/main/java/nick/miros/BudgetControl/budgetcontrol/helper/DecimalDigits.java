@@ -38,6 +38,9 @@ public class DecimalDigits implements InputFilter {
         } else if (input.substring(input.length() - 1, input.length()).equals(".")) {
             userInput.setError("delete the dot, or enter more decimals");
             return false;
+        } else if (input.equals("0")) {
+            userInput.setError("Expense amount cannot equal zero");
+            return false;
         }
         return true;
 

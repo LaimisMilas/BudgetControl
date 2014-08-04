@@ -18,6 +18,13 @@ import nick.miros.BudgetControl.budgetcontrol.helper.DecimalDigits;
 
 import java.util.Calendar;
 
+/**
+ * An Activity for saving expenses. The Expense can be freshly created or it can be an Expense that
+ * was passed to be edited.
+ * <p/>
+ * In case the user comes from the MainActivity this Activity will create a new Expense. In case the
+ * user comes from the ShowExpenseActivity this Activity will modify the passed Expense.
+ */
 public class SaveExpenseActivity extends Activity {
 
     private String description;
@@ -50,6 +57,7 @@ public class SaveExpenseActivity extends Activity {
         dataSource.open();
 
         Intent receivingIntent = getIntent();
+        //get the constant that stands for the Activity that the user is coming from
         activityComingFrom = receivingIntent.getIntExtra(ACTIVITY_COMING_FROM_KEY, 0);
 
         dateView = (TextView) findViewById(R.id.dateView);
@@ -73,6 +81,8 @@ public class SaveExpenseActivity extends Activity {
             }
         });
 
+        //in case the user enters this Activity from the MainActivity
+        //and this is a fresh expense
         if (activityComingFrom == MAIN_ACTIVITY_KEY) {
 
             Calendar c = Calendar.getInstance();
@@ -85,10 +95,15 @@ public class SaveExpenseActivity extends Activity {
             //the default date that is set once the Activity is started
             dateView.setText((chosenMonth + 1) + " / " + chosenDay + " / " + chosenYear);
 
-        } else if (activityComingFrom == SHOW_EXPENSE_ACTIVITY_KEY) {
+        }
+        //in case the user enters the Activity from the ShowExpenseActivity
+        //and the user chose an Expense beforehand that they want to edit
+        else if (activityComingFrom == SHOW_EXPENSE_ACTIVITY_KEY) {
 
+            //get the Expense the user chose
             chosenExpense = dataSource.getExpenseBasedOnId(receivingIntent.getLongExtra(EXPENSE_ID_KEY, 0));
 
+            //set the date, amount and description to the values of the Expense that was passed
             dateView.setText((chosenExpense.getMonth() + 1) + "/" + chosenExpense.getDay() + "/" + chosenExpense.getYear());
             amountView.setText(chosenExpense.getAmount() + "");
             descriptionView.setText(chosenExpense.getDescription() + "");
@@ -103,28 +118,28 @@ public class SaveExpenseActivity extends Activity {
         return true;
     }
 
+    //modifies or creates a new Expense
     public void saveExpense(View v) {
 
-        if (checkForEmpty(amountView, descriptionView)) {
+        //check for correct inputs in editTexts
+        if (checkForEmpty(amountView, descriptionView) && DecimalDigits.isValidInput(amountView)) {
 
-            if (DecimalDigits.isValidInput(amountView)) {
+            //in case the user comes from MainActivity create a new Expense
+            if (activityComingFrom == MAIN_ACTIVITY_KEY) {
 
-                if (activityComingFrom == MAIN_ACTIVITY_KEY) {
+                amount = Double.parseDouble(amountView.getText().toString());
+                description = descriptionView.getText().toString();
 
-                    amount = Double.parseDouble(amountView.getText().toString());
-                    description = descriptionView.getText().toString();
+                dataSource.createExpense(chosenDay, chosenMonth, chosenYear, amount, description);
+                startActivity(new Intent(this, ExpenseListActivity.class));
 
-                    dataSource.createExpense(chosenDay, chosenMonth, chosenYear, amount, description);
-                    startActivity(new Intent(this, ExpenseListActivity.class));
-                }
+            //in case the user comes from ShowExpenseActivity modify the chosen Expense
+            } else if (activityComingFrom == SHOW_EXPENSE_ACTIVITY_KEY) {
+                amount = Double.parseDouble(amountView.getText().toString());
+                description = descriptionView.getText().toString();
+                dataSource.modifyExpense(chosenDay, chosenMonth, chosenYear, amount, description, chosenExpense.getId());
+                finish();
 
-                else if (activityComingFrom == SHOW_EXPENSE_ACTIVITY_KEY) {
-                    amount = Double.parseDouble(amountView.getText().toString());
-                    description = descriptionView.getText().toString();
-                    dataSource.modifyExpense(chosenDay, chosenMonth, chosenYear, amount, description, chosenExpense.getId());
-                    finish();
-
-                }
             }
         }
     }
@@ -176,13 +191,12 @@ public class SaveExpenseActivity extends Activity {
             int month = c.get(Calendar.MONTH);
             int day = c.get(Calendar.DAY_OF_MONTH);
 
-            // Create a new instance of DatePickerDialog and return it
             return new DatePickerDialog(getActivity(), this, year, month, day);
         }
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
-            // Do something with the date chosen by the user
             TextView dateText = (TextView) getActivity().findViewById(R.id.dateView);
+            //set the dateText view to the date that the user chose in the dialog
             dateText.setText((month + 1) + " / " + day + " / " + year);
 
             chosenDay = day;

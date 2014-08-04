@@ -91,6 +91,11 @@ public class Expense implements Comparable<Expense>{
 		return month + "/" + day + "/" + year + " " + amount + " " + category + " " + description + " " + paymentMethod;
 	}
 
+    /**
+     * Compares two expenses based on their full dates.
+     * @param compareExpense expense to be compared to.
+     * @return comparison result
+     */
     public int compareTo(Expense compareExpense) {
 
         String compareDay;
