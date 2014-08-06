@@ -412,12 +412,6 @@ public class MainActivity extends ActionBarActivity {
 
         double currentBalance = Balance.getBalance(getApplicationContext());
 
-        TextView explanationTextView = (TextView) promptsView.findViewById(R.id.explanationText);
-        explanationTextView.setText("The balance shows whether you're on track with your budget or not. Positive balance means you are saving money, negative means that you are losing money. The formula for the balance: " +
-                " (days passed since the start of the month * your daily budget) - all your expenses for the month = "
-                + Currency.getCurrentCurrencyUsed(getApplicationContext())
-                + nf.format(currentBalance));
-
 
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
 

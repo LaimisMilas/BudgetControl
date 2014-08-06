@@ -10,6 +10,10 @@
         android:id="@+id/explanationText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Think of the balance as your allowance. In case you spent less than you daily
+        budget during the day - the balance grows by the amount of money you saved. In case you
+        overspend your daily budget - the balance shrinks by the amount you overspent. Try to keep
+        the balance positive."
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </LinearLayout>
